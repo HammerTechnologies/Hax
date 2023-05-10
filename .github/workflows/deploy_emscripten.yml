@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main
+permissions:
+  actions: write
+  pages: write
 jobs:
   deploy_pages:
     runs-on: ubuntu-latest
