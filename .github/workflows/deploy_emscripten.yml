@@ -4,8 +4,7 @@ on:
     branches:
       - main
 permissions:
-  actions: write
-  pages: write
+  contents: write
 jobs:
   deploy_pages:
     runs-on: ubuntu-latest
@@ -26,7 +25,5 @@ jobs:
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: _build
-          CLEAN: true
+          folder: _build
+          clean: true
