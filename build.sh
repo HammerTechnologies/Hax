@@ -1,21 +1,21 @@
 #!/bin/bash
 cd `dirname $0`
 
-mkdir _build
+echo "# Creating folders for CMake ..."
+mkdir _CMAKE
+mkdir _CMAKE/_GLFW
+mkdir _CMAKE/_DESKTOP
+
+echo "# Building GLFW3 ..."
+cd lib/glfw-3.3.8
+cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_DOCS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_INSTALL=OFF -B ../../_CMAKE/_GLFW
+cd ../../_CMAKE/_GLFW
+make
+cd ../..
 
 echo "# Building (Desktop) ..."
-mkdir _CMAKE
-cd _CMAKE
-cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ..
+cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -B _CMAKE/_DESKTOP
+cd _CMAKE/_DESKTOP
 make
-mv hax ../_build/hax
-cd ..
-
-echo "# Building (Web) ..."
-mkdir _CMAKE_EMSCRIPTEN
-cd _CMAKE_EMSCRIPTEN
-emcmake cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ..
-emmake make NDEBUG=1
-mv hax.js ../_build/hax.js
-mv hax.wasm ../_build/hax.wasm
-cd ..
+mv hax ../../_build/hax
+cd ../..
