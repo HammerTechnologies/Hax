@@ -1,10 +1,11 @@
 #!/bin/bash
+set -euo pipefail     # abort on fail
+
 cd `dirname $0`
 
 echo "# Creating folders for CMake ..."
-mkdir _CMAKE
-mkdir _CMAKE/_GLFW
-mkdir _CMAKE/_DESKTOP
+mkdir -p _CMAKE/_GLFW
+mkdir -p _CMAKE/_DESKTOP
 
 echo "# Building GLFW3 ..."
 cd lib/glfw-3.3.8
