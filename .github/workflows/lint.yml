@@ -9,6 +9,8 @@ jobs:
         id: linter
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          extra-args: -std=c++17 -fno-exceptions -fno-rtti -Wall -Wextra -Wpedantic -Werror
       - name: Fail fast?!
         if: steps.linter.outputs.checks-failed > 0
         run: exit 1
