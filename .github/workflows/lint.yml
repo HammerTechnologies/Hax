@@ -10,7 +10,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          extra-args: -std=c++17 -fno-exceptions -fno-rtti -Wall -Wextra -Wpedantic -Werror
+          extra-args: -std=c++17 -Ilib/glad_gles20/include -Ilib/glfw-3.3.8/include -fno-exceptions -fno-rtti -Wall -Wextra -Wpedantic -Werror
       - name: Fail fast?!
         if: steps.linter.outputs.checks-failed > 0
         run: exit 1
