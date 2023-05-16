@@ -5,10 +5,10 @@ cmake_minimum_required(VERSION 2.9)
 project(hax)
 
 #Define file groups
-file(GLOB HAX_FILES "src/*.cpp")
+file(GLOB HAX_FILES "src/*.cpp" "lib/glad_gles20/src/glad.c")
 
 #Add header and lib directories
-include_directories(${INCLUDE_DIRECTORIES} ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw-3.3.8/include)
+include_directories(${INCLUDE_DIRECTORIES} ${CMAKE_CURRENT_SOURCE_DIR}/lib/glad_gles20/include ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw-3.3.8/include)
 link_directories(${LINK_DIRECTORIES} ${CMAKE_CURRENT_SOURCE_DIR}/_CMAKE/_GLFW/src)
 
 #Add executable targets
@@ -28,8 +28,8 @@ elseif (${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
 	add_definitions(-DNO_SKIA)
 	set(CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS} "-o hax.js -s USE_GLFW=3 -s ALLOW_MEMORY_GROWTH=1 -s NO_EXIT_RUNTIME=1")
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-      message("Platform is Windows")
-      target_link_libraries(hax glfw3 ${TARGET_LINK_LIBRARIES})
+	message("Platform is Windows")
+	target_link_libraries(hax glfw3 ${TARGET_LINK_LIBRARIES})
 else (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	message("Unrecognized platform " ${CMAKE_SYSTEM_NAME})
 endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")

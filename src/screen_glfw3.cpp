@@ -1,3 +1,4 @@
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "screen.h"
 
@@ -8,7 +9,6 @@ Screen::Screen(uint16_t width, uint16_t height, bool fullscreen) noexcept
 	if (m_initCounter == 0) {
 		glfwInit();
 	}
-	++m_initCounter;
 
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 	glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_TRUE);
@@ -16,6 +16,12 @@ Screen::Screen(uint16_t width, uint16_t height, bool fullscreen) noexcept
 		glfwCreateWindow(width, height, "Hax", fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr),
 		glfwDestroyWindow);
 	enableContext();
+
+	if (m_initCounter == 0) {
+		gladLoadGLES2Loader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
+	}
+
+	++m_initCounter;
 }
 
 Screen::~Screen() noexcept {
