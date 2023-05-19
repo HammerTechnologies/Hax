@@ -2,12 +2,20 @@
 #include "shader.h"
 #include "vertex.h"
 
-Shader::Shader(const std::string& vertex, const std::string& fragment) noexcept {
+Shader::Shader(const std::string& vertex, const std::string& fragment) noexcept
+: m_id(0) {
+#ifdef EMSCRIPTEN
+	const std::string vertexCode = vertex;
+	const std::string fragmentCode = "precision mediump float;\n" + fragment;
+#else
+	const std::string vertexCode = vertex;
+	const std::string fragmentCode = fragment;
+#endif
 	char errorOutput[1024];
 	GLint retCode = 0;
 
 	// Create vertex shader
-	const char* cvertex = vertex.c_str();
+	const char* cvertex = vertexCode.c_str();
 	const GLuint vshader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vshader, 1, &cvertex, NULL);
 	glCompileShader(vshader);
@@ -20,7 +28,7 @@ Shader::Shader(const std::string& vertex, const std::string& fragment) noexcept 
 	}
 
 	// Create fragment shader
-	const char* cfragment = fragment.c_str();
+	const char* cfragment = fragmentCode.c_str();
 	const GLuint fshader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fshader, 1, &cfragment, NULL);
 	glCompileShader(fshader);

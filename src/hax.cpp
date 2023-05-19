@@ -1,6 +1,7 @@
 #ifdef EMSCRIPTEN
 #include <emscripten.h>
 #endif
+#include <iostream>
 #include <memory>
 #include "graphics/color.h"
 #include "graphics/graphics.h"
@@ -20,6 +21,9 @@ static void update() {
 }
 
 int main() {
+	if (!gfx->isValid()) {
+		std::cout << gfx->getError() << std::endl;
+	}
 #ifdef EMSCRIPTEN
 	emscripten_set_main_loop(update, 0, true);
 #else
