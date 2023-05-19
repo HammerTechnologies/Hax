@@ -35,6 +35,18 @@ void Screen::enableContext() const noexcept {
 	glfwMakeContextCurrent(m_window.get());
 }
 
+uint16_t Screen::getWidth() const noexcept {
+	int w;
+	glfwGetFramebufferSize(m_window.get(), &w, nullptr);
+	return static_cast<uint16_t>(w);
+}
+
+uint16_t Screen::getHeight() const noexcept {
+	int h;
+	glfwGetFramebufferSize(m_window.get(), nullptr, &h);
+	return static_cast<uint16_t>(h);
+}
+
 bool Screen::isOpened() const noexcept {
 	return !glfwWindowShouldClose(m_window.get());
 }

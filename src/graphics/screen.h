@@ -10,6 +10,8 @@ struct Screen {
 	~Screen() noexcept;
 
 	void enableContext() const noexcept;
+	uint16_t getWidth() const noexcept;
+	uint16_t getHeight() const noexcept;
 	bool isOpened() const noexcept;
 	void refresh() const noexcept;
 private:

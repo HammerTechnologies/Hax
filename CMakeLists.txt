@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.9)
 project(hax)
 
 #Define file groups
-file(GLOB HAX_FILES "src/*.cpp" "lib/glad_gles20/src/glad.c")
+file(GLOB HAX_FILES "src/*.cpp" "src/*/*.cpp" "src/*/*/*.cpp" "lib/glad_gles20/src/glad.c")
 
 #Add header and lib directories
 include_directories(${INCLUDE_DIRECTORIES} ${CMAKE_CURRENT_SOURCE_DIR}/lib/glad_gles20/include ${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw-3.3.8/include)

@@ -2,21 +2,24 @@
 #include <emscripten.h>
 #endif
 #include <memory>
-#include "color.h"
-#include "graphics.h"
-#include "screen.h"
+#include "graphics/color.h"
+#include "graphics/graphics.h"
+#include "graphics/screen.h"
 
-std::unique_ptr<Screen> screen = nullptr;
-std::unique_ptr<Graphics> gfx = nullptr;
+const auto screen = std::make_unique<const Screen>(800, 600, false);
+const auto gfx = std::make_unique<Graphics>();
 
 static void update() {
-	gfx->cls(Color::multiply(Color::BLUE, 0.5f));
+	const auto halfWidth = screen->getWidth() / 2;
+	const auto halfHeight = screen->getHeight() / 2;
+	gfx->setup2D(0, 0, screen->getWidth(), screen->getHeight());
+	gfx->cls(Color::multiply(Color::GREEN, 0.5f));
+	gfx->drawRect(32, 32, halfWidth - 32, halfHeight - 32, Color::rgb(255, 255, 128));
+	gfx->drawRect(halfWidth, halfHeight, halfWidth - 32, halfHeight - 32, Color::rgb(255, 128, 255));
 	screen->refresh();
 }
 
 int main() {
-	screen = std::make_unique<Screen>(800, 600, false);
-	gfx = std::make_unique<Graphics>();
 #ifdef EMSCRIPTEN
 	emscripten_set_main_loop(update, 0, true);
 #else
