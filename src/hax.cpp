@@ -93,6 +93,13 @@ void update() noexcept {
 int main() noexcept {
 	changeDir(exeDir() + "/assets");
 	g_hax = std::make_unique<Hax>();
+
+	// width, height
+	// std::unique_ptr<Graph> graph = generateMaze(16, 16, 0);
+#ifndef EMSCRIPTEN
+	// std::cout << graph << std::endl;
+#endif
+
 #ifdef EMSCRIPTEN
 	emscripten_set_main_loop(update, 0, true);
 #else
