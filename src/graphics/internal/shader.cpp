@@ -1,9 +1,10 @@
+#include <cstddef>
 #include <glad/glad.h>
 #include "shader.h"
 #include "vertex.h"
 
 Shader::Shader(const std::string& vertex, const std::string& fragment) noexcept
-: m_id(0) {
+: m_id{0} {
 #ifdef EMSCRIPTEN
 	const std::string vertexCode = vertex;
 	const std::string fragmentCode = "precision mediump float;\n" + fragment;

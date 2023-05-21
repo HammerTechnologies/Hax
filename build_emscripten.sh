@@ -11,4 +11,5 @@ cd _CMAKE/_EMSCRIPTEN
 emmake make NDEBUG=1
 mv hax.js ../../_build/hax.js
 mv hax.wasm ../../_build/hax.wasm
+mv hax.data ../../_build/hax.data
 cd ../..

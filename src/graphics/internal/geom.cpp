@@ -10,7 +10,6 @@ Geom::Geom(const std::vector<Vertex>& vertices, const std::vector<uint16_t>& ind
 	bind();
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint16_t), indices.data(), GL_STATIC_DRAW);
-	unbind();
 }
 
 Geom::~Geom() {
@@ -21,11 +20,6 @@ Geom::~Geom() {
 void Geom::bind() const noexcept {
 	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
-}
-
-void Geom::unbind() const noexcept {
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void Geom::draw() const noexcept {

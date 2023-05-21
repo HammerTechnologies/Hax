@@ -65,9 +65,9 @@ struct Vec3 {
 	}
 
 	constexpr Vec3 norm() const noexcept {
-		const T length = length();
-		const T invLength = (length > 0) ? (1 / length) : 0;
-		return *this * invLength;
+		const T len = length();
+		const T invLen = (len > 0) ? (1 / len) : 0;
+		return *this * invLen;
 	}
 
 	constexpr Vec3 mix(const Vec3& other, const T& t) const noexcept {

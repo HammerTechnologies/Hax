@@ -1,6 +1,7 @@
 #include <string>
 #include <glad/glad.h>
 #include "graphics.h"
+#include "texture.h"
 
 constexpr const char* VERTEX_SHADER = R"VS(
 uniform mat4 mvp;
@@ -52,7 +53,10 @@ Graphics::Graphics() noexcept
 	m_projection{} {}
 
 void Graphics::setup2D(uint16_t x, uint16_t y, uint16_t w, uint16_t h) noexcept {
+	glEnable(GL_BLEND);
+	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_SCISSOR_TEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDepthFunc(GL_LEQUAL);
 	glFrontFace(GL_CW);
 	glViewport(x, y, w, h);
@@ -73,11 +77,35 @@ void Graphics::drawRect(real_t x, real_t y, real_t width, real_t height, uint32_
 	m_rect.bind();
 	prepareShader(transform, color);
 	m_rect.draw();
-	m_rect.unbind();
 }
 
-void Graphics::prepareShader(const Mat4r& transform, uint32_t color) const noexcept {
+void Graphics::drawTexture(
+	Texture& tex,
+	real_t x,
+	real_t y,
+	real_t width,
+	real_t height,
+	real_t angle,
+	uint32_t color) const noexcept {
+	const real_t realWidth = (width != 0) ? width : tex.getWidth();
+	const real_t realHeight = (height != 0) ? height : tex.getHeight();
+	const Mat4r transform = Mat4r::transform(
+		Vec3r{x + realWidth / 2, y + realHeight / 2, 0},
+		Quatr::fromAxis(deg2rad(angle), Vec3r{0, 0, 1}),
+		Vec3r{realWidth, realHeight, 1});
+	tex.bind();
+	m_rect.bind();
+	prepareShader(transform, color, true);
+	m_rect.draw();
+}
+
+void Graphics::prepareShader(
+	const Mat4r& transform,
+	uint32_t color,
+	bool useTexture) const noexcept {
 	m_shader.prepare();
+	m_shader.setInt(m_useTextureLoc, useTexture);
+	m_shader.setInt(m_textureLoc, 0);
 	m_shader.setMat4(m_mvpLoc, m_projection * transform);
 	m_shader.setVec4(
 		m_baseColorLoc,

@@ -40,5 +40,6 @@
 build
 _build/*
 !_build/index.html
+!_build/*.png
 _CMAKE
 .vscode
