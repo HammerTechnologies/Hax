@@ -4,6 +4,7 @@
 #include <string>
 
 struct Texture {
+	Texture(uint16_t width, uint16_t height) noexcept;
 	Texture(const std::string& filename) noexcept;
 	~Texture() noexcept;
 
@@ -13,8 +14,11 @@ struct Texture {
 	constexpr uint16_t getHeight() const noexcept { return m_height; }
 
 	void bind() const noexcept;
+	void setPixels(const uint32_t* pixels) noexcept;
 private:
 	uint32_t m_id;
 	uint16_t m_width;
 	uint16_t m_height;
+
+	void genTexture() noexcept;
 };

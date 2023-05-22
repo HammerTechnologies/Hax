@@ -22,41 +22,48 @@
 #include <memory>
 #include <string>
 #include "graphics/color.h"
+#include "graphics/font.h"
 #include "graphics/graphics.h"
 #include "graphics/screen.h"
 #include "graphics/texture.h"
 
 struct Hax {
 	Hax() noexcept
-	: m_screen{std::make_unique<const Screen>(800, 600, false)},
-		m_gfx{std::make_unique<Graphics>()},
-		m_tex{std::make_unique<Texture>("smile.png")},
+	: m_screen{800, 600, false},
+		m_gfx{},
+		m_font{"Minecraft.ttf", 16.0f},
+		m_tex{"smile.png"},
 		m_angle{0} {
-		if (!m_gfx->isValid()) {
-			std::cout << m_gfx->getError() << std::endl;
+		if (!m_gfx.isValid()) {
+			std::cout << m_gfx.getError() << std::endl;
 		}
-		if (!m_tex->isValid()) {
+		if (!m_font.isValid()) {
+			std::cout << "Could not load font" << std::endl;
+		}
+		if (!m_tex.isValid()) {
 			std::cout << "Could not load texture" << std::endl;
 		}
 	}
 
 	void update() noexcept {
 		++m_angle;
-		const auto halfWidth = m_screen->getWidth() / 2;
-		const auto halfHeight = m_screen->getHeight() / 2;
-		m_gfx->setup2D(0, 0, m_screen->getWidth(), m_screen->getHeight());
-		m_gfx->cls(Color::multiply(Color::GREEN, static_cast<real_t>(0.5)));
-		m_gfx->drawRect(32, 32, halfWidth - 32, halfHeight - 32, Color::rgb(255, 255, 128));
-		m_gfx->drawRect(halfWidth, halfHeight, halfWidth - 32, halfHeight - 32, Color::rgb(255, 128, 255));
-		m_gfx->drawTexture(*m_tex, halfWidth - m_tex->getWidth() / 2, halfHeight - m_tex->getHeight() / 2, 0, 0, m_angle);
-		m_screen->refresh();
+		const auto halfWidth = m_screen.getWidth() / 2;
+		const auto halfHeight = m_screen.getHeight() / 2;
+		m_gfx.setup2D(0, 0, m_screen.getWidth(), m_screen.getHeight());
+		m_gfx.cls(Color::multiply(Color::GREEN, static_cast<real_t>(0.5)));
+		m_gfx.drawRect(32, 32, halfWidth - 32, halfHeight - 32, Color::rgb(255, 255, 128));
+		m_gfx.drawRect(halfWidth, halfHeight, halfWidth - 32, halfHeight - 32, Color::rgb(255, 128, 255));
+		m_gfx.drawTexture(m_tex, halfWidth - m_tex.getWidth() / 2, halfHeight - m_tex.getHeight() / 2, 0, 0, m_angle);
+		m_gfx.drawText(m_font, "Hello, world!", 0, 0);
+		m_screen.refresh();
 	}
 
-	bool isScreenOpened() const noexcept { return m_screen->isOpened(); }
+	bool isScreenOpened() const noexcept { return m_screen.isOpened(); }
 private:
-	const std::unique_ptr<const Screen> m_screen;
-	const std::unique_ptr<Graphics> m_gfx;
-	const std::unique_ptr<Texture> m_tex;
+	Screen m_screen;
+	Graphics m_gfx;
+	Font m_font;
+	Texture m_tex;
 	real_t m_angle;
 };
 
@@ -90,7 +97,7 @@ void update() noexcept {
 }
 
 int main() noexcept {
-	changeDir(exeDir());
+	changeDir(exeDir() + "/assets");
 	g_hax = std::make_unique<Hax>();
 #ifdef EMSCRIPTEN
 	emscripten_set_main_loop(update, 0, true);
