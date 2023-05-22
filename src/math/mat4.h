@@ -118,13 +118,13 @@ struct Mat4 {
 		return Mat4{arr};
 	}
 
-	constexpr static Mat4 ortho(const T& left, const T& right, const T& bottom, const T& top, const T& near, const T& far) noexcept {
+	constexpr static Mat4 ortho(const T& left, const T& right, const T& bottom, const T& top, const T& near_, const T& far_) noexcept {
 		const T a = static_cast<T>(2.0) / (right - left);
 		const T b = static_cast<T>(2.0) / (top - bottom);
-		const T c = static_cast<T>(2.0) / (far - near);
+		const T c = static_cast<T>(2.0) / (far_ - near_);
 		const T tx = -(right+left) / (right-left);
 		const T ty = -(top+bottom) / (top-bottom);
-		const T tz = -(far+near) / (far-near);
+		const T tz = -(far_+near_) / (far_-near_);
 		Mat4 result;
 		result.m_data[0] = a;
 		result.m_data[5] = b;
@@ -135,24 +135,24 @@ struct Mat4 {
 		return result;
 	}
 
-	constexpr static Mat4 frustum(const T& left, const T& right, const T& bottom, const T& top, const T& near, const T& far) noexcept {
+	constexpr static Mat4 frustum(const T& left, const T& right, const T& bottom, const T& top, const T& near_, const T& far_) noexcept {
 		Mat4 result;
-		result.m_data[0]  = 2 * near / (right - left);
-		result.m_data[5]  = 2 * near / (top - bottom);
+		result.m_data[0]  = 2 * near_ / (right - left);
+		result.m_data[5]  = 2 * near_ / (top - bottom);
 		result.m_data[8]  = -(right + left) / (right - left);
 		result.m_data[9]  = -(top + bottom) / (top - bottom);
-		result.m_data[10] = (far + near) / (far - near);
+		result.m_data[10] = (far_ + near_) / (far_ - near_);
 		result.m_data[11] = 1;
-		result.m_data[14] = -(2 * far * near) / (far - near);
+		result.m_data[14] = -(2 * far_ * near_) / (far_ - near_);
 		result.m_data[15] = 0;
 		return result;
 	}
 
-	constexpr static Mat4 perspective(const T& fovy, const T& aspect, const T& near, const T& far) noexcept {
+	constexpr static Mat4 perspective(const T& fovy, const T& aspect, const T& near_, const T& far_) noexcept {
 		const T& tangent = std::tan(fovy / 2);
-		const T& height = near * tangent;
+		const T& height = near_ * tangent;
 		const T& width = height * aspect;
-		return Mat4::frustum(-width, width, -height, height, near, far);
+		return Mat4::frustum(-width, width, -height, height, near_, far_);
 	}
 
 	constexpr static Mat4 lookat(const Vec3<T>& center, const Vec3<T>& eye, const Vec3<T>& up) noexcept {
