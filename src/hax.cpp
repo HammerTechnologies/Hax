@@ -46,6 +46,9 @@ struct Hax {
 	}
 
 	void update() noexcept {
+		if (m_screen.isKeyDown(Key::ESC)) {
+			exit(0);
+		}
 		++m_angle;
 		const auto halfWidth = m_screen.getWidth() / 2;
 		const auto halfHeight = m_screen.getHeight() / 2;

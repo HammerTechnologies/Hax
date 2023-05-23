@@ -1,3 +1,4 @@
+#include <cmath>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "screen.h"
@@ -54,4 +55,32 @@ bool Screen::isOpened() const noexcept {
 void Screen::refresh() const noexcept {
 	glfwSwapBuffers(m_window.get());
 	glfwPollEvents();
+}
+
+void Screen::setMouseVisible(bool visible) const noexcept {
+	glfwSetInputMode(m_window.get(), GLFW_CURSOR, visible ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN);
+}
+
+void Screen::setMousePosition(int32_t x, int32_t y) const noexcept {
+	glfwSetCursorPos(m_window.get(), x, y);
+}
+
+int32_t Screen::getMouseX() const noexcept {
+	double x;
+	glfwGetCursorPos(m_window.get(), &x, nullptr);
+	return static_cast<int32_t>(std::floor(x));
+}
+
+int32_t Screen::getMouseY() const noexcept {
+	double y;
+	glfwGetCursorPos(m_window.get(), nullptr, &y);
+	return static_cast<int32_t>(std::floor(y));
+}
+
+bool Screen::isMouseButtonDown(MouseButton button) const noexcept {
+	return glfwGetMouseButton(m_window.get(), static_cast<int32_t>(button)) == GLFW_PRESS;
+}
+
+bool Screen::isKeyDown(Key key) const noexcept {
+	return glfwGetKey(m_window.get(), static_cast<int32_t>(key)) == GLFW_PRESS;
 }
