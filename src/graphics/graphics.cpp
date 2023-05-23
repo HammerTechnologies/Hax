@@ -39,8 +39,9 @@ void main() {
 }
 )FS";
 
-Graphics::Graphics() noexcept
-: m_shader(VERTEX_SHADER, FRAGMENT_SHADER),
+Graphics::Graphics(void*(* loader)(const char*)) noexcept
+: m_init{gladLoadGLES2Loader(reinterpret_cast<GLADloadproc>(loader)) != 0},
+	m_shader(VERTEX_SHADER, FRAGMENT_SHADER),
 	m_rect(
 		{
 			Vertex(Vec3r(static_cast<real_t>(-0.5), static_cast<real_t>(-0.5), 0), Color::WHITE, 0, 0),

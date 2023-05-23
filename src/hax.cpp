@@ -22,21 +22,18 @@
 #include <memory>
 #include <sstream>
 #include <string>
-#include "graphics/color.h"
+#include "graphics/core.h"
 #include "graphics/font.h"
-#include "graphics/graphics.h"
-#include "graphics/screen.h"
 #include "graphics/texture.h"
 
 struct Hax {
 	Hax() noexcept
-	: m_screen{800, 600, false},
-		m_gfx{},
+	: m_core{800, 600, false},
 		m_font{"Minecraft.ttf", 16.0f},
 		m_tex{"smile.png"},
 		m_angle{0} {
-		if (!m_gfx.isValid()) {
-			std::cout << m_gfx.getError() << std::endl;
+		if (!m_core.getGraphics().isValid()) {
+			std::cout << m_core.getGraphics().getError() << std::endl;
 		}
 		if (!m_font.isValid()) {
 			std::cout << "Could not load font" << std::endl;
@@ -47,28 +44,27 @@ struct Hax {
 	}
 
 	void update() noexcept {
-		if (m_screen.isKeyDown(Key::ESC)) {
+		if (m_core.getInput().isKeyDown(Key::ESC)) {
 			exit(0);
 		}
 		std::ostringstream ss;
-		ss << m_screen.getWidth() << "x" << m_screen.getHeight() << " @ " << m_screen.getFps() << " FPS";
-		m_angle += 90 * m_screen.getDelta();
+		ss << m_core.getScreen().getWidth() << "x" << m_core.getScreen().getHeight() << " @ " << m_core.getScreen().getFps() << " FPS";
+		m_angle += 90 * m_core.getScreen().getDelta();
 
-		const auto halfWidth = m_screen.getWidth() / 2;
-		const auto halfHeight = m_screen.getHeight() / 2;
-		m_gfx.setup2D(0, 0, m_screen.getWidth(), m_screen.getHeight());
-		m_gfx.cls(Color::multiply(Color::GREEN, static_cast<real_t>(0.5)));
-		m_gfx.drawRect(32, 32, halfWidth - 32, halfHeight - 32, Color::rgb(255, 255, 128));
-		m_gfx.drawRect(halfWidth, halfHeight, halfWidth - 32, halfHeight - 32, Color::rgb(255, 128, 255));
-		m_gfx.drawTexture(m_tex, halfWidth - m_tex.getWidth() / 2, halfHeight - m_tex.getHeight() / 2, 0, 0, m_angle);
-		m_gfx.drawText(m_font, ss.str(), 0, 0);
-		m_screen.refresh();
+		const auto halfWidth = m_core.getScreen().getWidth() / 2;
+		const auto halfHeight = m_core.getScreen().getHeight() / 2;
+		m_core.getGraphics().setup2D(0, 0, m_core.getScreen().getWidth(), m_core.getScreen().getHeight());
+		m_core.getGraphics().cls(Color::multiply(Color::GREEN, static_cast<real_t>(0.5)));
+		m_core.getGraphics().drawRect(32, 32, halfWidth - 32, halfHeight - 32, Color::rgb(255, 255, 128));
+		m_core.getGraphics().drawRect(halfWidth, halfHeight, halfWidth - 32, halfHeight - 32, Color::rgb(255, 128, 255));
+		m_core.getGraphics().drawTexture(m_tex, halfWidth - m_tex.getWidth() / 2, halfHeight - m_tex.getHeight() / 2, 0, 0, m_angle);
+		m_core.getGraphics().drawText(m_font, ss.str(), 0, 0);
+		m_core.getScreen().refresh();
 	}
 
-	bool isScreenOpened() const noexcept { return m_screen.isOpened(); }
+	bool isScreenOpened() const noexcept { return m_core.getScreen().isOpened(); }
 private:
-	Screen m_screen;
-	Graphics m_gfx;
+	Core m_core;
 	Font m_font;
 	Texture m_tex;
 	real_t m_angle;
