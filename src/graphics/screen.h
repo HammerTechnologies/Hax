@@ -142,7 +142,10 @@ struct Screen {
 	uint16_t getWidth() const noexcept;
 	uint16_t getHeight() const noexcept;
 	bool isOpened() const noexcept;
-	void refresh() const noexcept;
+	void refresh() noexcept;
+
+	constexpr real_t getDelta() const noexcept { return m_delta; }
+	constexpr uint32_t getFps() const noexcept { return m_fps; }
 
   void setMouseVisible(bool visible) const noexcept;
   void setMousePosition(int32_t x, int32_t y) const noexcept;
@@ -153,4 +156,9 @@ struct Screen {
 private:
 	static uint8_t m_initCounter;
 	std::unique_ptr<GLFWwindow, void(*)(GLFWwindow*)> m_window;
+	real_t m_delta;
+	double m_lastTime;
+	uint32_t m_fps;
+	uint32_t m_fpsCounter;
+	real_t m_fpsTime;
 };

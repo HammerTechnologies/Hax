@@ -20,6 +20,7 @@
 #endif
 #include <iostream>
 #include <memory>
+#include <sstream>
 #include <string>
 #include "graphics/color.h"
 #include "graphics/font.h"
@@ -49,7 +50,10 @@ struct Hax {
 		if (m_screen.isKeyDown(Key::ESC)) {
 			exit(0);
 		}
-		++m_angle;
+		std::ostringstream ss;
+		ss << m_screen.getWidth() << "x" << m_screen.getHeight() << " @ " << m_screen.getFps() << " FPS";
+		m_angle += 90 * m_screen.getDelta();
+
 		const auto halfWidth = m_screen.getWidth() / 2;
 		const auto halfHeight = m_screen.getHeight() / 2;
 		m_gfx.setup2D(0, 0, m_screen.getWidth(), m_screen.getHeight());
@@ -57,7 +61,7 @@ struct Hax {
 		m_gfx.drawRect(32, 32, halfWidth - 32, halfHeight - 32, Color::rgb(255, 255, 128));
 		m_gfx.drawRect(halfWidth, halfHeight, halfWidth - 32, halfHeight - 32, Color::rgb(255, 128, 255));
 		m_gfx.drawTexture(m_tex, halfWidth - m_tex.getWidth() / 2, halfHeight - m_tex.getHeight() / 2, 0, 0, m_angle);
-		m_gfx.drawText(m_font, "Hello, world!", 0, 0);
+		m_gfx.drawText(m_font, ss.str(), 0, 0);
 		m_screen.refresh();
 	}
 

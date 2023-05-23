@@ -6,7 +6,12 @@
 uint8_t Screen::m_initCounter = 0;
 
 Screen::Screen(uint16_t width, uint16_t height, bool fullscreen) noexcept
-: m_window(nullptr, glfwDestroyWindow) {
+: m_window{nullptr, glfwDestroyWindow},
+	m_delta{0},
+	m_lastTime{0},
+	m_fps{0},
+	m_fpsCounter{0},
+	m_fpsTime{0} {
 	if (m_initCounter == 0) {
 		glfwInit();
 	}
@@ -22,6 +27,7 @@ Screen::Screen(uint16_t width, uint16_t height, bool fullscreen) noexcept
 		gladLoadGLES2Loader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
 	}
 
+	m_lastTime = glfwGetTime();
 	++m_initCounter;
 }
 
@@ -52,9 +58,24 @@ bool Screen::isOpened() const noexcept {
 	return !glfwWindowShouldClose(m_window.get());
 }
 
-void Screen::refresh() const noexcept {
+void Screen::refresh() noexcept {
+	// Refresh screen
 	glfwSwapBuffers(m_window.get());
 	glfwPollEvents();
+
+	// Update delta
+	const auto currentTime = glfwGetTime();
+	m_delta = static_cast<real_t>(currentTime - m_lastTime);
+	m_lastTime = currentTime;
+
+	// Update FPS
+	++m_fpsCounter;
+	m_fpsTime += m_delta;
+	if (m_fpsTime >= 1) {
+		m_fps = m_fpsCounter;
+		m_fpsCounter = 0;
+		m_fpsTime -= 1;
+	}
 }
 
 void Screen::setMouseVisible(bool visible) const noexcept {
