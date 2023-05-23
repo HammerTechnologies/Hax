@@ -16,7 +16,7 @@ Screen::Screen(uint16_t width, uint16_t height, bool fullscreen) noexcept
 		glfwInit();
 	}
 
-	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+	glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 	glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_TRUE);
 	m_window = std::unique_ptr<GLFWwindow, void(*)(GLFWwindow*)>(
 		glfwCreateWindow(width, height, "Hax", fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr),
