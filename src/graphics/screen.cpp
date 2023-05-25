@@ -21,9 +21,6 @@ Screen::~Screen() {
 
 void Screen::enableContext() const noexcept {
 	glfwMakeContextCurrent(m_window.get());
-	if (glfwGetError(NULL) != GLFW_NO_ERROR) {
-		m_logger.error("Could not enable GL context.");
-	}
 }
 
 uint16_t Screen::getWidth() const noexcept {
