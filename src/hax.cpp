@@ -18,27 +18,24 @@
 #else
 #include <direct.h>
 #endif
-#include <iostream>
 #include <memory>
 #include <sstream>
 #include <string>
 #include "graphics/core.h"
 #include "graphics/font.h"
 #include "graphics/texture.h"
+#include "logger.h"
 
 struct Hax {
 	Hax() noexcept
-	: m_core{800, 600, false},
+	: m_core{800, 600, false, m_logger},
 		m_font{"Minecraft.ttf", 16.0f},
 		m_tex{"mockup.png"} {
-		if (!m_core.getGraphics().isValid()) {
-			std::cout << m_core.getGraphics().getError() << std::endl;
-		}
 		if (!m_font.isValid()) {
-			std::cout << "Could not load font" << std::endl;
+			m_logger.error("Could not load font.");
 		}
 		if (!m_tex.isValid()) {
-			std::cout << "Could not load texture" << std::endl;
+			m_logger.error("Could not load texture.");
 		}
 	}
 
@@ -58,6 +55,7 @@ struct Hax {
 
 	bool isScreenOpened() const noexcept { return m_core.getScreen().isOpened(); }
 private:
+	Logger m_logger;
 	Core m_core;
 	Font m_font;
 	Texture m_tex;
@@ -101,6 +99,8 @@ int main() noexcept {
 	while (g_hax->isScreenOpened()) {
 		update();
 	}
+	g_hax = nullptr;
+	Core::terminate();
 #endif
 	return 0;
 }

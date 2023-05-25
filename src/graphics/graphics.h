@@ -9,15 +9,17 @@
 #include "internal/shader.h"
 
 struct Font;
+struct Logger;
 struct Texture;
 
 struct Graphics {
-	Graphics(void*(* loader)(const char*)) noexcept;
+	Graphics(void*(* loader)(const char*), const Logger& logger) noexcept;
+	~Graphics() noexcept;
 
 	constexpr bool isValid() const noexcept { return m_init && m_shader.isValid(); };
 
 	std::string getError() const noexcept {
-		return (!m_init) ? "Could not initialize OpenGL" : m_shader.getError();
+		return (!m_init) ? "Could not initialize GL" : m_shader.getError();
 	}
 
 	void setup2D(uint16_t x, uint16_t y, uint16_t w, uint16_t h) noexcept;
@@ -48,6 +50,7 @@ struct Graphics {
 		real_t y,
 		uint32_t color = Color::WHITE) const noexcept;
 private:
+	const Logger& m_logger;
 	bool m_init;
 	Shader m_shader;
 	Geom m_rect;

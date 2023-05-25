@@ -1,5 +1,6 @@
 #include <string>
 #include <glad/glad.h>
+#include "../logger.h"
 #include "font.h"
 #include "graphics.h"
 #include "texture.h"
@@ -39,8 +40,9 @@ void main() {
 }
 )FS";
 
-Graphics::Graphics(void*(* loader)(const char*)) noexcept
-: m_init{gladLoadGLES2Loader(reinterpret_cast<GLADloadproc>(loader)) != 0},
+Graphics::Graphics(void*(* loader)(const char*), const Logger& logger) noexcept
+: m_logger{logger},
+	m_init{gladLoadGLES2Loader(reinterpret_cast<GLADloadproc>(loader)) != 0},
 	m_shader(VERTEX_SHADER, FRAGMENT_SHADER),
 	m_rect(
 		{
@@ -54,7 +56,16 @@ Graphics::Graphics(void*(* loader)(const char*)) noexcept
 	m_baseColorLoc{m_shader.getUniform("baseColor")},
 	m_useTextureLoc{m_shader.getUniform("useTexture")},
 	m_textureLoc{m_shader.getUniform("texture")},
-	m_projection{} {}
+	m_projection{} {
+	if (!isValid()) {
+		m_logger.error(getError());
+	}
+	m_logger.info("Graphics initialized.");
+}
+
+Graphics::~Graphics() noexcept {
+	m_logger.info("Graphics deinitialized.");
+}
 
 void Graphics::setup2D(uint16_t x, uint16_t y, uint16_t w, uint16_t h) noexcept {
 	glEnable(GL_BLEND);
