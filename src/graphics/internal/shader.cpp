@@ -1,3 +1,4 @@
+#include <array>
 #include <cstddef>
 #include <glad/glad.h>
 #include "shader.h"
@@ -12,18 +13,18 @@ Shader::Shader(const std::string& vertex, const std::string& fragment) noexcept
 	const std::string vertexCode = vertex;
 	const std::string fragmentCode = fragment;
 #endif
-	char errorOutput[1024];
+	std::array<char, 1024> errorOutput;
 	GLint retCode = 0;
 
 	// Create vertex shader
 	const char* cvertex = vertexCode.c_str();
 	const GLuint vshader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vshader, 1, &cvertex, NULL);
+	glShaderSource(vshader, 1, &cvertex, nullptr);
 	glCompileShader(vshader);
 	glGetShaderiv(vshader, GL_COMPILE_STATUS, &retCode);
 	if (retCode == GL_FALSE) {
-		glGetShaderInfoLog(vshader, sizeof(errorOutput), NULL, errorOutput);
-		m_error = errorOutput;
+		glGetShaderInfoLog(vshader, errorOutput.size(), nullptr, errorOutput.data());
+		m_error = errorOutput.data();
 		glDeleteShader(vshader);
 		return;
 	}
@@ -31,12 +32,12 @@ Shader::Shader(const std::string& vertex, const std::string& fragment) noexcept
 	// Create fragment shader
 	const char* cfragment = fragmentCode.c_str();
 	const GLuint fshader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fshader, 1, &cfragment, NULL);
+	glShaderSource(fshader, 1, &cfragment, nullptr);
 	glCompileShader(fshader);
 	glGetShaderiv(fshader, GL_COMPILE_STATUS, &retCode);
 	if (retCode == GL_FALSE) {
-		glGetShaderInfoLog(fshader, sizeof(errorOutput), NULL, errorOutput);
-		m_error = errorOutput;
+		glGetShaderInfoLog(fshader, errorOutput.size(), nullptr, errorOutput.data());
+		m_error = errorOutput.data();
 		glDeleteShader(vshader);
 		glDeleteShader(fshader);
 		return;
@@ -51,8 +52,8 @@ Shader::Shader(const std::string& vertex, const std::string& fragment) noexcept
 	glDeleteShader(fshader);
 	glGetProgramiv(id, GL_LINK_STATUS, &retCode);
 	if (retCode == GL_FALSE) {
-		glGetProgramInfoLog(id, sizeof(errorOutput), NULL, errorOutput);
-		m_error = errorOutput;
+		glGetProgramInfoLog(id, errorOutput.size(), nullptr, errorOutput.data());
+		m_error = errorOutput.data();
 		glDeleteProgram(id);
 		return;
 	}
