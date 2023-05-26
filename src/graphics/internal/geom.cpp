@@ -2,10 +2,7 @@
 #include "geom.h"
 
 Geom::Geom(const std::vector<Vertex>& vertices, const std::vector<uint16_t>& indices) noexcept {
-	GLuint buffers[2];
-	glGenBuffers(2, buffers);
-	m_vertexBuffer = buffers[0];
-	m_indexBuffer = buffers[1];
+	glGenBuffers(m_buffers.size(), m_buffers.data());
 	m_numIndices = indices.size();
 	bind();
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
@@ -13,13 +10,12 @@ Geom::Geom(const std::vector<Vertex>& vertices, const std::vector<uint16_t>& ind
 }
 
 Geom::~Geom() {
-	GLuint buffers[] = {m_vertexBuffer, m_indexBuffer};
-	glDeleteBuffers(2, buffers);
+	glDeleteBuffers(m_buffers.size(), m_buffers.data());
 }
 
 void Geom::bind() const noexcept {
-	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, m_buffers[VERTEX_BUFFER]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_buffers[INDEX_BUFFER]);
 }
 
 void Geom::draw() const noexcept {

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <cstdint>
 #include <vector>
 #include "vertex.h"
@@ -10,6 +11,10 @@ struct Geom {
 	void bind() const noexcept;
 	void draw() const noexcept;
 private:
+	static constexpr size_t VERTEX_BUFFER = 0;
+	static constexpr size_t INDEX_BUFFER = 1;
+
+	std::array<uint32_t, 2> m_buffers;
 	uint32_t m_vertexBuffer;
 	uint32_t m_indexBuffer;
 	size_t m_numIndices;
