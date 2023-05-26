@@ -30,7 +30,7 @@ Core::Core(uint16_t width, uint16_t height, bool fullscreen, const Logger& logge
 }
 
 Core::~Core() noexcept {
-	m_logger.info("Core services deinitializing ...");
+	m_logger.info("Core services deinitializing...");
 }
 
 void Core::terminate() noexcept {

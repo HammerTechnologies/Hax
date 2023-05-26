@@ -12,7 +12,7 @@ Texture::Texture(uint16_t width, uint16_t height) noexcept
 
 Texture::Texture(const std::string& filename) noexcept
 : m_id{0}, m_width{0}, m_height{0} {
-	int w, h;
+	int32_t w, h;
 	const auto pixels = std::unique_ptr<uint32_t, void(*)(void*)>{
 		reinterpret_cast<uint32_t*>(stbi_load(filename.c_str(), &w, &h, nullptr, 4)),
 		stbi_image_free

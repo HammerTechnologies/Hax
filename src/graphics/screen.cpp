@@ -24,13 +24,13 @@ void Screen::enableContext() const noexcept {
 }
 
 uint16_t Screen::getWidth() const noexcept {
-	int w;
+	int32_t w;
 	glfwGetFramebufferSize(m_window.get(), &w, nullptr);
 	return static_cast<uint16_t>(w);
 }
 
 uint16_t Screen::getHeight() const noexcept {
-	int h;
+	int32_t h;
 	glfwGetFramebufferSize(m_window.get(), nullptr, &h);
 	return static_cast<uint16_t>(h);
 }

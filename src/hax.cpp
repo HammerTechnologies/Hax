@@ -72,9 +72,9 @@ inline std::string extractDir(const std::string& filename) noexcept {
 inline std::string exeDir() noexcept {
 	char path[FILENAME_MAX];
 #if defined(_WIN32)
-	path[GetModuleFileNameA(NULL, path, FILENAME_MAX)] = 0;
+	path[GetModuleFileNameA(nullptr, path, FILENAME_MAX)] = 0;
 #elif defined(__APPLE__)
-	unsigned int size = FILENAME_MAX;
+	uint32_t size = FILENAME_MAX;
 	_NSGetExecutablePath(path, &size);
 #else
 	path[readlink("/proc/self/exe", path, FILENAME_MAX)] = 0;
