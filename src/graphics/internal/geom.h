@@ -15,7 +15,5 @@ private:
 	static constexpr size_t INDEX_BUFFER = 1;
 
 	std::array<uint32_t, 2> m_buffers;
-	uint32_t m_vertexBuffer;
-	uint32_t m_indexBuffer;
 	size_t m_numIndices;
 };
