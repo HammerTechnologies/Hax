@@ -1,9 +1,9 @@
-#include <GLFW/glfw3.h>
 #include "../logger.h"
 #include "screen.h"
 
-Screen::Screen(const std::shared_ptr<GLFWwindow>& window, const Logger& logger) noexcept
-: m_logger{logger},
+Screen::Screen(const ContextDriver& context, const std::shared_ptr<ContextWindow>& window, const Logger& logger) noexcept
+: m_context{context},
+	m_logger{logger},
 	m_window{window},
 	m_delta{0},
 	m_lastTime{0},
@@ -11,7 +11,7 @@ Screen::Screen(const std::shared_ptr<GLFWwindow>& window, const Logger& logger) 
 	m_fpsCounter{0},
 	m_fpsTime{0} {
 	enableContext();
-	m_lastTime = glfwGetTime();
+	m_lastTime = context.getTime();
 	m_logger.info("Screen initialized.");
 }
 
@@ -20,32 +20,27 @@ Screen::~Screen() {
 }
 
 void Screen::enableContext() const noexcept {
-	glfwMakeContextCurrent(m_window.get());
+	m_context.enableWindowContext(*m_window);
 }
 
 uint16_t Screen::getWidth() const noexcept {
-	int32_t w;
-	glfwGetFramebufferSize(m_window.get(), &w, nullptr);
-	return static_cast<uint16_t>(w);
+	return m_context.getWindowWidth(*m_window);
 }
 
 uint16_t Screen::getHeight() const noexcept {
-	int32_t h;
-	glfwGetFramebufferSize(m_window.get(), nullptr, &h);
-	return static_cast<uint16_t>(h);
+	return m_context.getWindowHeight(*m_window);
 }
 
 bool Screen::isOpened() const noexcept {
-	return !glfwWindowShouldClose(m_window.get());
+	return m_context.isWindowOpened(*m_window);
 }
 
 void Screen::refresh() noexcept {
 	// Refresh screen
-	glfwSwapBuffers(m_window.get());
-	glfwPollEvents();
+	m_context.refreshwindow(*m_window);
 
 	// Update delta
-	const auto currentTime = glfwGetTime();
+	const auto currentTime = m_context.getTime();
 	m_delta = static_cast<real_t>(currentTime - m_lastTime);
 	m_lastTime = currentTime;
 

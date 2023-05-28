@@ -5,11 +5,11 @@
 
 struct Logger {
 	Logger() noexcept {
-		info("Logger initialized");
+		info("Logger initialized.");
 	}
 
 	~Logger() noexcept {
-		info("Logger deinitialized");
+		info("Logger deinitialized.");
 	}
 
 	void info(const std::string& msg) const noexcept {

@@ -3,12 +3,12 @@
 #include <cstdint>
 #include <memory>
 #include "../real.h"
+#include "internal/context_driver.h"
 
-struct GLFWwindow;
 struct Logger;
 
 struct Screen {
-	Screen(const std::shared_ptr<GLFWwindow>& window, const Logger& logger) noexcept;
+	Screen(const ContextDriver& context, const std::shared_ptr<ContextWindow>& window, const Logger& logger) noexcept;
 	~Screen() noexcept;
 
 	void enableContext() const noexcept;
@@ -20,10 +20,11 @@ struct Screen {
 	constexpr real_t getDelta() const noexcept { return m_delta; }
 	constexpr uint32_t getFps() const noexcept { return m_fps; }
 private:
+	const ContextDriver& m_context;
 	const Logger& m_logger;
-	std::shared_ptr<GLFWwindow> m_window;
+	std::shared_ptr<ContextWindow> m_window;
 	real_t m_delta;
-	double m_lastTime;
+	real_t m_lastTime;
 	uint32_t m_fps;
 	uint32_t m_fpsCounter;
 	real_t m_fpsTime;

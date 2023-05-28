@@ -3,9 +3,9 @@
 #include <memory>
 #include "graphics.h"
 #include "input.h"
+#include "internal/context_driver.h"
 #include "screen.h"
 
-struct GLFWwindow;
 struct Logger;
 
 struct Core {
@@ -21,7 +21,8 @@ struct Core {
 	static void terminate() noexcept;
 private:
 	const Logger& m_logger;
-	std::shared_ptr<GLFWwindow> m_window;
+	ContextDriver m_context;
+	std::shared_ptr<ContextWindow> m_window;
 	Screen m_screen;
 	Input m_input;
 	Graphics m_graphics;
