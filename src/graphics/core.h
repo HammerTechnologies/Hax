@@ -4,6 +4,7 @@
 #include "graphics.h"
 #include "input.h"
 #include "internal/context_driver.h"
+#include "internal/graphics_driver.h"
 #include "screen.h"
 
 struct Logger;
@@ -25,5 +26,6 @@ private:
 	std::shared_ptr<ContextWindow> m_window;
 	Screen m_screen;
 	Input m_input;
+	GraphicsDriver m_gfxDriver;
 	Graphics m_graphics;
 };

@@ -1,8 +1,9 @@
 #include <string>
-#include <glad/glad.h>
+#include <utility>
 #include "../logger.h"
 #include "font.h"
 #include "graphics.h"
+#include "internal/graphics_driver.h"
 #include "texture.h"
 
 constexpr const char* VERTEX_SHADER = R"VS(
@@ -40,11 +41,12 @@ void main() {
 }
 )FS";
 
-Graphics::Graphics(void*(* loader)(const char*), const Logger& logger) noexcept
-: m_logger{logger},
-	m_init{gladLoadGLES2Loader(reinterpret_cast<GLADloadproc>(loader)) != 0},
-	m_shader(VERTEX_SHADER, FRAGMENT_SHADER),
+Graphics::Graphics(const GraphicsDriver& driver, const Logger& logger) noexcept
+: m_driver{driver},
+	m_logger{logger},
+	m_shader(m_driver, VERTEX_SHADER, FRAGMENT_SHADER),
 	m_rect(
+		m_driver,
 		{
 			Vertex(Vec3r(static_cast<real_t>(-0.5), static_cast<real_t>(-0.5), 0), Color::WHITE, 0, 0),
 			Vertex(Vec3r(static_cast<real_t>( 0.5), static_cast<real_t>(-0.5), 0), Color::WHITE, 1, 0),
@@ -57,9 +59,6 @@ Graphics::Graphics(void*(* loader)(const char*), const Logger& logger) noexcept
 	m_useTextureLoc{m_shader.getUniform("useTexture")},
 	m_textureLoc{m_shader.getUniform("texture")},
 	m_projection{} {
-	if (!isValid()) {
-		m_logger.error(getError());
-	}
 	m_logger.info("Graphics initialized.");
 }
 
@@ -67,21 +66,30 @@ Graphics::~Graphics() noexcept {
 	m_logger.info("Graphics deinitialized.");
 }
 
+bool Graphics::isValid() const noexcept {
+	return m_driver.isValid() && m_shader.isValid();
+}
+
+std::unique_ptr<Font> Graphics::loadFont(const std::string& filename, real_t height) const noexcept {
+	auto font = new Font(filename, height, m_driver);
+	return font->isValid() ? std::unique_ptr<Font>(font) : nullptr;
+}
+
+std::unique_ptr<Texture> Graphics::loadTexture(const std::string& filename) const noexcept {
+	return std::unique_ptr<Texture>(new Texture(filename, m_driver));
+}
+
+std::unique_ptr<Texture> Graphics::createTexture(uint16_t width, uint16_t height) const noexcept {
+	return std::unique_ptr<Texture>(new Texture(width, height, m_driver));
+}
+
 void Graphics::setup2D(uint16_t x, uint16_t y, uint16_t w, uint16_t h) noexcept {
-	glEnable(GL_BLEND);
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_SCISSOR_TEST);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glDepthFunc(GL_LEQUAL);
-	glFrontFace(GL_CW);
-	glViewport(x, y, w, h);
-	glScissor(x, y, w, h);
+	m_driver.setup2D(x, y, w, h);
 	m_projection = Mat4r::ortho(0, w - x, h - y, 0, 0, 1);
 }
 
 void Graphics::cls(uint32_t color) const noexcept {
-	glClearColor(Color::redf(color), Color::greenf(color), Color::bluef(color), Color::alphaf(color));
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	m_driver.cls(color);
 }
 
 void Graphics::drawRect(

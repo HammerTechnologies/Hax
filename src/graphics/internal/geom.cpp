@@ -1,23 +1,21 @@
-#include <glad/glad.h>
 #include "geom.h"
 
-Geom::Geom(const std::vector<Vertex>& vertices, const std::vector<uint16_t>& indices) noexcept {
-	glGenBuffers(m_buffers.size(), m_buffers.data());
-	m_numIndices = indices.size();
-	bind();
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint16_t), indices.data(), GL_STATIC_DRAW);
+Geom::Geom(const GraphicsDriver& driver, const std::vector<Vertex>& vertices, const std::vector<uint16_t>& indices) noexcept
+: m_driver{driver},
+	m_vertexBuffer{driver.createVertexBuffer(vertices)},
+	m_indexBuffer{driver.createIndexBuffer(indices)},
+	m_numIndices{indices.size()} {
 }
 
 Geom::~Geom() {
-	glDeleteBuffers(m_buffers.size(), m_buffers.data());
+	m_driver.deleteBuffer(m_vertexBuffer);
+	m_driver.deleteBuffer(m_indexBuffer);
 }
 
 void Geom::bind() const noexcept {
-	glBindBuffer(GL_ARRAY_BUFFER, m_buffers[VERTEX_BUFFER]);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_buffers[INDEX_BUFFER]);
+	m_driver.bindBuffers(m_vertexBuffer, m_indexBuffer);
 }
 
 void Geom::draw() const noexcept {
-	glDrawElements(GL_TRIANGLE_FAN, m_numIndices, GL_UNSIGNED_SHORT, 0);
+	m_driver.drawBuffers(m_numIndices);
 }

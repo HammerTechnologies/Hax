@@ -6,7 +6,7 @@
 #undef STB_TRUETYPE_IMPLEMENTATION
 #include "font.h"
 
-Font::Font(const std::string& filename, real_t height) noexcept
+Font::Font(const std::string& filename, real_t height, const GraphicsDriver& driver) noexcept
 : m_tex{nullptr} {
 	// Read file into buffer
 	std::ifstream file(filename, std::ios::ate | std::ios::binary);
@@ -37,7 +37,7 @@ Font::Font(const std::string& filename, real_t height) noexcept
 	alphaBuffer.clear();
 
 	// Create texture
-	m_tex = std::make_unique<Texture>(w, h);
+	m_tex = std::unique_ptr<Texture>(new Texture(w, h, driver));
 	m_tex->setPixels(reinterpret_cast<uint32_t*>(pixels.data()));
 	pixels.clear();
 

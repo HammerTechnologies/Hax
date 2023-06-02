@@ -9,8 +9,6 @@
 #include "texture.h"
 
 struct Font {
-	Font(const std::string& filename, real_t height) noexcept;
-
 	bool isValid() const { return m_tex && m_tex->isValid(); }
 
 	constexpr real_t getHeight() const noexcept { return m_height; }
@@ -22,7 +20,9 @@ private:
 	real_t m_height;
 	real_t m_maxHeight;
 
+	Font(const std::string& filename, real_t height, const GraphicsDriver& driver) noexcept;
 	FontQuad getFontQuad(char c, real_t& startX, real_t& startY) const noexcept;
 
 	friend struct Graphics;
+	friend class std::default_delete<Font>;
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <memory>
 #include <string>
 #include "../math/mat4.h"
 #include "../real.h"
@@ -9,30 +10,28 @@
 #include "internal/shader.h"
 
 struct Font;
+struct GraphicsDriver;
 struct Logger;
 struct Texture;
 
 struct Graphics {
-	Graphics(void*(* loader)(const char*), const Logger& logger) noexcept;
+	Graphics(const GraphicsDriver& driver, const Logger& logger) noexcept;
 	~Graphics() noexcept;
 
-	constexpr bool isValid() const noexcept { return m_init && m_shader.isValid(); };
+	bool isValid() const noexcept;
 
-	std::string getError() const noexcept {
-		return (!m_init) ? "Could not initialize GL" : m_shader.getError();
-	}
+	std::unique_ptr<Font> loadFont(const std::string& filename, real_t height) const noexcept;
+	std::unique_ptr<Texture> loadTexture(const std::string& filename) const noexcept;
+	std::unique_ptr<Texture> createTexture(uint16_t width, uint16_t height) const noexcept;
 
 	void setup2D(uint16_t x, uint16_t y, uint16_t w, uint16_t h) noexcept;
-
 	void cls(uint32_t color = Color::BLACK) const noexcept;
-
 	void drawRect(
 		real_t x,
 		real_t y,
 		real_t width,
 		real_t height,
 		uint32_t color = Color::WHITE) const noexcept;
-
 	void drawTexture(
 		const Texture& tex,
 		real_t x,
@@ -42,7 +41,6 @@ struct Graphics {
 		real_t angle = 0,
 		uint32_t color = Color::WHITE,
 		const Mat4r& textureMatrix = Mat4r{}) const noexcept;
-
 	void drawText(
 		const Font& font,
 		const std::string& text,
@@ -50,8 +48,8 @@ struct Graphics {
 		real_t y,
 		uint32_t color = Color::WHITE) const noexcept;
 private:
+	const GraphicsDriver& m_driver;
 	const Logger& m_logger;
-	bool m_init;
 	Shader m_shader;
 	Geom m_rect;
 	int32_t m_mvpLoc;

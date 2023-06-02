@@ -29,12 +29,12 @@
 struct Hax {
 	Hax() noexcept
 	: m_core{800, 600, false, m_logger},
-		m_font{"Minecraft.ttf", 16.0f},
-		m_tex{"mockup.png"} {
-		if (!m_font.isValid()) {
+		m_font{m_core.getGraphics().loadFont("Minecraft.ttf", 16.0f)},
+		m_tex{m_core.getGraphics().loadTexture("mockup.png")} {
+		if (!m_font->isValid()) {
 			m_logger.error("Could not load font.");
 		}
-		if (!m_tex.isValid()) {
+		if (!m_tex->isValid()) {
 			m_logger.error("Could not load texture.");
 		}
 	}
@@ -48,8 +48,8 @@ struct Hax {
 
 		m_core.getGraphics().setup2D(0, 0, m_core.getScreen().getWidth(), m_core.getScreen().getHeight());
 		m_core.getGraphics().cls();
-		m_core.getGraphics().drawTexture(m_tex, 0, 0, m_core.getScreen().getWidth(), m_core.getScreen().getHeight());
-		m_core.getGraphics().drawText(m_font, ss.str(), 14, 12);
+		m_core.getGraphics().drawTexture(*m_tex, 0, 0, m_core.getScreen().getWidth(), m_core.getScreen().getHeight());
+		m_core.getGraphics().drawText(*m_font, ss.str(), 14, 12);
 		m_core.getScreen().refresh();
 	}
 
@@ -57,8 +57,8 @@ struct Hax {
 private:
 	Logger m_logger;
 	Core m_core;
-	Font m_font;
-	Texture m_tex;
+	std::unique_ptr<Font> m_font;
+	std::unique_ptr<Texture> m_tex;
 };
 
 std::unique_ptr<Hax> g_hax = nullptr;
