@@ -10,35 +10,18 @@
 
 struct Logger;
 
-struct VertexBuffer {
-	VertexBuffer(uint32_t id) : m_id{id} {}
-private:
-	uint32_t m_id;
-	friend struct GraphicsDriver;
-};
-
-struct IndexBuffer {
-	IndexBuffer(uint32_t id) : m_id{id} {}
-private:
-	uint32_t m_id;
-	friend struct GraphicsDriver;
-};
-
-struct GpuProgram {
-	GpuProgram(uint32_t id) : m_id{id} {}
+struct GraphicsResource {
+	GraphicsResource(uint32_t id) : m_id{id} {}
 	constexpr operator bool() const noexcept { return m_id != 0; }
 private:
 	uint32_t m_id;
 	friend struct GraphicsDriver;
 };
 
-struct DriverTexture {
-	DriverTexture(uint32_t id) : m_id{id} {}
-	constexpr operator bool() const noexcept { return m_id != 0; }
-private:
-	uint32_t m_id;
-	friend struct GraphicsDriver;
-};
+struct VertexBuffer : GraphicsResource {};
+struct IndexBuffer : GraphicsResource {};
+struct GpuProgram : GraphicsResource {};
+struct DriverTexture : GraphicsResource {};
 
 struct GraphicsDriver {
 	GraphicsDriver(ContextDriver::GlGetProcAddress loader, const Logger& logger) noexcept;
