@@ -18,7 +18,7 @@ struct Graphics {
 	Graphics(const GraphicsDriver& driver, const Logger& logger) noexcept;
 	~Graphics() noexcept;
 
-	bool isValid() const noexcept;
+	operator bool() const noexcept { return m_driver && m_shader; }
 
 	std::unique_ptr<Font> loadFont(const std::string& filename, real_t height) const noexcept;
 	std::unique_ptr<Texture> loadTexture(const std::string& filename) const noexcept;

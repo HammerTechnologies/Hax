@@ -10,7 +10,7 @@ struct Shader {
 	Shader(const GraphicsDriver& driver, const std::string& vertex, const std::string& fragment) noexcept;
 	~Shader() noexcept;
 
-	constexpr bool isValid() const noexcept { return m_program.isValid(); }
+	constexpr operator bool() const noexcept { return m_program; }
 
 	int32_t getUniform(const std::string& name) const noexcept;
 

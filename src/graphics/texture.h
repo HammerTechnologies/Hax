@@ -5,7 +5,7 @@
 #include "internal/graphics_driver.h"
 
 struct Texture {
-	constexpr bool isValid() const { return m_width != 0 && m_height != 0 && m_internal.isValid(); }
+	constexpr operator bool() const { return m_width != 0 && m_height != 0 && m_internal; }
 
 	constexpr uint16_t getWidth() const noexcept { return m_width; }
 	constexpr uint16_t getHeight() const noexcept { return m_height; }

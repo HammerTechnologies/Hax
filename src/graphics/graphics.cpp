@@ -66,13 +66,8 @@ Graphics::~Graphics() noexcept {
 	m_logger.info("Graphics deinitialized.");
 }
 
-bool Graphics::isValid() const noexcept {
-	return m_driver.isValid() && m_shader.isValid();
-}
-
 std::unique_ptr<Font> Graphics::loadFont(const std::string& filename, real_t height) const noexcept {
-	auto font = new Font(filename, height, m_driver);
-	return font->isValid() ? std::unique_ptr<Font>(font) : nullptr;
+	return std::unique_ptr<Font>(new Font(filename, height, m_driver));
 }
 
 std::unique_ptr<Texture> Graphics::loadTexture(const std::string& filename) const noexcept {
@@ -116,7 +111,7 @@ void Graphics::drawTexture(
 	real_t angle,
 	uint32_t color,
 	const Mat4r& textureMatrix) const noexcept {
-	if (tex.isValid()) {
+	if (tex) {
 		const real_t realWidth = (width != 0) ? width : tex.getWidth();
 		const real_t realHeight = (height != 0) ? height : tex.getHeight();
 		const Mat4r transform = Mat4r::transform(
@@ -136,7 +131,7 @@ void Graphics::drawText(
 	real_t x,
 	real_t y,
 	uint32_t color) const noexcept {
-	if (font.isValid()) {
+	if (font) {
 		y += font.m_maxHeight;
 		for (size_t i = 0; i < text.size(); ++i) {
 			const FontQuad quad = font.getFontQuad(text[i], x, y);

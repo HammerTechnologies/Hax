@@ -26,7 +26,7 @@ private:
 
 struct GpuProgram {
 	GpuProgram(uint32_t id) : m_id{id} {}
-	constexpr bool isValid() const noexcept { return m_id != 0; }
+	constexpr operator bool() const noexcept { return m_id != 0; }
 private:
 	uint32_t m_id;
 	friend struct GraphicsDriver;
@@ -34,7 +34,7 @@ private:
 
 struct DriverTexture {
 	DriverTexture(uint32_t id) : m_id{id} {}
-	constexpr bool isValid() const noexcept { return m_id != 0; }
+	constexpr operator bool() const noexcept { return m_id != 0; }
 private:
 	uint32_t m_id;
 	friend struct GraphicsDriver;
@@ -43,7 +43,7 @@ private:
 struct GraphicsDriver {
 	GraphicsDriver(ContextDriver::GlGetProcAddress loader, const Logger& logger) noexcept;
 
-	constexpr bool isValid() const noexcept { return m_init; };
+	constexpr operator bool() const noexcept { return m_init; };
 
 	void setup2D(uint16_t x, uint16_t y, uint16_t w, uint16_t h) const noexcept;
 	void cls(uint32_t color) const noexcept;

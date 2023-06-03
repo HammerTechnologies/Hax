@@ -31,10 +31,10 @@ struct Hax {
 	: m_core{640, 360, false, m_logger},
 		m_font{m_core.getGraphics().loadFont("Minecraft.ttf", 16.0f)},
 		m_tex{m_core.getGraphics().loadTexture("mockup.png")} {
-		if (!m_font->isValid()) {
+		if (!*m_font) {
 			m_logger.error("Could not load font.");
 		}
-		if (!m_tex->isValid()) {
+		if (!*m_tex) {
 			m_logger.error("Could not load texture.");
 		}
 	}

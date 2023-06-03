@@ -9,7 +9,7 @@
 #include "texture.h"
 
 struct Font {
-	bool isValid() const { return m_tex && m_tex->isValid(); }
+	operator bool() const { return m_tex && *m_tex; }
 
 	constexpr real_t getHeight() const noexcept { return m_height; }
 	real_t getTextWidth(const std::string& text) const noexcept;
