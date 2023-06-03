@@ -28,7 +28,7 @@
 
 struct Hax {
 	Hax() noexcept
-	: m_core{800, 600, false, m_logger},
+	: m_core{640, 360, false, m_logger},
 		m_font{m_core.getGraphics().loadFont("Minecraft.ttf", 16.0f)},
 		m_tex{m_core.getGraphics().loadTexture("mockup.png")} {
 		if (!m_font->isValid()) {
