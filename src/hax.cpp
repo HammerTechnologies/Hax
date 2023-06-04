@@ -65,7 +65,9 @@ std::unique_ptr<Hax> g_hax = nullptr;
 
 inline std::string extractDir(const std::string& filename) noexcept {
 	size_t find_pos = filename.rfind('\\');
-	if (find_pos == std::string::npos) find_pos = filename.rfind('/');
+	if (find_pos == std::string::npos) {
+		find_pos = filename.rfind('/');
+	}
 	return filename.substr(0, find_pos);
 }
 
