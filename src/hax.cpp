@@ -40,14 +40,7 @@ struct Hax {
 		},
 		m_font{m_core.getGraphics().loadFont("Minecraft.ttf", 16.0f)},
 		m_tex{m_core.getGraphics().loadTexture("mockup.png")},
-		m_yaw{0} {
-		if (!*m_font) {
-			m_logger.error("Could not load font.");
-		}
-		if (!*m_tex) {
-			m_logger.error("Could not load texture.");
-		}
-	}
+		m_yaw{0} {}
 
 	void update() noexcept {
 		if (m_core.getInput().isKeyDown(Key::ESC)) {

@@ -68,11 +68,19 @@ Graphics::~Graphics() noexcept {
 }
 
 std::unique_ptr<Font> Graphics::loadFont(const std::string& filename, real_t height) const noexcept {
-	return std::unique_ptr<Font>(new Font(filename, height, m_driver));
+	auto font = std::unique_ptr<Font>(new Font(filename, height, m_driver));
+	if (!*font) {
+		m_logger.error("Could not load font '" + filename + "'.");
+	}
+	return font;
 }
 
 std::unique_ptr<Texture> Graphics::loadTexture(const std::string& filename) const noexcept {
-	return std::unique_ptr<Texture>(new Texture(filename, m_driver));
+	auto texture = std::unique_ptr<Texture>(new Texture(filename, m_driver));
+	if (!*texture) {
+		m_logger.error("Could not load texture '" + filename + "'.");
+	}
+	return texture;
 }
 
 std::unique_ptr<Texture> Graphics::createTexture(uint16_t width, uint16_t height) const noexcept {
