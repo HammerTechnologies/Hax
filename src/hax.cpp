@@ -31,7 +31,7 @@ struct Hax {
 	Hax() noexcept
 	: m_core{640, 360, false, m_logger},
 		m_viewer{
-			Vec3r{},
+			Vec3r{0, 0, -5},
 			Vec3r{},
 			0,
 			0,
@@ -39,7 +39,8 @@ struct Hax {
 			m_core.getScreen().getHeight()
 		},
 		m_font{m_core.getGraphics().loadFont("Minecraft.ttf", 16.0f)},
-		m_tex{m_core.getGraphics().loadTexture("mockup.png")} {
+		m_tex{m_core.getGraphics().loadTexture("mockup.png")},
+		m_yaw{0} {
 		if (!*m_font) {
 			m_logger.error("Could not load font.");
 		}
@@ -55,12 +56,20 @@ struct Hax {
 		std::ostringstream ss;
 		ss << m_core.getScreen().getWidth() << "x" << m_core.getScreen().getHeight() << " @ " << m_core.getScreen().getFps() << " FPS";
 
+		m_yaw += 45 * m_core.getScreen().getDelta();
 		m_viewer.m_viewportWidth = m_core.getScreen().getWidth();
 		m_viewer.m_viewportHeight = m_core.getScreen().getHeight();
 		m_core.getGraphics().setup2D(0, 0, m_core.getScreen().getWidth(), m_core.getScreen().getHeight());
 		m_core.getGraphics().cls();
 		m_core.getGraphics().drawTexture(*m_tex, 0, 0, m_core.getScreen().getWidth(), m_core.getScreen().getHeight());
 		m_core.getGraphics().drawText(*m_font, ss.str(), 14, 12);
+		m_core.getGraphics().setup3D(m_viewer);
+		m_core.getGraphics().drawQuad(
+			Mat4r::transform(
+				Vec3r{},
+				Quatr::fromEuler(Vec3r{0, m_yaw, 0}.rad()),
+				Vec3r{1, 1, 1}),
+			Color::BROWN);
 		m_core.getScreen().refresh();
 	}
 
@@ -71,6 +80,7 @@ private:
 	Viewer m_viewer;
 	std::unique_ptr<Font> m_font;
 	std::unique_ptr<Texture> m_tex;
+	real_t m_yaw;
 };
 
 std::unique_ptr<Hax> g_hax = nullptr;

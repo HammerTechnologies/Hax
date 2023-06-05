@@ -157,6 +157,12 @@ void Graphics::drawText(
 	}
 }
 
+void Graphics::drawQuad(const Mat4r& transform, uint32_t color) const noexcept {
+	m_rect.bind();
+	prepareShader(transform, Mat4r{}, color, false);
+	m_rect.draw();
+}
+
 void Graphics::prepareShader(
 	const Mat4r& transform,
 	const Mat4r& textureMatrix,

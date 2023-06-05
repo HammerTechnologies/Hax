@@ -49,6 +49,7 @@ struct Graphics {
 		real_t x,
 		real_t y,
 		uint32_t color = Color::WHITE) const noexcept;
+	void drawQuad(const Mat4r& transform, uint32_t color = Color::WHITE) const noexcept;
 private:
 	const GraphicsDriver& m_driver;
 	const Logger& m_logger;
