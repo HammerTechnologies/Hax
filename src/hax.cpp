@@ -24,11 +24,20 @@
 #include "graphics/core.h"
 #include "graphics/font.h"
 #include "graphics/texture.h"
+#include "graphics/viewer.h"
 #include "logger.h"
 
 struct Hax {
 	Hax() noexcept
 	: m_core{640, 360, false, m_logger},
+		m_viewer{
+			Vec3r{},
+			Vec3r{},
+			0,
+			0,
+			m_core.getScreen().getWidth(),
+			m_core.getScreen().getHeight()
+		},
 		m_font{m_core.getGraphics().loadFont("Minecraft.ttf", 16.0f)},
 		m_tex{m_core.getGraphics().loadTexture("mockup.png")} {
 		if (!*m_font) {
@@ -46,6 +55,8 @@ struct Hax {
 		std::ostringstream ss;
 		ss << m_core.getScreen().getWidth() << "x" << m_core.getScreen().getHeight() << " @ " << m_core.getScreen().getFps() << " FPS";
 
+		m_viewer.m_viewportWidth = m_core.getScreen().getWidth();
+		m_viewer.m_viewportHeight = m_core.getScreen().getHeight();
 		m_core.getGraphics().setup2D(0, 0, m_core.getScreen().getWidth(), m_core.getScreen().getHeight());
 		m_core.getGraphics().cls();
 		m_core.getGraphics().drawTexture(*m_tex, 0, 0, m_core.getScreen().getWidth(), m_core.getScreen().getHeight());
@@ -57,6 +68,7 @@ struct Hax {
 private:
 	Logger m_logger;
 	Core m_core;
+	Viewer m_viewer;
 	std::unique_ptr<Font> m_font;
 	std::unique_ptr<Texture> m_tex;
 };

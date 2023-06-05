@@ -1,6 +1,7 @@
 #include <array>
 #include <glad/glad.h>
 #include "../../logger.h"
+#include "../viewer.h"
 #include "graphics_driver.h"
 #include "vertex.h"
 
@@ -14,13 +15,32 @@ GraphicsDriver::GraphicsDriver(ContextDriver::GlGetProcAddress loader, const Log
 
 void GraphicsDriver::setup2D(uint16_t x, uint16_t y, uint16_t w, uint16_t h) const noexcept {
 	glEnable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_SCISSOR_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glDepthFunc(GL_LEQUAL);
 	glFrontFace(GL_CW);
 	glViewport(x, y, w, h);
 	glScissor(x, y, w, h);
+}
+
+void GraphicsDriver::setup3D(const Viewer& viewer) const noexcept {
+	glDisable(GL_BLEND);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_SCISSOR_TEST);
+	glDepthFunc(GL_LEQUAL);
+	glFrontFace(GL_CW);
+	glViewport(
+		viewer.m_viewportX,
+		viewer.m_viewportY,
+		viewer.m_viewportWidth,
+		viewer.m_viewportHeight);
+	glScissor(
+		viewer.m_viewportX,
+		viewer.m_viewportY,
+		viewer.m_viewportWidth,
+		viewer.m_viewportHeight);
 }
 
 void GraphicsDriver::cls(uint32_t color = Color::BLACK) const noexcept {

@@ -13,6 +13,7 @@ struct Font;
 struct GraphicsDriver;
 struct Logger;
 struct Texture;
+struct Viewer;
 
 struct Graphics {
 	Graphics(const GraphicsDriver& driver, const Logger& logger) noexcept;
@@ -25,6 +26,7 @@ struct Graphics {
 	std::unique_ptr<Texture> createTexture(uint16_t width, uint16_t height) const noexcept;
 
 	void setup2D(uint16_t x, uint16_t y, uint16_t w, uint16_t h) noexcept;
+	void setup3D(const Viewer& viewer) noexcept;
 	void cls(uint32_t color = Color::BLACK) const noexcept;
 	void drawRect(
 		real_t x,

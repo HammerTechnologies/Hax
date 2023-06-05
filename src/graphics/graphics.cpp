@@ -5,6 +5,7 @@
 #include "graphics.h"
 #include "internal/graphics_driver.h"
 #include "texture.h"
+#include "viewer.h"
 
 constexpr const char* VERTEX_SHADER = R"VS(
 uniform mat4 mvp;
@@ -81,6 +82,17 @@ std::unique_ptr<Texture> Graphics::createTexture(uint16_t width, uint16_t height
 void Graphics::setup2D(uint16_t x, uint16_t y, uint16_t w, uint16_t h) noexcept {
 	m_driver.setup2D(x, y, w, h);
 	m_projection = Mat4r::ortho(0, w - x, h - y, 0, 0, 1);
+}
+
+void Graphics::setup3D(const Viewer& viewer) noexcept {
+	m_driver.setup3D(viewer);
+	m_projection =
+		Mat4r::perspective(
+			deg2rad(viewer.m_fov),
+			static_cast<real_t>(viewer.m_viewportWidth) / viewer.m_viewportHeight,
+			viewer.m_rangeMin,
+			viewer.m_rangeMax)
+		* viewer.getViewMatrix();
 }
 
 void Graphics::cls(uint32_t color) const noexcept {

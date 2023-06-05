@@ -17,35 +17,95 @@ struct Vec3 {
 	: m_x{x}, m_y{y}, m_z{z} {}
 
 	constexpr Vec3 operator+(const Vec3& other) const noexcept {
-		return Vec3(m_x + other.m_x, m_y + other.m_y, m_z + other.m_z);
+		return Vec3{m_x + other.m_x, m_y + other.m_y, m_z + other.m_z};
 	}
 
 	constexpr Vec3 operator+(const T& scalar) const noexcept {
-		return Vec3(m_x + scalar, m_y + scalar, m_z + scalar);
+		return Vec3{m_x + scalar, m_y + scalar, m_z + scalar};
+	}
+
+	constexpr Vec3& operator+=(const Vec3& other) noexcept {
+		m_x += other.m_x;
+		m_y += other.m_y;
+		m_z += other.m_z;
+		return *this;
+	}
+
+	constexpr Vec3& operator+=(const T& scalar) noexcept {
+		m_x += scalar;
+		m_y += scalar;
+		m_z += scalar;
+		return *this;
 	}
 
 	constexpr Vec3 operator-(const Vec3& other) const noexcept {
-		return Vec3(m_x - other.m_x, m_y - other.m_y, m_z - other.m_z);
+		return Vec3{m_x - other.m_x, m_y - other.m_y, m_z - other.m_z};
 	}
 
 	constexpr Vec3 operator-(const T& scalar) const noexcept {
-		return Vec3(m_x - scalar, m_y - scalar, m_z - scalar);
+		return Vec3{m_x - scalar, m_y - scalar, m_z - scalar};
+	}
+
+	constexpr Vec3 operator-() const noexcept {
+		return Vec3{-m_x, -m_y, -m_z};
+	}
+
+	constexpr Vec3& operator-=(const Vec3& other) noexcept {
+		m_x -= other.m_x;
+		m_y -= other.m_y;
+		m_z -= other.m_z;
+		return *this;
+	}
+
+	constexpr Vec3& operator-=(const T& scalar) noexcept {
+		m_x -= scalar;
+		m_y -= scalar;
+		m_z -= scalar;
+		return *this;
 	}
 
 	constexpr Vec3 operator*(const Vec3& other) const noexcept {
-		return Vec3(m_x * other.m_x, m_y * other.m_y, m_z * other.m_z);
+		return Vec3{m_x * other.m_x, m_y * other.m_y, m_z * other.m_z};
 	}
 
 	constexpr Vec3 operator*(const T& scalar) const noexcept {
-		return Vec3(m_x * scalar, m_y * scalar, m_z * scalar);
+		return Vec3{m_x * scalar, m_y * scalar, m_z * scalar};
+	}
+
+	constexpr Vec3& operator*=(const Vec3& other) noexcept {
+		m_x *= other.m_x;
+		m_y *= other.m_y;
+		m_z *= other.m_z;
+		return *this;
+	}
+
+	constexpr Vec3& operator*=(const T& scalar) noexcept {
+		m_x *= scalar;
+		m_y *= scalar;
+		m_z *= scalar;
+		return *this;
 	}
 
 	constexpr Vec3 operator/(const Vec3& other) const noexcept {
-		return Vec3(m_x / other.m_x, m_y / other.m_y, m_z / other.m_z);
+		return Vec3{m_x / other.m_x, m_y / other.m_y, m_z / other.m_z};
 	}
 
 	constexpr Vec3 operator/(const T& scalar) const noexcept {
-		return Vec3(m_x / scalar, m_y / scalar, m_z / scalar);
+		return Vec3{m_x / scalar, m_y / scalar, m_z / scalar};
+	}
+
+	constexpr Vec3& operator/=(const Vec3& other) noexcept {
+		m_x /= other.m_x;
+		m_y /= other.m_y;
+		m_z /= other.m_z;
+		return *this;
+	}
+
+	constexpr Vec3& operator/=(const T& scalar) noexcept {
+		m_x /= scalar;
+		m_y /= scalar;
+		m_z /= scalar;
+		return *this;
 	}
 
 	constexpr T dot(const Vec3& other) const noexcept {
@@ -53,7 +113,10 @@ struct Vec3 {
 	}
 
 	constexpr Vec3 cross(const Vec3& other) const noexcept {
-		return Vec3(m_y*other.m_z - m_z*other.m_y, m_z*other.m_x -m_x*other.m_z, m_x*other.m_y - m_y*other.m_x);
+		return Vec3{
+			m_y*other.m_z - m_z*other.m_y,
+			m_z*other.m_x -m_x*other.m_z,
+			m_x*other.m_y - m_y*other.m_x};
 	}
 
 	constexpr T sqlength() const noexcept {
@@ -75,11 +138,11 @@ struct Vec3 {
 	}
 
 	constexpr Vec3 deg() const noexcept {
-		return Vec3(rad2deg(m_x), rad2deg(m_y), rad2deg(m_z));
+		return Vec3{rad2deg(m_x), rad2deg(m_y), rad2deg(m_z)};
 	}
 
 	constexpr Vec3 rad() const noexcept {
-		return Vec3(deg2rad(m_x), deg2rad(m_y), deg2rad(m_z));
+		return Vec3{deg2rad(m_x), deg2rad(m_y), deg2rad(m_z)};
 	}
 };
 

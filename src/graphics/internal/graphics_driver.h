@@ -9,6 +9,7 @@
 #include "vertex.h"
 
 struct Logger;
+struct Viewer;
 
 struct GraphicsResource {
 	GraphicsResource(uint32_t id) : m_id{id} {}
@@ -29,6 +30,7 @@ struct GraphicsDriver {
 	constexpr operator bool() const noexcept { return m_init; };
 
 	void setup2D(uint16_t x, uint16_t y, uint16_t w, uint16_t h) const noexcept;
+	void setup3D(const Viewer& viewer) const noexcept;
 	void cls(uint32_t color) const noexcept;
 
 	VertexBuffer createVertexBuffer(const std::vector<Vertex>& vertices) const noexcept;
