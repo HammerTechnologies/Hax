@@ -56,7 +56,7 @@ struct Hax {
 		std::ostringstream ss;
 		ss << m_core.getScreen().getWidth() << "x" << m_core.getScreen().getHeight() << " @ " << m_core.getScreen().getFps() << " FPS";
 
-		m_yaw += 45 * m_core.getScreen().getDelta();
+		m_yaw += M_PI * m_core.getScreen().getDelta();
 		m_viewer.m_viewportWidth = m_core.getScreen().getWidth();
 		m_viewer.m_viewportHeight = m_core.getScreen().getHeight();
 		m_core.getGraphics().setup2D(0, 0, m_core.getScreen().getWidth(), m_core.getScreen().getHeight());
@@ -67,9 +67,9 @@ struct Hax {
 		m_core.getGraphics().drawQuad(
 			Mat4r::transform(
 				Vec3r{},
-				Quatr::fromEuler(Vec3r{0, m_yaw, 0}.rad()),
+				Quatr::fromEuler(Vec3r{0, m_yaw, 0}),
 				Vec3r{1, 1, 1}),
-			Color::BROWN);
+			Color::ORANGE);
 		m_core.getScreen().refresh();
 	}
 
