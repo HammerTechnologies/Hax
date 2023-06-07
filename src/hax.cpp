@@ -25,6 +25,7 @@
 #include "graphics/font.h"
 #include "graphics/texture.h"
 #include "graphics/viewer.h"
+#include "maze/generator.h"
 #include "logger.h"
 
 struct Hax {
@@ -38,6 +39,7 @@ struct Hax {
 			m_core.getScreen().getWidth(),
 			m_core.getScreen().getHeight()
 		},
+		m_maze{generateMaze(16, 16, 0)},
 		m_font{m_core.getGraphics().loadFont("Minecraft.ttf", 16.0f)},
 		m_tex{m_core.getGraphics().loadTexture("mockup.png")},
 		m_yaw{0} {}
@@ -52,10 +54,18 @@ struct Hax {
 		m_yaw += M_PI * m_core.getScreen().getDelta();
 		m_viewer.m_viewportWidth = m_core.getScreen().getWidth();
 		m_viewer.m_viewportHeight = m_core.getScreen().getHeight();
+
 		m_core.getGraphics().setup2D(0, 0, m_core.getScreen().getWidth(), m_core.getScreen().getHeight());
 		m_core.getGraphics().cls();
 		m_core.getGraphics().drawTexture(*m_tex, 0, 0, m_core.getScreen().getWidth(), m_core.getScreen().getHeight());
 		m_core.getGraphics().drawText(*m_font, ss.str(), 14, 12);
+
+		for (uint8_t y = 0; y < m_maze->getHeight(); y++) {
+			for (uint8_t x = 0; x < m_maze->getWidth(); x++) {
+				drawNode(m_maze->getNodeAt(x, y), x + 2, y + 2, 16, Color::YELLOW);
+			}
+		}
+
 		m_core.getGraphics().setup3D(m_viewer);
 		m_core.getGraphics().drawQuad(
 			Mat4r::transform(
@@ -66,14 +76,68 @@ struct Hax {
 		m_core.getScreen().refresh();
 	}
 
-	bool isScreenOpened() const noexcept { return m_core.getScreen().isOpened(); }
+	bool isScreenOpened() const noexcept {
+		return m_core.getScreen().isOpened();
+	}
 private:
 	Logger m_logger;
 	Core m_core;
 	Viewer m_viewer;
+	std::unique_ptr<Graph> m_maze;
 	std::unique_ptr<Font> m_font;
 	std::unique_ptr<Texture> m_tex;
 	real_t m_yaw;
+
+	void drawNode(
+		const std::shared_ptr<GraphNode>& gn,
+		uint16_t tileX,
+		uint16_t tileY,
+		uint16_t size,
+		uint32_t color) const noexcept {
+		const auto half = size / 2;
+		const auto& graphics = m_core.getGraphics();
+		if (gn->hasWest() && !gn->hasEast() && !gn->hasNorth() && !gn->hasSouth()) {
+			graphics.drawRect(tileX * size, tileY * size + half, half, 1, color);
+		} else if (!gn->hasWest() && gn->hasEast() && !gn->hasNorth() && !gn->hasSouth())	{
+			graphics.drawRect(tileX * size + half, tileY * size + half, half, 1, color);
+		} else if (!gn->hasWest() && !gn->hasEast() && gn->hasNorth() && !gn->hasSouth())	{
+			graphics.drawRect(tileX * size + half, tileY * size, 1, half, color);
+		} else if (!gn->hasWest() && !gn->hasEast() && !gn->hasNorth() && gn->hasSouth())	{
+			graphics.drawRect(tileX * size + half, tileY * size + half, 1, half, color);
+		} else if (!gn->hasWest() && !gn->hasEast() && !gn->hasNorth() && !gn->hasSouth()) {
+		} else if (gn->hasWest() && gn->hasEast() && !gn->hasNorth() && !gn->hasSouth()) {
+			graphics.drawRect(tileX * size, tileY * size + half, size, 1, color);
+		} else if (!gn->hasWest() && !gn->hasEast() && gn->hasNorth() && gn->hasSouth()) {
+			graphics.drawRect(tileX * size + half, tileY * size, 1, size, color);
+		} else if (!gn->hasWest() && gn->hasEast() && !gn->hasNorth() && gn->hasSouth()) {
+			graphics.drawRect(tileX * size + half, tileY * size + half, half, 1, color);
+			graphics.drawRect(tileX * size + half, tileY * size + half, 1, half, color);
+		} else if (gn->hasWest() && !gn->hasEast() && !gn->hasNorth() && gn->hasSouth()) {
+			graphics.drawRect(tileX * size, tileY * size + half, half, 1, color);
+			graphics.drawRect(tileX * size + half, tileY * size + half, 1, half, color);
+		} else if (!gn->hasWest() && gn->hasEast() && gn->hasNorth() && !gn->hasSouth()) {
+			graphics.drawRect(tileX * size + half, tileY * size + half, half, 1, color);
+			graphics.drawRect(tileX * size + half, tileY * size, 1, half, color);
+		} else if (gn->hasWest() && !gn->hasEast() && gn->hasNorth() && !gn->hasSouth()) {
+			graphics.drawRect(tileX * size, tileY * size + half, half, 1, color);
+			graphics.drawRect(tileX * size + half, tileY * size, 1, half, color);
+		} else if (!gn->hasWest() && gn->hasEast() && gn->hasNorth() && gn->hasSouth())	{
+			graphics.drawRect(tileX * size + half, tileY * size + half, half, 1, color);
+			graphics.drawRect(tileX * size + half, tileY * size, 1, size, color);
+		} else if (gn->hasWest() && !gn->hasEast() && gn->hasNorth() && gn->hasSouth())	{
+			graphics.drawRect(tileX * size, tileY * size + half, half, 1, color);
+			graphics.drawRect(tileX * size + half, tileY * size, 1, size, color);
+		} else if (gn->hasWest() && gn->hasEast() && !gn->hasNorth() && gn->hasSouth())	{
+			graphics.drawRect(tileX * size, tileY * size + half, size, 1, color);
+			graphics.drawRect(tileX * size + half, tileY * size + half, 1, half, color);
+		} else if (gn->hasWest() && gn->hasEast() && gn->hasNorth() && !gn->hasSouth())	{
+			graphics.drawRect(tileX * size, tileY * size + half, size, 1, color);
+			graphics.drawRect(tileX * size + half, tileY * size, 1, half, color);
+		} else if (gn->hasWest() && gn->hasEast() && gn->hasNorth() && gn->hasSouth()) {
+			graphics.drawRect(tileX * size, tileY * size, size, 1, color);
+			graphics.drawRect(tileX * size + half, tileY * size, 1, size, color);
+		}
+	}
 };
 
 std::unique_ptr<Hax> g_hax = nullptr;
@@ -110,12 +174,6 @@ void update() noexcept {
 int main() noexcept {
 	changeDir(exeDir() + "/assets");
 	g_hax = std::make_unique<Hax>();
-
-	// width, height
-	// std::unique_ptr<Graph> graph = generateMaze(16, 16, 0);
-#ifndef EMSCRIPTEN
-	// std::cout << graph << std::endl;
-#endif
 
 #ifdef EMSCRIPTEN
 	emscripten_set_main_loop(update, 0, true);
