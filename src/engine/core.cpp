@@ -1,6 +1,6 @@
-#include "../logger.h"
 #include "core.h"
-#include "internal/graphics_driver.h"
+#include "logger.h"
+#include "graphics/internal/graphics_driver.h"
 
 Core::Core(uint16_t width, uint16_t height, bool fullscreen, const Logger& logger) noexcept
 : m_logger{logger},

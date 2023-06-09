@@ -1,11 +1,11 @@
 #pragma once
 
 #include <memory>
-#include "graphics.h"
-#include "input.h"
-#include "internal/context_driver.h"
-#include "internal/graphics_driver.h"
-#include "screen.h"
+#include "graphics/graphics.h"
+#include "graphics/input.h"
+#include "graphics/internal/context_driver.h"
+#include "graphics/internal/graphics_driver.h"
+#include "graphics/screen.h"
 
 struct Logger;
 

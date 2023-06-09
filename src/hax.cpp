@@ -21,12 +21,12 @@
 #include <memory>
 #include <sstream>
 #include <string>
-#include "graphics/core.h"
-#include "graphics/font.h"
-#include "graphics/texture.h"
-#include "graphics/viewer.h"
-#include "maze/generator.h"
-#include "logger.h"
+#include "engine/core.h"
+#include "engine/graphics/font.h"
+#include "engine/graphics/texture.h"
+#include "engine/graphics/viewer.h"
+#include "engine/logger.h"
+#include "engine/maze/generator.h"
 
 struct Hax {
 	Hax() noexcept
