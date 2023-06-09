@@ -1,19 +1,22 @@
 #ifdef EMSCRIPTEN
 #include <emscripten.h>
 #endif
+#include <iostream>
 #include "core.h"
+#include "game.h"
 
-void init();
-bool update();
-void finish();
+#ifdef EMSCRIPTEN
+void update() noexcept {
+	Game::getInstance()->update();
+}
+#endif
 
 int main() noexcept {
-	init();
 #ifdef EMSCRIPTEN
 	emscripten_set_main_loop(update, 0, true);
 #else
-	while (update()) {}
-	finish();
+	while (Game::getInstance()->update()) {}
+	Game::getInstance()->finish();
 	Core::terminate();
 #endif
 	return 0;

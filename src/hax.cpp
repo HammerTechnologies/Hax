@@ -2,13 +2,14 @@
 #include <sstream>
 #include "dir.h"
 #include "engine/core.h"
+#include "engine/game.h"
 #include "engine/graphics/font.h"
 #include "engine/graphics/texture.h"
 #include "engine/graphics/viewer.h"
 #include "engine/logger.h"
 #include "engine/maze/generator.h"
 
-struct Hax {
+struct Hax : Game {
 	Hax() noexcept
 	: m_core{640, 360, false, m_logger},
 		m_viewer{
@@ -28,8 +29,8 @@ struct Hax {
 			m_tex = m_core.getGraphics().loadTexture("mockup.png");
 		}
 
-	bool update() noexcept {
-		if (m_core.getInput().isKeyDown(Key::ESC)) {
+	virtual bool update() noexcept override {
+		if (!m_core.getScreen().isOpened() || m_core.getInput().isKeyDown(Key::ESC)) {
 			return false;
 		}
 
@@ -63,9 +64,7 @@ struct Hax {
 		return true;
 	}
 
-	bool isScreenOpened() const noexcept {
-		return m_core.getScreen().isOpened();
-	}
+	virtual void finish() noexcept override;
 private:
 	Logger m_logger;
 	Core m_core;
@@ -127,16 +126,8 @@ private:
 	}
 };
 
-std::unique_ptr<Hax> g_hax = nullptr;
+std::unique_ptr<Hax> g_hax = std::make_unique<Hax>();
 
-void init() noexcept {
-	g_hax = std::make_unique<Hax>();
-}
-
-bool update() noexcept {
-	return g_hax->update();
-}
-
-void finish() noexcept {
+void Hax::finish() noexcept {
 	g_hax = nullptr;
 }
