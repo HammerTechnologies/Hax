@@ -1,6 +1,3 @@
-#ifdef EMSCRIPTEN
-#include <emscripten.h>
-#endif
 #include <memory>
 #include <sstream>
 #include "dir.h"
@@ -23,14 +20,19 @@ struct Hax {
 			m_core.getScreen().getHeight()
 		},
 		m_maze{generateMaze(16, 16, 0)},
-		m_font{m_core.getGraphics().loadFont("Minecraft.ttf", 16.0f)},
-		m_tex{m_core.getGraphics().loadTexture("mockup.png")},
-		m_yaw{0} {}
-
-	void update() noexcept {
-		if (m_core.getInput().isKeyDown(Key::ESC)) {
-			exit(0);
+		m_font{nullptr},
+		m_tex{nullptr},
+		m_yaw{0} {
+			changeDir(exeDir() + "/assets");
+			m_font = m_core.getGraphics().loadFont("Minecraft.ttf", 16);
+			m_tex = m_core.getGraphics().loadTexture("mockup.png");
 		}
+
+	bool update() noexcept {
+		if (m_core.getInput().isKeyDown(Key::ESC)) {
+			return false;
+		}
+
 		std::ostringstream ss;
 		ss << m_core.getScreen().getWidth() << "x" << m_core.getScreen().getHeight() << " @ " << m_core.getScreen().getFps() << " FPS";
 
@@ -57,6 +59,8 @@ struct Hax {
 				Vec3r{1, 1, 1}),
 			Color::ORANGE);
 		m_core.getScreen().refresh();
+
+		return true;
 	}
 
 	bool isScreenOpened() const noexcept {
@@ -125,22 +129,14 @@ private:
 
 std::unique_ptr<Hax> g_hax = nullptr;
 
-void update() noexcept {
-	g_hax->update();
+void init() noexcept {
+	g_hax = std::make_unique<Hax>();
 }
 
-int main() noexcept {
-	changeDir(exeDir() + "/assets");
-	g_hax = std::make_unique<Hax>();
+bool update() noexcept {
+	return g_hax->update();
+}
 
-#ifdef EMSCRIPTEN
-	emscripten_set_main_loop(update, 0, true);
-#else
-	while (g_hax->isScreenOpened()) {
-		update();
-	}
+void finish() noexcept {
 	g_hax = nullptr;
-	Core::terminate();
-#endif
-	return 0;
 }
