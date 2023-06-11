@@ -26,7 +26,7 @@ void GraphicsDriver::setup2D(uint16_t x, uint16_t y, uint16_t w, uint16_t h) con
 
 void GraphicsDriver::setup3D(const Viewer& viewer) const noexcept {
 	glDisable(GL_BLEND);
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_SCISSOR_TEST);
