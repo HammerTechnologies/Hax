@@ -11,6 +11,7 @@
 
 struct Font;
 struct GraphicsDriver;
+struct Level;
 struct Logger;
 struct Texture;
 struct Viewer;
@@ -50,11 +51,19 @@ struct Graphics {
 		real_t y,
 		uint32_t color = Color::WHITE) const noexcept;
 	void drawQuad(const Mat4r& transform, uint32_t color = Color::WHITE) const noexcept;
+	void drawLevel2D(
+		const Level& level,
+		real_t x,
+		real_t y,
+		real_t size,
+		uint32_t color = Color::WHITE) const noexcept;
+	void drawLevel3D(const Level& level, real_t size, uint32_t color = Color::WHITE) const noexcept;
 private:
 	const GraphicsDriver& m_driver;
 	const Logger& m_logger;
 	Shader m_shader;
 	Geom m_rect;
+	Geom m_quad;
 	int32_t m_mvpLoc;
 	int32_t m_textureMatrixLoc;
 	int32_t m_baseColorLoc;

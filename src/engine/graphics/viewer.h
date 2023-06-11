@@ -49,8 +49,9 @@ struct Viewer {
 	}
 
 	constexpr Mat4r getViewMatrix() const noexcept {
+		const auto q = Quatr::fromEuler(m_euler.rad());
 		return Mat4r{}
-			.rotate(Quatr::fromEuler(m_euler.rad()))
+			.rotate(-q.angle(), q.axis())
 			.translate(-m_position);
 	}
 };

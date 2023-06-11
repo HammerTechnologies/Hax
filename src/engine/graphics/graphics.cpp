@@ -4,6 +4,7 @@
 #include "font.h"
 #include "graphics.h"
 #include "internal/graphics_driver.h"
+#include "level.h"
 #include "texture.h"
 #include "viewer.h"
 
@@ -45,15 +46,23 @@ void main() {
 Graphics::Graphics(const GraphicsDriver& driver, const Logger& logger) noexcept
 : m_driver{driver},
 	m_logger{logger},
-	m_shader(m_driver, VERTEX_SHADER, FRAGMENT_SHADER),
-	m_rect(
+	m_shader{m_driver, VERTEX_SHADER, FRAGMENT_SHADER},
+	m_rect{
 		m_driver,
 		{
 			Vertex(Vec3r(static_cast<real_t>(-0.5), static_cast<real_t>(-0.5), 0), Color::WHITE, 0, 0),
 			Vertex(Vec3r(static_cast<real_t>( 0.5), static_cast<real_t>(-0.5), 0), Color::WHITE, 1, 0),
 			Vertex(Vec3r(static_cast<real_t>( 0.5), static_cast<real_t>( 0.5), 0), Color::WHITE, 1, 1),
 			Vertex(Vec3r(static_cast<real_t>(-0.5), static_cast<real_t>( 0.5), 0), Color::WHITE, 0, 1)},
-		{0, 1, 2, 3}),
+		{0, 1, 2, 3}},
+	m_quad{
+		m_driver,
+		{
+			Vertex(Vec3r(0, 1, 0), Color::WHITE, 0, 0),
+			Vertex(Vec3r(1, 1, 0), Color::WHITE, 1, 0),
+			Vertex(Vec3r(1, 0, 0), Color::WHITE, 1, 1),
+			Vertex(Vec3r(0, 0, 0), Color::WHITE, 0, 1)},
+		{0, 1, 2, 3}},
 	m_mvpLoc{m_shader.getUniform("mvp")},
 	m_textureMatrixLoc{m_shader.getUniform("textureMatrix")},
 	m_baseColorLoc{m_shader.getUniform("baseColor")},
@@ -166,9 +175,22 @@ void Graphics::drawText(
 }
 
 void Graphics::drawQuad(const Mat4r& transform, uint32_t color) const noexcept {
-	m_rect.bind();
+	m_quad.bind();
 	prepareShader(transform, Mat4r{}, color, false);
-	m_rect.draw();
+	m_quad.draw();
+}
+
+void Graphics::drawLevel2D(
+	const Level& level,
+	real_t x,
+	real_t y,
+	real_t size,
+	uint32_t color) const noexcept {
+	level.draw2D(*this, x, y, size, color);
+}
+
+void Graphics::drawLevel3D(const Level& level, real_t size, uint32_t color) const noexcept {
+	level.draw3D(*this, size, color);
 }
 
 void Graphics::prepareShader(

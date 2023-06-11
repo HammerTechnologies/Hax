@@ -4,62 +4,66 @@
 #include "engine/core.h"
 #include "engine/game.h"
 #include "engine/graphics/font.h"
+#include "engine/graphics/level.h"
 #include "engine/graphics/texture.h"
 #include "engine/graphics/viewer.h"
 #include "engine/logger.h"
-#include "engine/maze/generator.h"
 
 struct Hax : Game {
 	Hax() noexcept
 	: m_core{640, 360, false, m_logger},
 		m_viewer{
-			Vec3r{0, 0, -5},
+			Vec3r{0, 8, -5},
 			Vec3r{},
 			0,
 			0,
 			m_core.getScreen().getWidth(),
 			m_core.getScreen().getHeight()
 		},
-		m_maze{generateMaze(16, 16, 0)},
+		m_level{16, 16, 0},
 		m_font{nullptr},
-		m_tex{nullptr},
-		m_yaw{0} {
+		m_tex{nullptr} {
 			changeDir(exeDir() + "/assets");
 			m_font = m_core.getGraphics().loadFont("Minecraft.ttf", 16);
 			m_tex = m_core.getGraphics().loadTexture("mockup.png");
 		}
 
 	virtual bool update() noexcept override {
-		if (!m_core.getScreen().isOpened() || m_core.getInput().isKeyDown(Key::ESC)) {
+		auto& graphics = m_core.getGraphics();
+		auto& input = m_core.getInput();
+		auto& screen = m_core.getScreen();
+
+		if (!screen.isOpened() || input.isKeyDown(Key::ESC)) {
 			return false;
 		}
 
+		if (input.isKeyDown(Key::LEFT)) { m_viewer.m_euler.m_y -= 180 * screen.getDelta(); }
+		if (input.isKeyDown(Key::RIGHT)) { m_viewer.m_euler.m_y += 180 * screen.getDelta(); }
+		if (input.isKeyDown(Key::UP)) { m_viewer.move(Vec3r{0, 0, 16 * screen.getDelta()}); }
+		if (input.isKeyDown(Key::DOWN)) { m_viewer.move(Vec3r{0, 0, -16 * screen.getDelta()}); }
+
 		std::ostringstream ss;
-		ss << m_core.getScreen().getWidth() << "x" << m_core.getScreen().getHeight() << " @ " << m_core.getScreen().getFps() << " FPS";
+		ss << screen.getWidth() << "x" << screen.getHeight() << " @ " << screen.getFps() << " FPS";
 
-		m_yaw += M_PI * m_core.getScreen().getDelta();
-		m_viewer.m_viewportWidth = m_core.getScreen().getWidth();
-		m_viewer.m_viewportHeight = m_core.getScreen().getHeight();
+		m_viewer.m_viewportWidth = screen.getWidth();
+		m_viewer.m_viewportHeight = screen.getHeight();
 
-		m_core.getGraphics().setup2D(0, 0, m_core.getScreen().getWidth(), m_core.getScreen().getHeight());
-		m_core.getGraphics().cls();
-		m_core.getGraphics().drawTexture(*m_tex, 0, 0, m_core.getScreen().getWidth(), m_core.getScreen().getHeight());
-		m_core.getGraphics().drawText(*m_font, ss.str(), 14, 12);
+		graphics.setup3D(m_viewer);
+		graphics.cls();
+		graphics.drawLevel3D(m_level, 16, Color::WHITE);
 
-		for (uint8_t y = 0; y < m_maze->getHeight(); y++) {
-			for (uint8_t x = 0; x < m_maze->getWidth(); x++) {
-				drawNode(m_maze->getNodeAt(x, y), x + 2, y + 2, 16, Color::YELLOW);
-			}
-		}
+		graphics.setup2D(0, 0, screen.getWidth(), screen.getHeight());
+		//graphics.drawTexture(*m_tex, 0, 0, screen.getWidth(), screen.getHeight());
+		graphics.drawLevel2D(m_level, 16, 32, 16, Color::BROWN);
+		graphics.drawRect(
+			16 + m_viewer.m_position.m_x + 4,
+			32 + m_viewer.m_position.m_z + 4,
+			8,
+			8,
+			Color::RED);
+		graphics.drawText(*m_font, ss.str(), 14, 12, Color::RED);
 
-		m_core.getGraphics().setup3D(m_viewer);
-		m_core.getGraphics().drawQuad(
-			Mat4r::transform(
-				Vec3r{},
-				Quatr::fromEuler(Vec3r{0, m_yaw, 0}),
-				Vec3r{1, 1, 1}),
-			Color::ORANGE);
-		m_core.getScreen().refresh();
+		screen.refresh();
 
 		return true;
 	}
@@ -69,61 +73,9 @@ private:
 	Logger m_logger;
 	Core m_core;
 	Viewer m_viewer;
-	std::unique_ptr<Graph> m_maze;
+	Level m_level;
 	std::unique_ptr<Font> m_font;
 	std::unique_ptr<Texture> m_tex;
-	real_t m_yaw;
-
-	void drawNode(
-		const std::shared_ptr<GraphNode>& gn,
-		uint16_t tileX,
-		uint16_t tileY,
-		uint16_t size,
-		uint32_t color) const noexcept {
-		const auto half = size / 2;
-		const auto& graphics = m_core.getGraphics();
-		if (gn->hasWest() && !gn->hasEast() && !gn->hasNorth() && !gn->hasSouth()) {
-			graphics.drawRect(tileX * size, tileY * size + half, half, 1, color);
-		} else if (!gn->hasWest() && gn->hasEast() && !gn->hasNorth() && !gn->hasSouth())	{
-			graphics.drawRect(tileX * size + half, tileY * size + half, half, 1, color);
-		} else if (!gn->hasWest() && !gn->hasEast() && gn->hasNorth() && !gn->hasSouth())	{
-			graphics.drawRect(tileX * size + half, tileY * size, 1, half, color);
-		} else if (!gn->hasWest() && !gn->hasEast() && !gn->hasNorth() && gn->hasSouth())	{
-			graphics.drawRect(tileX * size + half, tileY * size + half, 1, half, color);
-		} else if (!gn->hasWest() && !gn->hasEast() && !gn->hasNorth() && !gn->hasSouth()) {
-		} else if (gn->hasWest() && gn->hasEast() && !gn->hasNorth() && !gn->hasSouth()) {
-			graphics.drawRect(tileX * size, tileY * size + half, size, 1, color);
-		} else if (!gn->hasWest() && !gn->hasEast() && gn->hasNorth() && gn->hasSouth()) {
-			graphics.drawRect(tileX * size + half, tileY * size, 1, size, color);
-		} else if (!gn->hasWest() && gn->hasEast() && !gn->hasNorth() && gn->hasSouth()) {
-			graphics.drawRect(tileX * size + half, tileY * size + half, half, 1, color);
-			graphics.drawRect(tileX * size + half, tileY * size + half, 1, half, color);
-		} else if (gn->hasWest() && !gn->hasEast() && !gn->hasNorth() && gn->hasSouth()) {
-			graphics.drawRect(tileX * size, tileY * size + half, half, 1, color);
-			graphics.drawRect(tileX * size + half, tileY * size + half, 1, half, color);
-		} else if (!gn->hasWest() && gn->hasEast() && gn->hasNorth() && !gn->hasSouth()) {
-			graphics.drawRect(tileX * size + half, tileY * size + half, half, 1, color);
-			graphics.drawRect(tileX * size + half, tileY * size, 1, half, color);
-		} else if (gn->hasWest() && !gn->hasEast() && gn->hasNorth() && !gn->hasSouth()) {
-			graphics.drawRect(tileX * size, tileY * size + half, half, 1, color);
-			graphics.drawRect(tileX * size + half, tileY * size, 1, half, color);
-		} else if (!gn->hasWest() && gn->hasEast() && gn->hasNorth() && gn->hasSouth())	{
-			graphics.drawRect(tileX * size + half, tileY * size + half, half, 1, color);
-			graphics.drawRect(tileX * size + half, tileY * size, 1, size, color);
-		} else if (gn->hasWest() && !gn->hasEast() && gn->hasNorth() && gn->hasSouth())	{
-			graphics.drawRect(tileX * size, tileY * size + half, half, 1, color);
-			graphics.drawRect(tileX * size + half, tileY * size, 1, size, color);
-		} else if (gn->hasWest() && gn->hasEast() && !gn->hasNorth() && gn->hasSouth())	{
-			graphics.drawRect(tileX * size, tileY * size + half, size, 1, color);
-			graphics.drawRect(tileX * size + half, tileY * size + half, 1, half, color);
-		} else if (gn->hasWest() && gn->hasEast() && gn->hasNorth() && !gn->hasSouth())	{
-			graphics.drawRect(tileX * size, tileY * size + half, size, 1, color);
-			graphics.drawRect(tileX * size + half, tileY * size, 1, half, color);
-		} else if (gn->hasWest() && gn->hasEast() && gn->hasNorth() && gn->hasSouth()) {
-			graphics.drawRect(tileX * size, tileY * size, size, 1, color);
-			graphics.drawRect(tileX * size + half, tileY * size, 1, size, color);
-		}
-	}
 };
 
 std::unique_ptr<Hax> g_hax = std::make_unique<Hax>();
