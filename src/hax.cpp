@@ -54,10 +54,10 @@ struct Hax : Game {
 
 		graphics.setup2D(0, 0, screen.getWidth(), screen.getHeight());
 		//graphics.drawTexture(m_tex.get(), 0, 0, screen.getWidth(), screen.getHeight());
-		graphics.drawLevel2D(m_level, 16, 32, 16, Color::BROWN);
+		graphics.drawLevel2D(m_level, 16, 32, 16, Color::ORANGE);
 		graphics.drawRect(
-			16 + m_viewer.m_position.m_x + 4,
-			32 + m_viewer.m_position.m_z + 4,
+			12 + m_viewer.m_position.m_x,
+			28 + m_level.getHeight() * 16 - m_viewer.m_position.m_z,
 			8,
 			8,
 			Color::RED);

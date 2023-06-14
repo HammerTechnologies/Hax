@@ -74,7 +74,7 @@ void Level::drawNode2D(
 void Level::draw3D(const Graphics& graphics, real_t size, uint32_t color) const noexcept {
 	for (uint8_t y = 0; y < m_maze->getHeight(); ++y) {
 		for (uint8_t x = 0; x < m_maze->getWidth(); ++x) {
-			drawNode3D(graphics, m_maze->getNodeAt(x, y), x, y, size, color);
+			drawNode3D(graphics, m_maze->getNodeAt(x, y), x, m_maze->getHeight() - y - 1, size, color);
 		}
 	}
 }
@@ -157,7 +157,7 @@ void Level::drawNWall(
 	real_t size,
 	uint32_t color) noexcept {
 	const auto half = size / 2;
-	drawZWall(graphics, tileX * size + half, tileY * size + half, half, size, color);
+	drawZWall(graphics, tileX * size + half, (tileY + 1) * size, half, size, color);
 }
 
 void Level::drawSWall(
@@ -167,7 +167,7 @@ void Level::drawSWall(
 	real_t size,
 	uint32_t color) noexcept {
 	const auto half = size / 2;
-	drawZWall(graphics, tileX * size + half, tileY * size, half, size, color);
+	drawZWall(graphics, tileX * size + half, tileY * size + half, half, size, color);
 }
 
 void Level::drawWEWall(
@@ -187,7 +187,7 @@ void Level::drawNSWall(
 	real_t size,
 	uint32_t color) noexcept {
 	const auto half = size / 2;
-	drawZWall(graphics, tileX * size + half, tileY * size, size, size, color);
+	drawZWall(graphics, tileX * size + half, (tileY + 1) * size, size, size, color);
 }
 
 void Level::drawXWall(

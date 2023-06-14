@@ -10,6 +10,9 @@ struct Graphics;
 struct Level {
 	Level(uint8_t width, uint8_t height, uint32_t seed) noexcept
 	: m_maze{generateMaze(width, height, seed)} {}
+
+	uint8_t getWidth() const noexcept { return m_maze->getWidth(); }
+	uint8_t getHeight() const noexcept { return m_maze->getHeight(); }
 private:
 	std::unique_ptr<Graph> m_maze;
 
