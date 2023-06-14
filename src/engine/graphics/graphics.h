@@ -36,7 +36,7 @@ struct Graphics {
 		real_t height,
 		uint32_t color = Color::WHITE) const noexcept;
 	void drawTexture(
-		const Texture& tex,
+		const Texture* tex,
 		real_t x,
 		real_t y,
 		real_t width = 0,
@@ -45,7 +45,7 @@ struct Graphics {
 		uint32_t color = Color::WHITE,
 		const Mat4r& textureMatrix = Mat4r{}) const noexcept;
 	void drawText(
-		const Font& font,
+		const Font* font,
 		const std::string& text,
 		real_t x,
 		real_t y,

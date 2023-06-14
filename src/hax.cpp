@@ -53,7 +53,7 @@ struct Hax : Game {
 		graphics.drawLevel3D(m_level, 16, Color::WHITE);
 
 		graphics.setup2D(0, 0, screen.getWidth(), screen.getHeight());
-		//graphics.drawTexture(*m_tex, 0, 0, screen.getWidth(), screen.getHeight());
+		graphics.drawTexture(m_tex.get(), 0, 0, screen.getWidth(), screen.getHeight());
 		graphics.drawLevel2D(m_level, 16, 32, 16, Color::BROWN);
 		graphics.drawRect(
 			16 + m_viewer.m_position.m_x + 4,
@@ -61,7 +61,7 @@ struct Hax : Game {
 			8,
 			8,
 			Color::RED);
-		graphics.drawText(*m_font, ss.str(), 14, 12, Color::RED);
+		graphics.drawText(m_font.get(), ss.str(), 14, 12, Color::RED);
 
 		screen.refresh();
 

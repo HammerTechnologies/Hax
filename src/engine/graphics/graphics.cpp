@@ -78,16 +78,18 @@ Graphics::~Graphics() noexcept {
 
 std::unique_ptr<Font> Graphics::loadFont(const std::string& filename, real_t height) const noexcept {
 	auto font = std::unique_ptr<Font>(new Font(filename, height, m_driver));
-	if (!*font) {
+	if (!font->isValid()) {
 		m_logger.error("Could not load font '" + filename + "'.");
+		font.reset();
 	}
 	return font;
 }
 
 std::unique_ptr<Texture> Graphics::loadTexture(const std::string& filename) const noexcept {
 	auto texture = std::unique_ptr<Texture>(new Texture(filename, m_driver));
-	if (!*texture) {
+	if (!texture->isValid()) {
 		m_logger.error("Could not load texture '" + filename + "'.");
+		texture.reset();
 	}
 	return texture;
 }
@@ -132,7 +134,7 @@ void Graphics::drawRect(
 }
 
 void Graphics::drawTexture(
-	const Texture& tex,
+	const Texture* tex,
 	real_t x,
 	real_t y,
 	real_t width,
@@ -141,13 +143,13 @@ void Graphics::drawTexture(
 	uint32_t color,
 	const Mat4r& textureMatrix) const noexcept {
 	if (tex) {
-		const real_t realWidth = (width != 0) ? width : tex.getWidth();
-		const real_t realHeight = (height != 0) ? height : tex.getHeight();
+		const real_t realWidth = (width != 0) ? width : tex->getWidth();
+		const real_t realHeight = (height != 0) ? height : tex->getHeight();
 		const Mat4r transform = Mat4r::transform(
 			Vec3r{x + realWidth / 2, y + realHeight / 2, 0},
 			Quatr::fromAxis(deg2rad(angle), Vec3r{0, 0, 1}),
 			Vec3r{realWidth, realHeight, 1});
-		tex.bind();
+		tex->bind();
 		m_rect.bind();
 		prepareShader(transform, textureMatrix, color, true);
 		m_rect.draw();
@@ -155,21 +157,21 @@ void Graphics::drawTexture(
 }
 
 void Graphics::drawText(
-	const Font& font,
+	const Font* font,
 	const std::string& text,
 	real_t x,
 	real_t y,
 	uint32_t color) const noexcept {
 	if (font) {
-		y += font.m_maxHeight;
+		y += font->m_maxHeight;
 		for (size_t i = 0; i < text.size(); ++i) {
-			const FontQuad quad = font.getFontQuad(text[i], x, y);
+			const FontQuad quad = font->getFontQuad(text[i], x, y);
 			const Mat4r texMatrix = Mat4r::transform(
 				Vec3r{quad.m_u, quad.m_v, 0},
 				Quatr{},
 				Vec3r{quad.m_us, quad.m_vs, 1}
 			);
-			drawTexture(*font.m_tex, quad.m_x, quad.m_y, quad.m_width, quad.m_height, 0, color, texMatrix);
+			drawTexture(font->m_tex.get(), quad.m_x, quad.m_y, quad.m_width, quad.m_height, 0, color, texMatrix);
 		}
 	}
 }
