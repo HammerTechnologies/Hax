@@ -5,9 +5,9 @@
 #include <stb_truetype.h>
 #undef STB_TRUETYPE_IMPLEMENTATION
 #include "font.h"
+#include "texture.h"
 
-Font::Font(const std::string& filename, real_t height, const GraphicsDriver& driver) noexcept
-: m_tex{nullptr} {
+Font::Font(const std::string& filename, real_t height, const GraphicsDriver& driver) noexcept {
 	// Read file into buffer
 	std::ifstream file(filename, std::ios::ate | std::ios::binary);
 	if (!file.is_open()) return;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <memory>
 #include <string>
 #include "internal/graphics_driver.h"
 
@@ -17,7 +18,6 @@ private:
 	uint16_t m_height;
 
 	Texture(uint16_t width, uint16_t height, const GraphicsDriver& driver) noexcept;
-	Texture(const std::string& filename, const GraphicsDriver& driver) noexcept;
 	~Texture() noexcept;
 
 	constexpr bool isValid() const { return m_width != 0 && m_height != 0 && m_internal; }

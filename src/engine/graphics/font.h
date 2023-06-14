@@ -6,7 +6,9 @@
 #include <stb_truetype.h>
 #include "../real.h"
 #include "font_quad.h"
-#include "texture.h"
+#include "internal/graphics_driver.h"
+
+struct Texture;
 
 struct Font {
 	constexpr real_t getHeight() const noexcept { return m_height; }

@@ -5,6 +5,7 @@
 #include "graphics.h"
 #include "internal/graphics_driver.h"
 #include "level.h"
+#include "pixmap.h"
 #include "texture.h"
 #include "viewer.h"
 
@@ -77,7 +78,7 @@ Graphics::~Graphics() noexcept {
 }
 
 std::unique_ptr<Font> Graphics::loadFont(const std::string& filename, real_t height) const noexcept {
-	auto font = std::unique_ptr<Font>(new Font(filename, height, m_driver));
+	auto font = std::unique_ptr<Font> {new Font(filename, height, m_driver)};
 	if (!font->isValid()) {
 		m_logger.error("Could not load font '" + filename + "'.");
 		font.reset();
@@ -85,11 +86,23 @@ std::unique_ptr<Font> Graphics::loadFont(const std::string& filename, real_t hei
 	return font;
 }
 
+std::unique_ptr<Pixmap> Graphics::loadPixmap(const std::string& filename) const noexcept {
+	auto pixmap = std::unique_ptr<Pixmap> {new Pixmap(filename)};
+	if (pixmap->getWidth() == 0 && pixmap->getHeight() == 0) {
+		m_logger.error("Could not load pixmap '" + filename + "'.");
+		pixmap.reset();
+	}
+	return pixmap;
+}
+
 std::unique_ptr<Texture> Graphics::loadTexture(const std::string& filename) const noexcept {
-	auto texture = std::unique_ptr<Texture>(new Texture(filename, m_driver));
+	auto pixmap = Pixmap {filename};
+	auto texture = std::unique_ptr<Texture> {new Texture(pixmap.getWidth(), pixmap.getHeight(), m_driver)};
 	if (!texture->isValid()) {
 		m_logger.error("Could not load texture '" + filename + "'.");
 		texture.reset();
+	} else {
+		texture->setPixels(pixmap.data());
 	}
 	return texture;
 }

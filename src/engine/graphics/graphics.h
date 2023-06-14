@@ -13,6 +13,7 @@ struct Font;
 struct GraphicsDriver;
 struct Level;
 struct Logger;
+struct Pixmap;
 struct Texture;
 struct Viewer;
 
@@ -23,6 +24,7 @@ struct Graphics {
 	operator bool() const noexcept { return m_driver && m_shader; }
 
 	std::unique_ptr<Font> loadFont(const std::string& filename, real_t height) const noexcept;
+	std::unique_ptr<Pixmap> loadPixmap(const std::string& filename) const noexcept;
 	std::unique_ptr<Texture> loadTexture(const std::string& filename) const noexcept;
 	std::unique_ptr<Texture> createTexture(uint16_t width, uint16_t height) const noexcept;
 
