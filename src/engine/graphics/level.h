@@ -20,61 +20,61 @@ private:
 		const Graphics& graphics,
 		const Vec2r& position,
 		real_t size,
-		uint32_t color) const noexcept;
+		color_t color) const noexcept;
 	static void drawNode2D(
 		const Graphics& graphics,
 		const std::shared_ptr<GraphNode>& gn,
 		const Vec2r& position,
 		real_t size,
-		uint32_t color) noexcept;
+		color_t color) noexcept;
 
-	void draw3D(const Graphics& graphics, real_t size, uint32_t color) const noexcept;
+	void draw3D(const Graphics& graphics, real_t size, color_t color) const noexcept;
 	static void drawNode3D(
 		const Graphics& graphics,
 		const std::shared_ptr<GraphNode>& gn,
 		const Vec2<uint8_t>& tile,
 		real_t size,
-		uint32_t color) noexcept;
+		color_t color) noexcept;
 	static void drawWWall(
 		const Graphics& graphics,
 		const Vec2<uint8_t>& tile,
 		real_t size,
-		uint32_t color) noexcept;
+		color_t color) noexcept;
 	static void drawEWall(
 		const Graphics& graphics,
 		const Vec2<uint8_t>& tile,
 		real_t size,
-		uint32_t color) noexcept;
+		color_t color) noexcept;
 	static void drawNWall(
 		const Graphics& graphics,
 		const Vec2<uint8_t>& tile,
 		real_t size,
-		uint32_t color) noexcept;
+		color_t color) noexcept;
 	static void drawSWall(
 		const Graphics& graphics,
 		const Vec2<uint8_t>& tile,
 		real_t size,
-		uint32_t color) noexcept;
+		color_t color) noexcept;
 	static void drawWEWall(
 		const Graphics& graphics,
 		const Vec2<uint8_t>& tile,
 		real_t size,
-		uint32_t color) noexcept;
+		color_t color) noexcept;
 	static void drawNSWall(
 		const Graphics& graphics,
 		const Vec2<uint8_t>& tile,
 		real_t size,
-		uint32_t color) noexcept;
+		color_t color) noexcept;
 	static void drawXWall(
 		const Graphics& graphics,
 		const Vec2r& position,
 		const Vec2r& size,
-		uint32_t color) noexcept;
+		color_t color) noexcept;
 	static void drawZWall(
 		const Graphics& graphics,
 		const Vec2r& position,
 		const Vec2r& size,
-		uint32_t color) noexcept;
+		color_t color) noexcept;
 
 	friend struct Graphics;
 };

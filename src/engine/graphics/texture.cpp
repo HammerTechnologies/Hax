@@ -13,6 +13,6 @@ void Texture::bind() const noexcept {
 	m_driver.bindTexture(m_internal);
 }
 
-void Texture::setPixels(const uint32_t* pixels) const noexcept {
+void Texture::setPixels(const color_t* pixels) const noexcept {
 	m_driver.setTexturePixels(m_internal, m_size, pixels);
 }

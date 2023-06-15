@@ -51,18 +51,20 @@ Graphics::Graphics(const GraphicsDriver& driver, const Logger& logger) noexcept
 	m_rect{
 		m_driver,
 		{
-			Vertex(Vec3r(static_cast<real_t>(-0.5), static_cast<real_t>(-0.5), 0), Color::WHITE, 0, 0),
-			Vertex(Vec3r(static_cast<real_t>( 0.5), static_cast<real_t>(-0.5), 0), Color::WHITE, 1, 0),
-			Vertex(Vec3r(static_cast<real_t>( 0.5), static_cast<real_t>( 0.5), 0), Color::WHITE, 1, 1),
-			Vertex(Vec3r(static_cast<real_t>(-0.5), static_cast<real_t>( 0.5), 0), Color::WHITE, 0, 1)},
+			{{-0.5, -0.5, 0}, Color::WHITE, {0, 0}},
+			{{ 0.5, -0.5, 0}, Color::WHITE, {1, 0}},
+			{{ 0.5,  0.5, 0}, Color::WHITE, {1, 1}},
+			{{-0.5,  0.5, 0}, Color::WHITE, {0, 1}}
+		},
 		{0, 1, 2, 3}},
 	m_quad{
 		m_driver,
 		{
-			Vertex(Vec3r(0, 1, 0), Color::WHITE, 0, 0),
-			Vertex(Vec3r(1, 1, 0), Color::WHITE, 1, 0),
-			Vertex(Vec3r(1, 0, 0), Color::WHITE, 1, 1),
-			Vertex(Vec3r(0, 0, 0), Color::WHITE, 0, 1)},
+			{{0, 1, 0}, Color::WHITE, {0, 0}},
+			{{1, 1, 0}, Color::WHITE, {1, 0}},
+			{{1, 0, 0}, Color::WHITE, {1, 1}},
+			{{0, 0, 0}, Color::WHITE, {0, 1}}
+		},
 		{0, 1, 2, 3}},
 	m_mvpLoc{m_shader.getUniform("mvp")},
 	m_textureMatrixLoc{m_shader.getUniform("textureMatrix")},
@@ -127,14 +129,14 @@ void Graphics::setup3D(const Viewer& viewer) noexcept {
 		* viewer.getViewMatrix();
 }
 
-void Graphics::cls(uint32_t color) const noexcept {
+void Graphics::cls(color_t color) const noexcept {
 	m_driver.cls(color);
 }
 
 void Graphics::drawRect(
 	const Vec2r& position,
 	const Vec2r& size,
-	uint32_t color) const noexcept {
+	color_t color) const noexcept {
 	const auto transform = Mat4r::transform(
 		{position.x() + size.x() / 2, position.y() + size.y() / 2, 0},
 		{},
@@ -149,7 +151,7 @@ void Graphics::drawTexture(
 	const Vec2r& position,
 	const Vec2r& size,
 	real_t angle,
-	uint32_t color,
+	color_t color,
 	const Mat4r& textureMatrix) const noexcept {
 	if (tex) {
 		const auto realSize = Vec2r {
@@ -170,7 +172,7 @@ void Graphics::drawText(
 	const Font* font,
 	const std::string& text,
 	const Vec2r& position,
-	uint32_t color) const noexcept {
+	color_t color) const noexcept {
 	if (font) {
 		auto fixedPos = Vec2r {position.x(), position.y() + font->m_maxHeight};
 		for (auto i = size_t {0}; i < text.size(); ++i) {
@@ -191,7 +193,7 @@ void Graphics::drawText(
 	}
 }
 
-void Graphics::drawQuad(const Mat4r& transform, uint32_t color) const noexcept {
+void Graphics::drawQuad(const Mat4r& transform, color_t color) const noexcept {
 	m_quad.bind();
 	prepareShader(transform, Mat4r{}, color, false);
 	m_quad.draw();
@@ -201,18 +203,18 @@ void Graphics::drawLevel2D(
 	const Level& level,
 	const Vec2r& position,
 	real_t size,
-	uint32_t color) const noexcept {
+	color_t color) const noexcept {
 	level.draw2D(*this, position, size, color);
 }
 
-void Graphics::drawLevel3D(const Level& level, real_t size, uint32_t color) const noexcept {
+void Graphics::drawLevel3D(const Level& level, real_t size, color_t color) const noexcept {
 	level.draw3D(*this, size, color);
 }
 
 void Graphics::prepareShader(
 	const Mat4r& transform,
 	const Mat4r& textureMatrix,
-	uint32_t color,
+	color_t color,
 	bool useTexture) const noexcept {
 	m_shader.prepare();
 	m_shader.setInt(m_useTextureLoc, useTexture);

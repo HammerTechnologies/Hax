@@ -11,14 +11,14 @@ Font::Font(const std::string& filename, real_t height, const GraphicsDriver& dri
 	// Read file into buffer
 	auto file = std::ifstream {filename, std::ios::ate | std::ios::binary};
 	if (!file.is_open()) return;
-	auto ttf = std::vector<uint8_t>(file.tellg());
+	auto ttf = std::vector<colorcomp_t>(file.tellg());
 	file.seekg(0);
 	file.read(reinterpret_cast<char*>(ttf.data()), ttf.size());
 	file.close();
 
 	// Bake font into alpha buffer
 	auto w = 64, h = 64;
-	auto alphaBuffer = std::vector<uint8_t>(w * h);
+	auto alphaBuffer = std::vector<colorcomp_t>(w * h);
 	while (stbtt_BakeFontBitmap(ttf.data(), 0, height, alphaBuffer.data(), w, h, 32, m_glyphs.size(), m_glyphs.data()) <= 0) {
 		if (w == h) {
 			w *= 2;
@@ -30,7 +30,7 @@ Font::Font(const std::string& filename, real_t height, const GraphicsDriver& dri
 	ttf.clear();
 
 	// Copy into pixels
-	auto pixels = std::vector<uint8_t>(w * h * 4, 255);
+	auto pixels = std::vector<colorcomp_t>(w * h * 4, 255);
 	for (auto i = 0; i < w*h; ++i) {
 		pixels[i*4 + 3] = alphaBuffer[i];
 	}
@@ -38,7 +38,7 @@ Font::Font(const std::string& filename, real_t height, const GraphicsDriver& dri
 
 	// Create texture
 	m_tex = std::unique_ptr<Texture> {new Texture {Vec2<uint16_t>(w, h), driver}};
-	m_tex->setPixels(reinterpret_cast<uint32_t*>(pixels.data()));
+	m_tex->setPixels(reinterpret_cast<color_t*>(pixels.data()));
 	pixels.clear();
 
 	// Get max char height

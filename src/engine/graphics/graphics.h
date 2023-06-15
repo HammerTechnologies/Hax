@@ -30,30 +30,30 @@ struct Graphics {
 
 	void setup2D(const Vec2<uint16_t>& position, const Vec2<uint16_t> size) noexcept;
 	void setup3D(const Viewer& viewer) noexcept;
-	void cls(uint32_t color = Color::BLACK) const noexcept;
+	void cls(color_t color = Color::BLACK) const noexcept;
 	void drawRect(
 		const Vec2r& position,
 		const Vec2r& size,
-		uint32_t color = Color::WHITE) const noexcept;
+		color_t color = Color::WHITE) const noexcept;
 	void drawTexture(
 		const Texture* tex,
 		const Vec2r& position,
 		const Vec2r& size = {},
 		real_t angle = 0,
-		uint32_t color = Color::WHITE,
+		color_t color = Color::WHITE,
 		const Mat4r& textureMatrix = Mat4r{}) const noexcept;
 	void drawText(
 		const Font* font,
 		const std::string& text,
 		const Vec2r& position,
-		uint32_t color = Color::WHITE) const noexcept;
-	void drawQuad(const Mat4r& transform, uint32_t color = Color::WHITE) const noexcept;
+		color_t color = Color::WHITE) const noexcept;
+	void drawQuad(const Mat4r& transform, color_t color = Color::WHITE) const noexcept;
 	void drawLevel2D(
 		const Level& level,
 		const Vec2r& position,
 		real_t size,
-		uint32_t color = Color::WHITE) const noexcept;
-	void drawLevel3D(const Level& level, real_t size, uint32_t color = Color::WHITE) const noexcept;
+		color_t color = Color::WHITE) const noexcept;
+	void drawLevel3D(const Level& level, real_t size, color_t color = Color::WHITE) const noexcept;
 private:
 	const GraphicsDriver& m_driver;
 	const Logger& m_logger;
@@ -70,6 +70,6 @@ private:
 	void prepareShader(
 		const Mat4r& transform,
 		const Mat4r& textureMatrix,
-		uint32_t color,
+		color_t color,
 		bool useTexture) const noexcept;
 };

@@ -5,7 +5,7 @@ void Level::draw2D(
 	const Graphics& graphics,
 	const Vec2r& position,
 	real_t size,
-	uint32_t color) const noexcept {
+	color_t color) const noexcept {
 	for (auto tileY = 0; tileY < m_maze->getHeight(); ++tileY) {
 		for (auto tileX = 0; tileX < m_maze->getWidth(); ++tileX) {
 			drawNode2D(
@@ -23,7 +23,7 @@ void Level::drawNode2D(
 	const std::shared_ptr<GraphNode>& gn,
 	const Vec2r& position,
 	real_t size,
-	uint32_t color) noexcept {
+	color_t color) noexcept {
 	const auto half = size / 2;
 	if (gn->hasWest() && !gn->hasEast() && !gn->hasNorth() && !gn->hasSouth()) {
 		graphics.drawRect({position.x(), position.y() + half}, {half, 1}, color);
@@ -68,7 +68,7 @@ void Level::drawNode2D(
 	}
 }
 
-void Level::draw3D(const Graphics& graphics, real_t size, uint32_t color) const noexcept {
+void Level::draw3D(const Graphics& graphics, real_t size, color_t color) const noexcept {
 	for (auto tileY = uint8_t {0}; tileY < m_maze->getHeight(); ++tileY) {
 		for (auto tileX = uint8_t {0}; tileX < m_maze->getWidth(); ++tileX) {
 			drawNode3D(
@@ -86,7 +86,7 @@ void Level::drawNode3D(
 	const std::shared_ptr<GraphNode>& gn,
 	const Vec2<uint8_t>& tile,
 	real_t size,
-	uint32_t color) noexcept {
+	color_t color) noexcept {
 	const auto dark = Color::multiply(color, 0.75f);
 	if (gn->hasWest() && !gn->hasEast() && !gn->hasNorth() && !gn->hasSouth()) {
 		drawWWall(graphics, tile, size, color);
@@ -135,7 +135,7 @@ void Level::drawWWall(
 	const Graphics& graphics,
 	const Vec2<uint8_t>& tile,
 	real_t size,
-	uint32_t color) noexcept {
+	color_t color) noexcept {
 	const auto half = size / 2;
 	drawXWall(graphics, {tile.x() * size, tile.y() * size + half}, {half, size}, color);
 }
@@ -144,7 +144,7 @@ void Level::drawEWall(
 	const Graphics& graphics,
 	const Vec2<uint8_t>& tile,
 	real_t size,
-	uint32_t color) noexcept {
+	color_t color) noexcept {
 	const auto half = size / 2;
 	drawXWall(graphics, {tile.x() * size + half, tile.y() * size + half}, {half, size}, color);
 }
@@ -153,7 +153,7 @@ void Level::drawNWall(
 	const Graphics& graphics,
 	const Vec2<uint8_t>& tile,
 	real_t size,
-	uint32_t color) noexcept {
+	color_t color) noexcept {
 	const auto half = size / 2;
 	drawZWall(graphics, {tile.x() * size + half, (tile.y() + 1) * size}, {half, size}, color);
 }
@@ -162,7 +162,7 @@ void Level::drawSWall(
 	const Graphics& graphics,
 	const Vec2<uint8_t>& tile,
 	real_t size,
-	uint32_t color) noexcept {
+	color_t color) noexcept {
 	const auto half = size / 2;
 	drawZWall(graphics, {tile.x() * size + half, tile.y() * size + half}, {half, size}, color);
 }
@@ -171,7 +171,7 @@ void Level::drawWEWall(
 	const Graphics& graphics,
 	const Vec2<uint8_t>& tile,
 	real_t size,
-	uint32_t color) noexcept {
+	color_t color) noexcept {
 	const auto half = size / 2;
 	drawXWall(graphics, {tile.x() * size, tile.y() * size + half}, {size, size}, color);
 }
@@ -180,7 +180,7 @@ void Level::drawNSWall(
 	const Graphics& graphics,
 	const Vec2<uint8_t>& tile,
 	real_t size,
-	uint32_t color) noexcept {
+	color_t color) noexcept {
 	const auto half = size / 2;
 	drawZWall(graphics, {tile.x() * size + half, (tile.y() + 1) * size}, {size, size}, color);
 }
@@ -189,7 +189,7 @@ void Level::drawXWall(
 	const Graphics& graphics,
 	const Vec2r& position,
 	const Vec2r& size,
-	uint32_t color) noexcept {
+	color_t color) noexcept {
 	const auto transform = Mat4r::transform(
 		Vec3r{position.x(), 0, position.y()},
 		Quatr{},
@@ -201,7 +201,7 @@ void Level::drawZWall(
 	const Graphics& graphics,
 	const Vec2r& position,
 	const Vec2r& size,
-	uint32_t color) noexcept {
+	color_t color) noexcept {
 	const auto transform = Mat4r::transform(
 		{position.x(), 0, position.y()},
 		Quatr::fromEuler(Vec3r{0, M_PI_2, 0}),

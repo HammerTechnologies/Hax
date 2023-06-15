@@ -33,7 +33,7 @@ struct GraphicsDriver {
 
 	void setup2D(const Vec2<uint16_t>& position, const Vec2<uint16_t> size) const noexcept;
 	void setup3D(const Viewer& viewer) const noexcept;
-	void cls(uint32_t color) const noexcept;
+	void cls(color_t color) const noexcept;
 
 	VertexBuffer createVertexBuffer(const std::vector<Vertex>& vertices) const noexcept;
 	IndexBuffer createIndexBuffer(const std::vector<uint16_t>& indices) const noexcept;
@@ -61,7 +61,7 @@ struct GraphicsDriver {
 	void setTexturePixels(
 		const DriverTexture& texture,
 		const Vec2<uint16_t>& size,
-		const uint32_t* pixels) const noexcept;
+		const color_t* pixels) const noexcept;
 private:
 	const Logger& m_logger;
 	bool m_init;

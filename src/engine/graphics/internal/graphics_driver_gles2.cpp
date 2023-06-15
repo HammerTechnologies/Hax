@@ -44,7 +44,7 @@ void GraphicsDriver::setup3D(const Viewer& viewer) const noexcept {
 		viewer.m_viewportSize.y());
 }
 
-void GraphicsDriver::cls(uint32_t color = Color::BLACK) const noexcept {
+void GraphicsDriver::cls(color_t color = Color::BLACK) const noexcept {
 	glClearColor(Color::redf(color), Color::greenf(color), Color::bluef(color), Color::alphaf(color));
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
@@ -215,7 +215,7 @@ void GraphicsDriver::bindTexture(const DriverTexture& texture) const noexcept {
 void GraphicsDriver::setTexturePixels(
 	const DriverTexture& texture,
 	const Vec2<uint16_t>& size,
-	const uint32_t* pixels) const noexcept {
+	const color_t* pixels) const noexcept {
 	bindTexture(texture);
 	glTexImage2D(
 		GL_TEXTURE_2D,

@@ -2,14 +2,15 @@
 
 #include <array>
 #include <cstdint>
+#include "../../math/vec2.h"
 #include "../../math/vec3.h"
 #include "../../math/real.h"
 
 struct Vertex {
 	Vec3r m_position;
-	uint32_t m_color;
-	std::array<real_t, 2> m_texCoords;
+	color_t m_color;
+	Vec2r m_texCoords;
 
-	constexpr Vertex(const Vec3r& position, uint32_t color, real_t u, real_t v) noexcept
-	: m_position{position}, m_color{color}, m_texCoords{u, v} {}
+	constexpr Vertex(const Vec3r& position, color_t color, const Vec2r& texCoords) noexcept
+	: m_position{position}, m_color{color}, m_texCoords{texCoords} {}
 };
