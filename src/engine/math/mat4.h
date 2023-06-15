@@ -5,6 +5,7 @@
 #include "../real.h"
 #include "quat.h"
 #include "vec3.h"
+#include "vec4.h"
 
 template <typename T>
 struct Mat4 {
@@ -29,15 +30,15 @@ struct Mat4 {
 		return result;
 	}
 
+	constexpr Vec4<T> operator*(const Vec4<T>& v) const noexcept {
+		const auto translation = Mat4{}.translate({v.x(), v.y(), v.z()});
+		translation.m_data[15] = v.w();
+		const auto result = *this * translation;
+		return {result.m_data[12], result.m_data[13], result.m_data[14], result.m_data[15]};
+	}
+
 	constexpr const T* data() const noexcept { return m_data.data(); }
 	constexpr T* data() noexcept { return m_data.data(); }
-
-	constexpr Vec3<T> mulVec3(const Vec3<T>& v, const T& w) const noexcept {
-		const auto translation = Mat4{}.translate(v);
-		translation.m_data[15] = w;
-		const auto result = *this * translation;
-		return {result.m_data[12], result.m_data[13], result.m_data[14]};
-	}
 
 	constexpr Mat4 translate(const Vec3<T>& v) const noexcept {
 		auto translation = Mat4 {};

@@ -4,12 +4,6 @@
 #include "../real.h"
 
 template<typename T>
-constexpr T deg2rad(const T& a) noexcept { return T(a * 0.0174532925); }
-
-template<typename T>
-constexpr T rad2deg(const T& a) noexcept { return T(a * 57.2957795); }
-
-template<typename T>
 struct Vec2 {
 	constexpr Vec2(T x = 0, T y = 0) noexcept
 	: m_x{x}, m_y{y} {}
@@ -134,14 +128,6 @@ struct Vec2 {
 
 	constexpr Vec2 mix(const Vec2& other, const T& t) const noexcept {
 		return *this + (other - *this) * t;
-	}
-
-	constexpr Vec2 deg() const noexcept {
-		return {rad2deg(m_x), rad2deg(m_y)};
-	}
-
-	constexpr Vec2 rad() const noexcept {
-		return {deg2rad(m_x), deg2rad(m_y)};
 	}
 private:
 	T m_x, m_y;

@@ -5,6 +5,12 @@
 #include "vec2.h"
 
 template<typename T>
+constexpr T deg2rad(const T& a) noexcept { return T(a * 0.0174532925); }
+
+template<typename T>
+constexpr T rad2deg(const T& a) noexcept { return T(a * 57.2957795); }
+
+template<typename T>
 struct Vec3 {
 	constexpr Vec3(T x = 0, T y = 0, T z = 0) noexcept
 	: m_x{x}, m_y{y}, m_z{z} {}
