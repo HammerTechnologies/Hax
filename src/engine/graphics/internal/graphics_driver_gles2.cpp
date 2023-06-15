@@ -164,7 +164,7 @@ void GraphicsDriver::setProgramUniform(int32_t location, real_t x, real_t y) con
 }
 
 void GraphicsDriver::setProgramUniform(int32_t location, const Vec3r& v) const noexcept {
-	glUniform3f(location, v.m_x, v.m_y, v.m_z);
+	glUniform3f(location, v.x(), v.y(), v.z());
 }
 
 void GraphicsDriver::setProgramUniform(int32_t location, real_t x, real_t y, real_t z, real_t w) const noexcept {
@@ -172,7 +172,7 @@ void GraphicsDriver::setProgramUniform(int32_t location, real_t x, real_t y, rea
 }
 
 void GraphicsDriver::setProgramUniform(int32_t location, const Mat4r& m) const noexcept {
-	glUniformMatrix4fv(location, 1, false, m.m_data.data());
+	glUniformMatrix4fv(location, 1, false, m.data());
 }
 
 int32_t GraphicsDriver::getProgramAttribLocation(const GpuProgram& program, const std::string& name) const noexcept {

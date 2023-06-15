@@ -37,8 +37,8 @@ struct Hax : Game {
 			return false;
 		}
 
-		if (input.isKeyDown(Key::LEFT)) { m_viewer.m_euler.m_y -= 180 * screen.getDelta(); }
-		if (input.isKeyDown(Key::RIGHT)) { m_viewer.m_euler.m_y += 180 * screen.getDelta(); }
+		if (input.isKeyDown(Key::LEFT)) { m_viewer.m_euler.y() -= 180 * screen.getDelta(); }
+		if (input.isKeyDown(Key::RIGHT)) { m_viewer.m_euler.y() += 180 * screen.getDelta(); }
 		if (input.isKeyDown(Key::UP)) { m_viewer.move(Vec3r{0, 0, 16 * screen.getDelta()}); }
 		if (input.isKeyDown(Key::DOWN)) { m_viewer.move(Vec3r{0, 0, -16 * screen.getDelta()}); }
 
@@ -56,8 +56,8 @@ struct Hax : Game {
 		//graphics.drawTexture(m_tex.get(), 0, 0, screen.getWidth(), screen.getHeight());
 		graphics.drawLevel2D(m_level, 16, 32, 16, Color::ORANGE);
 		graphics.drawRect(
-			12 + m_viewer.m_position.m_x,
-			28 + m_level.getHeight() * 16 - m_viewer.m_position.m_z,
+			12 + m_viewer.m_position.x(),
+			28 + m_level.getHeight() * 16 - m_viewer.m_position.z(),
 			8,
 			8,
 			Color::RED);

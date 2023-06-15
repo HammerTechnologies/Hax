@@ -6,21 +6,19 @@
 
 template <typename T>
 struct Quat {
-	T m_w, m_x, m_y, m_z;
-
 	constexpr Quat(const T& w = 1, const T& x = 0, const T& y = 0, const T& z = 0) noexcept
 	: m_w(w), m_x(x), m_y(y), m_z(z) {}
 
 	constexpr static Quat fromAxis(const T& angle, const Vec3<T>& axis) noexcept {
 		const auto halfAngle = angle / 2;
 		const auto v = axis.norm() * std::sin(halfAngle);
-		return {std::cos(halfAngle), v.m_x, v.m_y, v.m_z};
+		return {std::cos(halfAngle), v.x(), v.y(), v.z()};
 	}
 
 	constexpr static Quat fromEuler(const Vec3<T>& euler) noexcept {
-		const auto halfx = euler.m_x / 2;
-		const auto halfy = euler.m_y / 2;
-		const auto halfz = euler.m_z / 2;
+		const auto halfx = euler.x() / 2;
+		const auto halfy = euler.y() / 2;
+		const auto halfz = euler.z() / 2;
 		const auto sinx = std::sin(halfx);
 		const auto siny = std::sin(halfy);
 		const auto sinz = std::sin(halfz);
@@ -49,7 +47,7 @@ struct Quat {
 	}
 
 	constexpr Vec3<T> operator*(const Vec3<T>& v) const noexcept {
-		const auto q = *this * Quat{0, v.m_x, v.m_y, v.m_z} * conj();
+		const auto q = *this * Quat{0, v.x(), v.y(), v.z()} * conj();
 		return {q.m_x, q.m_y, q.m_z};
 	}
 
@@ -60,6 +58,15 @@ struct Quat {
 	constexpr Quat operator/(const T& scalar) const noexcept {
 		return {m_w / scalar, m_x / scalar, m_y / scalar, m_z / scalar};
 	}
+
+	constexpr const T& w() const noexcept { return m_w; }
+	constexpr const T& x() const noexcept { return m_x; }
+	constexpr const T& y() const noexcept { return m_y; }
+	constexpr const T& z() const noexcept { return m_z; }
+	constexpr T& w() noexcept { return m_w; }
+	constexpr T& x() noexcept { return m_x; }
+	constexpr T& y() noexcept { return m_y; }
+	constexpr T& z() noexcept { return m_z; }
 
 	constexpr Quat norm() const noexcept {
 		const auto result = *this;
@@ -115,6 +122,8 @@ struct Quat {
 			std::atan2(2 * (m_x*m_y + m_w*m_z), m_w*m_w + m_x*m_x - m_y*m_y - m_z*m_z)
 		};
 	}
+private:
+	T m_w, m_x, m_y, m_z;
 };
 
 using Quatr = Quat<real_t>;

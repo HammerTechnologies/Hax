@@ -11,8 +11,6 @@ constexpr T rad2deg(const T& a) noexcept { return T(a * 57.2957795); }
 
 template<typename T>
 struct Vec3 {
-	T m_x, m_y, m_z;
-
 	constexpr Vec3(T x = 0, T y = 0, T z = 0) noexcept
 	: m_x{x}, m_y{y}, m_z{z} {}
 
@@ -108,6 +106,13 @@ struct Vec3 {
 		return *this;
 	}
 
+	constexpr const T& x() const noexcept { return m_x; }
+	constexpr const T& y() const noexcept { return m_y; }
+	constexpr const T& z() const noexcept { return m_z; }
+	constexpr T& x() noexcept { return m_x; }
+	constexpr T& y() noexcept { return m_y; }
+	constexpr T& z() noexcept { return m_z; }
+
 	constexpr T dot(const Vec3& other) const noexcept {
 		return m_x * other.m_x + m_y * other.m_y + m_z * other.m_z;
 	}
@@ -144,6 +149,8 @@ struct Vec3 {
 	constexpr Vec3 rad() const noexcept {
 		return {deg2rad(m_x), deg2rad(m_y), deg2rad(m_z)};
 	}
+private:
+	T m_x, m_y, m_z;
 };
 
 using Vec3r = Vec3<real_t>;

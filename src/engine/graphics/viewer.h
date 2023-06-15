@@ -44,8 +44,8 @@ struct Viewer {
 
 	constexpr void lookAt(const Vec3r& position) noexcept {
 		const auto dir = (position - m_position).norm();
-		m_euler.m_x = rad2deg(std::asin(-dir.m_y));
-		m_euler.m_y = rad2deg(std::atan2(dir.m_x, dir.m_z));
+		m_euler.x() = rad2deg(std::asin(-dir.y()));
+		m_euler.y() = rad2deg(std::atan2(dir.x(), dir.z()));
 	}
 
 	constexpr Mat4r getViewMatrix() const noexcept {

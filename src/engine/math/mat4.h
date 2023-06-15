@@ -8,8 +8,6 @@
 
 template <typename T>
 struct Mat4 {
-	std::array<T, 16> m_data;
-
 	constexpr Mat4() noexcept
 	: Mat4({1, 0, 0, 0,	0, 1, 0, 0,	0, 0, 1, 0,	0, 0, 0, 1}) {}
 
@@ -31,6 +29,9 @@ struct Mat4 {
 		return result;
 	}
 
+	constexpr const T* data() const noexcept { return m_data.data(); }
+	constexpr T* data() noexcept { return m_data.data(); }
+
 	constexpr Vec3<T> mulVec3(const Vec3<T>& v, const T& w) const noexcept {
 		const auto translation = Mat4{}.translate(v);
 		translation.m_data[15] = w;
@@ -40,31 +41,31 @@ struct Mat4 {
 
 	constexpr Mat4 translate(const Vec3<T>& v) const noexcept {
 		auto translation = Mat4 {};
-		translation.m_data[12] = v.m_x;
-		translation.m_data[13] = v.m_y;
-		translation.m_data[14] = v.m_z;
+		translation.m_data[12] = v.x();
+		translation.m_data[13] = v.y();
+		translation.m_data[14] = v.z();
 		return *this * translation;
 	}
 
 	constexpr Mat4 rotate(const T& angle, const Vec3<T>& axis) const noexcept {
 		const auto c = std::cos(angle);
 		const auto s = std::sin(angle);
-		const auto xx = axis.m_x * axis.m_x;
-		const auto xy = axis.m_x * axis.m_y;
-		const auto xz = axis.m_x * axis.m_z;
-		const auto yy = axis.m_y * axis.m_y;
-		const auto yz = axis.m_y * axis.m_z;
-		const auto zz = axis.m_z * axis.m_z;
-		
+		const auto xx = axis.x() * axis.x();
+		const auto xy = axis.x() * axis.y();
+		const auto xz = axis.x() * axis.z();
+		const auto yy = axis.y() * axis.y();
+		const auto yz = axis.y() * axis.z();
+		const auto zz = axis.z() * axis.z();
+
 		auto rotation = Mat4 {};
 		rotation.m_data[0] = xx * (1 - c) + c;
-		rotation.m_data[1] = xy * (1 - c) + axis.m_z * s;
-		rotation.m_data[2] = xz * (1 - c) - axis.m_y * s;
-		rotation.m_data[4] = xy * (1 - c) - axis.m_z * s;
+		rotation.m_data[1] = xy * (1 - c) + axis.z() * s;
+		rotation.m_data[2] = xz * (1 - c) - axis.y() * s;
+		rotation.m_data[4] = xy * (1 - c) - axis.z() * s;
 		rotation.m_data[5] = yy * (1 - c) + c;
-		rotation.m_data[6] = yz * (1 - c) + axis.m_x * s;
-		rotation.m_data[8] = xz * (1 - c) + axis.m_y * s;
-		rotation.m_data[9] = yz * (1 - c) - axis.m_x * s;
+		rotation.m_data[6] = yz * (1 - c) + axis.x() * s;
+		rotation.m_data[8] = xz * (1 - c) + axis.y() * s;
+		rotation.m_data[9] = yz * (1 - c) - axis.x() * s;
 		rotation.m_data[10] = zz * (1 - c) + c;
 		return *this * rotation;
 	}
@@ -75,9 +76,9 @@ struct Mat4 {
 
 	constexpr Mat4 scale(const Vec3<T>& v) const noexcept {
 		auto scale = Mat4 {};
-		scale.m_data[0] = v.m_x;
-		scale.m_data[5] = v.m_y;
-		scale.m_data[10] = v.m_z;
+		scale.m_data[0] = v.x();
+		scale.m_data[5] = v.y();
+		scale.m_data[10] = v.z();
 		return *this * scale;
 	}
 
@@ -160,17 +161,17 @@ struct Mat4 {
 		const auto x = up.cross(z).norm();
 		const auto y = z.cross(x).norm();
 		const auto mat = Mat4 {{
-			x.m_x,
-			y.m_x,
-			z.m_x,
+			x.x(),
+			y.x(),
+			z.x(),
 			0,
-			x.m_y,
-			y.m_y,
-			z.m_y,
+			x.y(),
+			y.y(),
+			z.y(),
 			0,
-			x.m_z,
-			y.m_z,
-			z.m_z,
+			x.z(),
+			y.z(),
+			z.z(),
 			0,
 			0,
 			0,
@@ -188,9 +189,9 @@ struct Mat4 {
 		mat.m_data[3] = 0;
 		mat.m_data[7] = 0;
 		mat.m_data[11] = 0;
-		mat.m_data[12] = pos.m_x;
-		mat.m_data[13] = pos.m_y;
-		mat.m_data[14] = pos.m_z;
+		mat.m_data[12] = pos.x();
+		mat.m_data[13] = pos.y();
+		mat.m_data[14] = pos.z();
 		mat.m_data[15] = 1;
 		if (upfront) {
 			mat.m_data[4] = 0;
@@ -199,6 +200,8 @@ struct Mat4 {
 		}
 		return mat.rotate(spin, Vec3{0, 0, 1}).scale(Vec3<T> {width, height, 1});
 	}
+private:
+	std::array<T, 16> m_data;
 };
 
 using Mat4r = Mat4<real_t>;
