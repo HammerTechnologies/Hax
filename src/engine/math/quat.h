@@ -68,6 +68,9 @@ struct Quat {
 	constexpr T& y() noexcept { return m_y; }
 	constexpr T& z() noexcept { return m_z; }
 
+	constexpr const T* data() const noexcept { return &m_w; }
+	constexpr T* data() noexcept { return &m_w; }
+
 	constexpr Quat norm() const noexcept {
 		const auto result = *this;
 		const auto mag2 = m_x*m_x + m_y*m_y + m_z*m_z + m_w*m_w;

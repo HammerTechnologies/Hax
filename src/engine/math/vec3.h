@@ -113,6 +113,9 @@ struct Vec3 {
 	constexpr T& y() noexcept { return m_y; }
 	constexpr T& z() noexcept { return m_z; }
 
+	constexpr const T* data() const noexcept { return &m_x; }
+	constexpr T* data() noexcept { return &m_x; }
+
 	constexpr T dot(const Vec3& other) const noexcept {
 		return m_x * other.m_x + m_y * other.m_y + m_z * other.m_z;
 	}
