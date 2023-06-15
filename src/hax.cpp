@@ -73,7 +73,7 @@ private:
 	std::unique_ptr<Texture> m_tex;
 };
 
-std::unique_ptr<Hax> g_hax = std::make_unique<Hax>();
+auto g_hax = std::make_unique<Hax>();
 
 void Hax::finish() noexcept {
 	g_hax = nullptr;
