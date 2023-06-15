@@ -1,3 +1,4 @@
+#include <array>
 #if defined(_WIN32)
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
@@ -18,7 +19,7 @@
 #include <string>
 
 inline std::string extractDir(const std::string& filename) noexcept {
-	size_t find_pos = filename.rfind('\\');
+	auto find_pos = filename.rfind('\\');
 	if (find_pos == std::string::npos) {
 		find_pos = filename.rfind('/');
 	}
@@ -26,16 +27,16 @@ inline std::string extractDir(const std::string& filename) noexcept {
 }
 
 inline std::string exeDir() noexcept {
-	char path[FILENAME_MAX];
+	auto path = std::array<char, FILENAME_MAX> {};
 #if defined(_WIN32)
-	path[GetModuleFileNameA(nullptr, path, FILENAME_MAX)] = 0;
+	path[GetModuleFileNameA(nullptr, path.data(), path.size())] = 0;
 #elif defined(__APPLE__)
-	uint32_t size = FILENAME_MAX;
+	auto size = uint32_t {path.size()};
 	_NSGetExecutablePath(path, &size);
 #else
-	path[readlink("/proc/self/exe", path, FILENAME_MAX)] = 0;
+	path[readlink("/proc/self/exe", path.data(), path.size())] = 0;
 #endif
-	return extractDir(path);
+	return extractDir(path.data());
 }
 
 inline bool changeDir(const std::string& path) noexcept {

@@ -29,10 +29,10 @@ struct Color {
 
 	static constexpr uint32_t rgbf(real_t r, real_t g, real_t b, real_t a = 1) noexcept {
 		return rgb(
-			static_cast<uint8_t>(r * 255),
-			static_cast<uint8_t>(g * 255),
-			static_cast<uint8_t>(b * 255),
-			static_cast<uint8_t>(a * 255));
+			uint8_t(r * 255),
+			uint8_t(g * 255),
+			uint8_t(b * 255),
+			uint8_t(a * 255));
 	}
 
 	static constexpr uint8_t red(uint32_t color) noexcept {
@@ -52,19 +52,19 @@ struct Color {
 	}
 
 	static constexpr real_t redf(uint32_t color) noexcept {
-		return static_cast<real_t>(red(color)) / 255.0f;
+		return real_t(red(color)) / 255.0f;
 	}
 
 	static constexpr real_t greenf(uint32_t color) noexcept {
-		return static_cast<real_t>(green(color)) / 255.0f;
+		return real_t(green(color)) / 255.0f;
 	}
 
 	static constexpr real_t bluef(uint32_t color) noexcept {
-		return static_cast<real_t>(blue(color)) / 255.0f;
+		return real_t(blue(color)) / 255.0f;
 	}
 
 	static constexpr real_t alphaf(uint32_t color) noexcept {
-		return static_cast<real_t>(alpha(color)) / 255.0f;
+		return real_t(alpha(color)) / 255.0f;
 	}
 
 	static constexpr uint32_t withAlpha(uint32_t color, uint8_t new_alpha) noexcept {
@@ -72,6 +72,10 @@ struct Color {
 	}
 
 	static constexpr uint32_t multiply(uint32_t color, real_t factor) noexcept {
-		return rgbf(redf(color) * factor, greenf(color) * factor, bluef(color) * factor, alphaf(color));
+		return rgbf(
+			redf(color) * factor,
+			greenf(color) * factor,
+			bluef(color) * factor,
+			alphaf(color));
 	}
 };

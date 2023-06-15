@@ -4,11 +4,11 @@
 #include "vertex.h"
 
 Shader::Shader(const GraphicsDriver& driver, const std::string& vertex, const std::string& fragment) noexcept
-: m_driver{driver},
-	m_program{m_driver.createProgram(vertex, fragment)},
-	m_vertexPos{m_driver.getProgramAttribLocation(m_program, "vertexPos")},
-	m_vertexColor{m_driver.getProgramAttribLocation(m_program, "vertexColor")},
-	m_vertexTexCoords{m_driver.getProgramAttribLocation(m_program, "vertexTexCoords")} {
+: m_driver {driver},
+	m_program {m_driver.createProgram(vertex, fragment)},
+	m_vertexPos {m_driver.getProgramAttribLocation(m_program, "vertexPos")},
+	m_vertexColor {m_driver.getProgramAttribLocation(m_program, "vertexColor")},
+	m_vertexTexCoords {m_driver.getProgramAttribLocation(m_program, "vertexTexCoords")} {
 }
 
 Shader::~Shader() noexcept {

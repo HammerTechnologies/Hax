@@ -17,12 +17,12 @@ struct Mat4 {
 	: m_data(m) {}
 
 	constexpr Mat4 operator*(const Mat4& other) const noexcept {
-		Mat4 result;
+		auto result = Mat4 {};
 		for (size_t i = 0; i < 4; ++i) {
-			const T a0 = m_data[i];
-			const T a1 = m_data[i+4];
-			const T a2 = m_data[i+8];
-			const T a3 = m_data[i+12];
+			const auto a0 = m_data[i];
+			const auto a1 = m_data[i+4];
+			const auto a2 = m_data[i+8];
+			const auto a3 = m_data[i+12];
 			result.m_data[i] = a0*other.m_data[0] + a1*other.m_data[1] + a2*other.m_data[2] + a3*other.m_data[3];
 			result.m_data[i+4] = a0*other.m_data[4] + a1*other.m_data[5] + a2*other.m_data[6] + a3*other.m_data[7];
 			result.m_data[i+8] = a0*other.m_data[8] + a1*other.m_data[9] + a2*other.m_data[10] + a3*other.m_data[11];
@@ -32,31 +32,31 @@ struct Mat4 {
 	}
 
 	constexpr Vec3<T> mulVec3(const Vec3<T>& v, const T& w) const noexcept {
-		const Mat4 translation = Mat4{}.translate(v);
+		const auto translation = Mat4{}.translate(v);
 		translation.m_data[15] = w;
-		const Mat4 result{*this * translation};
-		return Vec3<T>(result.m_data[12], result.m_data[13], result.m_data[14]);
+		const auto result = *this * translation;
+		return {result.m_data[12], result.m_data[13], result.m_data[14]};
 	}
 
 	constexpr Mat4 translate(const Vec3<T>& v) const noexcept {
-		Mat4 translation;
+		auto translation = Mat4 {};
 		translation.m_data[12] = v.m_x;
 		translation.m_data[13] = v.m_y;
 		translation.m_data[14] = v.m_z;
-		return Mat4{*this * translation};
+		return *this * translation;
 	}
 
 	constexpr Mat4 rotate(const T& angle, const Vec3<T>& axis) const noexcept {
-		const T c = std::cos(angle);
-		const T s = std::sin(angle);
-		const T xx = axis.m_x * axis.m_x;
-		const T xy = axis.m_x * axis.m_y;
-		const T xz = axis.m_x * axis.m_z;
-		const T yy = axis.m_y * axis.m_y;
-		const T yz = axis.m_y * axis.m_z;
-		const T zz = axis.m_z * axis.m_z;
+		const auto c = std::cos(angle);
+		const auto s = std::sin(angle);
+		const auto xx = axis.m_x * axis.m_x;
+		const auto xy = axis.m_x * axis.m_y;
+		const auto xz = axis.m_x * axis.m_z;
+		const auto yy = axis.m_y * axis.m_y;
+		const auto yz = axis.m_y * axis.m_z;
+		const auto zz = axis.m_z * axis.m_z;
 		
-		Mat4 rotation;
+		auto rotation = Mat4 {};
 		rotation.m_data[0] = xx * (1 - c) + c;
 		rotation.m_data[1] = xy * (1 - c) + axis.m_z * s;
 		rotation.m_data[2] = xz * (1 - c) - axis.m_y * s;
@@ -74,7 +74,7 @@ struct Mat4 {
 	}
 
 	constexpr Mat4 scale(const Vec3<T>& v) const noexcept {
-		Mat4 scale;
+		auto scale = Mat4 {};
 		scale.m_data[0] = v.m_x;
 		scale.m_data[5] = v.m_y;
 		scale.m_data[10] = v.m_z;
@@ -82,17 +82,17 @@ struct Mat4 {
 	}
 
 	constexpr Mat4 transposed() const noexcept {
-		const std::array<T, 16> arr;
-		for (size_t r = 0; r < 4; ++r) {
-			for (size_t c = 0; c < 4; ++c) {
+		const auto arr = std::array<T, 16> {};
+		for (auto r = 0; r < 4; ++r) {
+			for (auto c = 0; c < 4; ++c) {
 				arr[c*4 + r] = m_data[r*4 + c];
 			}
 		}
-		return Mat4{arr};
+		return {arr};
 	}
 
 	constexpr Mat4 inverse() const noexcept {
-		const std::array<T, 16> arr;
+		const auto arr = std::array<T, 16> {};
 		arr[ 0] =  m_data[5] * m_data[10] * m_data[15] - m_data[5] * m_data[11] * m_data[14] - m_data[9] * m_data[6] * m_data[15] + m_data[9] * m_data[7] * m_data[14] + m_data[13] * m_data[6] * m_data[11] - m_data[13] * m_data[7] * m_data[10];
 		arr[ 4] = -m_data[4] * m_data[10] * m_data[15] + m_data[4] * m_data[11] * m_data[14] + m_data[8] * m_data[6] * m_data[15] - m_data[8] * m_data[7] * m_data[14] - m_data[12] * m_data[6] * m_data[11] + m_data[12] * m_data[7] * m_data[10];
 		arr[ 8] =  m_data[4] * m_data[ 9] * m_data[15] - m_data[4] * m_data[11] * m_data[13] - m_data[8] * m_data[5] * m_data[15] + m_data[8] * m_data[7] * m_data[13] + m_data[12] * m_data[5] * m_data[11] - m_data[12] * m_data[7] * m_data[ 9];
@@ -109,23 +109,23 @@ struct Mat4 {
 		arr[ 7] =  m_data[0] * m_data[ 6] * m_data[11] - m_data[0] * m_data[ 7] * m_data[10] - m_data[4] * m_data[2] * m_data[11] + m_data[4] * m_data[3] * m_data[10] + m_data[ 8] * m_data[2] * m_data[ 7] - m_data[ 8] * m_data[3] * m_data[ 6];
 		arr[11] = -m_data[0] * m_data[ 5] * m_data[11] + m_data[0] * m_data[ 7] * m_data[ 9] + m_data[4] * m_data[1] * m_data[11] - m_data[4] * m_data[3] * m_data[ 9] - m_data[ 8] * m_data[1] * m_data[ 7] + m_data[ 8] * m_data[3] * m_data[ 5];
 		arr[15] =  m_data[0] * m_data[ 5] * m_data[10] - m_data[0] * m_data[ 6] * m_data[ 9] - m_data[4] * m_data[1] * m_data[10] + m_data[4] * m_data[2] * m_data[ 9] + m_data[ 8] * m_data[1] * m_data[ 6] - m_data[ 8] * m_data[2] * m_data[ 5];
-		const T det = m_data[0] * arr[0] + m_data[1] * arr[4] + m_data[2] * arr[8] + m_data[3] * arr[12];
-		if (std::abs(det) <= static_cast<T>(0.00001)) return Mat4(m_data);
-		const T invdet = static_cast<T>(1.0) / det;
-		for (size_t i = 0; i < 16; i++) {
+		const auto det = m_data[0] * arr[0] + m_data[1] * arr[4] + m_data[2] * arr[8] + m_data[3] * arr[12];
+		if (std::abs(det) <= T{0.00001}) return Mat4 {m_data};
+		const auto invdet = T{1.0} / det;
+		for (auto i = 0; i < 16; i++) {
 			arr[i] *= invdet;
 		}
-		return Mat4{arr};
+		return {arr};
 	}
 
 	constexpr static Mat4 ortho(const T& left, const T& right, const T& bottom, const T& top, const T& near_, const T& far_) noexcept {
-		const T a = static_cast<T>(2.0) / (right - left);
-		const T b = static_cast<T>(2.0) / (top - bottom);
-		const T c = static_cast<T>(2.0) / (far_ - near_);
-		const T tx = -(right+left) / (right-left);
-		const T ty = -(top+bottom) / (top-bottom);
-		const T tz = -(far_+near_) / (far_-near_);
-		Mat4 result;
+		const auto a = T{2.0} / (right - left);
+		const auto b = T{2.0} / (top - bottom);
+		const auto c = T{2.0} / (far_ - near_);
+		const auto tx = -(right+left) / (right-left);
+		const auto ty = -(top+bottom) / (top-bottom);
+		const auto tz = -(far_+near_) / (far_-near_);
+		auto result = Mat4 {};
 		result.m_data[0] = a;
 		result.m_data[5] = b;
 		result.m_data[10] = c;
@@ -136,7 +136,7 @@ struct Mat4 {
 	}
 
 	constexpr static Mat4 frustum(const T& left, const T& right, const T& bottom, const T& top, const T& near_, const T& far_) noexcept {
-		Mat4 result;
+		auto result = Mat4 {};
 		result.m_data[0]  = 2 * near_ / (right - left);
 		result.m_data[5]  = 2 * near_ / (top - bottom);
 		result.m_data[8]  = -(right + left) / (right - left);
@@ -149,17 +149,17 @@ struct Mat4 {
 	}
 
 	constexpr static Mat4 perspective(const T& fovy, const T& aspect, const T& near_, const T& far_) noexcept {
-		const T& tangent = std::tan(fovy / 2);
-		const T& height = near_ * tangent;
-		const T& width = height * aspect;
+		const auto tangent = std::tan(fovy / 2);
+		const auto height = near_ * tangent;
+		const auto width = height * aspect;
 		return Mat4::frustum(-width, width, -height, height, near_, far_);
 	}
 
 	constexpr static Mat4 lookat(const Vec3<T>& center, const Vec3<T>& eye, const Vec3<T>& up) noexcept {
-		const Vec3<T> z{(eye - center).norm()};
-		const Vec3<T> x{up.cross(z).norm()};
-		const Vec3<T> y{z.cross(x).norm()};
-		const Mat4 mat{{
+		const auto z = (eye - center).norm();
+		const auto x = up.cross(z).norm();
+		const auto y = z.cross(x).norm();
+		const auto mat = Mat4 {{
 			x.m_x,
 			y.m_x,
 			z.m_x,
@@ -180,11 +180,11 @@ struct Mat4 {
 	}
 
 	constexpr static Mat4 transform(const Vec3<T>& pos, const Quat<T>& rot, const Vec3<T>& scale) noexcept {
-		return Mat4{}.translate(pos).rotate(rot).scale(scale);
+		return Mat4 {}.translate(pos).rotate(rot).scale(scale);
 	}
 
 	constexpr static Mat4 billboard(const Mat4& view, const Vec3<T>& pos, const T& spin, const T& width, const T& height, bool upfront) {
-		Mat4 mat = view.transposed();
+		auto mat = view.transposed();
 		mat.m_data[3] = 0;
 		mat.m_data[7] = 0;
 		mat.m_data[11] = 0;
@@ -197,7 +197,7 @@ struct Mat4 {
 			mat.m_data[5] = 1;
 			mat.m_data[6] = 0;
 		}
-		return mat.rotate(spin, Vec3{0, 0, 1}).scale(Vec3{width, height, 1});
+		return mat.rotate(spin, Vec3{0, 0, 1}).scale(Vec3<T> {width, height, 1});
 	}
 };
 

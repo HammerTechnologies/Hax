@@ -1,10 +1,10 @@
 #include "geom.h"
 
 Geom::Geom(const GraphicsDriver& driver, const std::vector<Vertex>& vertices, const std::vector<uint16_t>& indices) noexcept
-: m_driver{driver},
-	m_vertexBuffer{driver.createVertexBuffer(vertices)},
-	m_indexBuffer{driver.createIndexBuffer(indices)},
-	m_numIndices{indices.size()} {
+: m_driver {driver},
+	m_vertexBuffer {driver.createVertexBuffer(vertices)},
+	m_indexBuffer {driver.createIndexBuffer(indices)},
+	m_numIndices {indices.size()} {
 }
 
 Geom::~Geom() {

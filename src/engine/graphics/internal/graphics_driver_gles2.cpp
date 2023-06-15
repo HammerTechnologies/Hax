@@ -50,19 +50,19 @@ void GraphicsDriver::cls(uint32_t color = Color::BLACK) const noexcept {
 }
 
 VertexBuffer GraphicsDriver::createVertexBuffer(const std::vector<Vertex>& vertices) const noexcept {
-	uint32_t buffer;
+	auto buffer = 0U;
 	glGenBuffers(1, &buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, buffer);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
-	return VertexBuffer{buffer};
+	return {buffer};
 }
 
 IndexBuffer GraphicsDriver::createIndexBuffer(const std::vector<uint16_t>& indices) const noexcept {
-	uint32_t buffer;
+	auto buffer = 0U;
 	glGenBuffers(1, &buffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint16_t), indices.data(), GL_STATIC_DRAW);
-	return IndexBuffer{buffer};
+	return {buffer};
 }
 
 void GraphicsDriver::bindBuffers(const VertexBuffer& vertexBuffer, const IndexBuffer& indexBuffer) const noexcept {
@@ -84,19 +84,19 @@ void GraphicsDriver::deleteBuffer(const IndexBuffer& buffer) const noexcept {
 
 GpuProgram GraphicsDriver::createProgram(const std::string& vertex, const std::string& fragment) const noexcept {
 #ifdef EMSCRIPTEN
-	const std::string vertexCode = vertex;
-	const std::string fragmentCode = "precision mediump float;\n" + fragment;
+	const auto vertexCode = vertex;
+	const auto fragmentCode = "precision mediump float;\n" + fragment;
 #else
-	const std::string vertexCode = vertex;
-	const std::string fragmentCode = fragment;
+	const auto vertexCode = vertex;
+	const auto fragmentCode = fragment;
 #endif
 
-	std::array<char, 1024> errorOutput;
-	GLint retCode = 0;
+	auto errorOutput = std::array<char, 1024> {};
+	auto retCode = 0;
 
 	// Create vertex shader
-	const char* cvertex = vertexCode.c_str();
-	const GLuint vshader = glCreateShader(GL_VERTEX_SHADER);
+	const auto cvertex = vertexCode.c_str();
+	const auto vshader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vshader, 1, &cvertex, nullptr);
 	glCompileShader(vshader);
 	glGetShaderiv(vshader, GL_COMPILE_STATUS, &retCode);
@@ -104,12 +104,12 @@ GpuProgram GraphicsDriver::createProgram(const std::string& vertex, const std::s
 		glGetShaderInfoLog(vshader, errorOutput.size(), nullptr, errorOutput.data());
 		m_logger.error(errorOutput.data());
 		glDeleteShader(vshader);
-		return GpuProgram{0};
+		return {0};
 	}
 
 	// Create fragment shader
-	const char* cfragment = fragmentCode.c_str();
-	const GLuint fshader = glCreateShader(GL_FRAGMENT_SHADER);
+	const auto cfragment = fragmentCode.c_str();
+	const auto fshader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fshader, 1, &cfragment, nullptr);
 	glCompileShader(fshader);
 	glGetShaderiv(fshader, GL_COMPILE_STATUS, &retCode);
@@ -118,11 +118,11 @@ GpuProgram GraphicsDriver::createProgram(const std::string& vertex, const std::s
 		m_logger.error(errorOutput.data());
 		glDeleteShader(vshader);
 		glDeleteShader(fshader);
-		return GpuProgram{0};
+		return {0};
 	}
 
 	// Create program
-	const uint32_t id = glCreateProgram();
+	const auto id = glCreateProgram();
 	glAttachShader(id, vshader);
 	glAttachShader(id, fshader);
 	glLinkProgram(id);
@@ -133,10 +133,10 @@ GpuProgram GraphicsDriver::createProgram(const std::string& vertex, const std::s
 		glGetProgramInfoLog(id, errorOutput.size(), nullptr, errorOutput.data());
 		m_logger.error(errorOutput.data());
 		glDeleteProgram(id);
-		return GpuProgram{0};
+		return {0};
 	}
 
-	return GpuProgram{id};
+	return {id};
 }
 
 void GraphicsDriver::deleteProgram(const GpuProgram& program) const noexcept {
@@ -194,14 +194,14 @@ void GraphicsDriver::setProgramAttrib(int32_t location, size_t size, bool normal
 }
 
 DriverTexture GraphicsDriver::createTexture() const noexcept {
-	uint32_t id;
+	auto id = 0U;
 	glGenTextures(1, &id);
 	glBindTexture(GL_TEXTURE_2D, id);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	return DriverTexture{id};
+	return {id};
 }
 
 void GraphicsDriver::deleteTexture(const DriverTexture& texture) const noexcept {

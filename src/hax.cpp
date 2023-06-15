@@ -42,7 +42,7 @@ struct Hax : Game {
 		if (input.isKeyDown(Key::UP)) { m_viewer.move(Vec3r{0, 0, 16 * screen.getDelta()}); }
 		if (input.isKeyDown(Key::DOWN)) { m_viewer.move(Vec3r{0, 0, -16 * screen.getDelta()}); }
 
-		std::ostringstream ss;
+		auto ss = std::ostringstream {};
 		ss << screen.getWidth() << "x" << screen.getHeight() << " @ " << screen.getFps() << " FPS";
 
 		m_viewer.m_viewportWidth = screen.getWidth();

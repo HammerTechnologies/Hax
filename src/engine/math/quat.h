@@ -12,22 +12,22 @@ struct Quat {
 	: m_w(w), m_x(x), m_y(y), m_z(z) {}
 
 	constexpr static Quat fromAxis(const T& angle, const Vec3<T>& axis) noexcept {
-		const T& halfAngle = angle / 2;
-		const Vec3<T> v{axis.norm() * std::sin(halfAngle)};
-		return Quat{std::cos(halfAngle), v.m_x, v.m_y, v.m_z};
+		const auto halfAngle = angle / 2;
+		const auto v = axis.norm() * std::sin(halfAngle);
+		return {std::cos(halfAngle), v.m_x, v.m_y, v.m_z};
 	}
 
 	constexpr static Quat fromEuler(const Vec3<T>& euler) noexcept {
-		const T halfx = euler.m_x / 2;
-		const T halfy = euler.m_y / 2;
-		const T halfz = euler.m_z / 2;
-		const T sinx = std::sin(halfx);
-		const T siny = std::sin(halfy);
-		const T sinz = std::sin(halfz);
-		const T cosx = std::cos(halfx);
-		const T cosy = std::cos(halfy);
-		const T cosz = std::cos(halfz);
-		return Quat{
+		const auto halfx = euler.m_x / 2;
+		const auto halfy = euler.m_y / 2;
+		const auto halfz = euler.m_z / 2;
+		const auto sinx = std::sin(halfx);
+		const auto siny = std::sin(halfy);
+		const auto sinz = std::sin(halfz);
+		const auto cosx = std::cos(halfx);
+		const auto cosy = std::cos(halfy);
+		const auto cosz = std::cos(halfz);
+		return {
 			cosx * cosy * cosz + sinx * siny * sinz,
 			sinx * cosy * cosz - cosx * siny * sinz,
 			cosx * siny * cosz + sinx * cosy * sinz,
@@ -36,11 +36,11 @@ struct Quat {
 	}
 
 	constexpr Quat operator+(const Quat& other) const noexcept {
-		return Quat{m_w + other.m_w, m_x + other.m_x, m_y + other.m_y, m_z + other.m_z};
+		return {m_w + other.m_w, m_x + other.m_x, m_y + other.m_y, m_z + other.m_z};
 	}
 
 	constexpr Quat operator*(const Quat& other) const noexcept {
-		return Quat{
+		return {
 			m_w*other.m_w - m_x*other.m_x - m_y*other.m_y - m_z*other.m_z,
 			m_w*other.m_x + m_x*other.m_w + m_y*other.m_z - m_z*other.m_y,
 			m_w*other.m_y + m_y*other.m_w + m_z*other.m_x - m_x*other.m_z,
@@ -49,23 +49,23 @@ struct Quat {
 	}
 
 	constexpr Vec3<T> operator*(const Vec3<T>& v) const noexcept {
-		const Quat q{*this * Quat{0, v.m_x, v.m_y, v.m_z} * conj()};
-		return Vec3<T>{q.m_x, q.m_y, q.m_z};
+		const auto q = *this * Quat{0, v.m_x, v.m_y, v.m_z} * conj();
+		return {q.m_x, q.m_y, q.m_z};
 	}
 
 	constexpr Quat operator*(const T& scalar) const noexcept {
-		return Quat{m_w * scalar, m_x * scalar, m_y * scalar, m_z * scalar};
+		return {m_w * scalar, m_x * scalar, m_y * scalar, m_z * scalar};
 	}
 
 	constexpr Quat operator/(const T& scalar) const noexcept {
-		return Quat{m_w / scalar, m_x / scalar, m_y / scalar, m_z / scalar};
+		return {m_w / scalar, m_x / scalar, m_y / scalar, m_z / scalar};
 	}
 
 	constexpr Quat norm() const noexcept {
-		const Quat result{*this};
-		const T mag2 = m_x*m_x + m_y*m_y + m_z*m_z + m_w*m_w;
-		if (mag2 > static_cast<T>(0.00001) && std::abs(mag2 - static_cast<T>(1.0)) > static_cast<T>(0.00001)) {
-			const T invmag = static_cast<T>(1) / std::sqrt(mag2);
+		const auto result = *this;
+		const auto mag2 = m_x*m_x + m_y*m_y + m_z*m_z + m_w*m_w;
+		if (mag2 > T{0.00001} && std::abs(mag2 - T{1.0}) > T{0.00001}) {
+			const auto invmag = T{1} / std::sqrt(mag2);
 			result.m_w *= invmag;
 			result.m_x *= invmag;
 			result.m_y *= invmag;
@@ -75,7 +75,7 @@ struct Quat {
 	}
 
 	constexpr Quat conj() const noexcept {
-		return Quat{m_w, -m_x, -m_y, -m_z};
+		return {m_w, -m_x, -m_y, -m_z};
 	}
 
 	constexpr Quat lerp(const Quat& other, const T& t) const noexcept {
@@ -83,12 +83,12 @@ struct Quat {
 	}
 
 	constexpr Quat slerp(const Quat& other, const T& t) const noexcept {
-		const T dot = this->dot(other);
-		const Quat q{(dot < 0) ? (other * -1) : other};
+		const auto dot = this->dot(other);
+		const auto q = (dot < 0) ? (other * -1) : other;
 		const T absdot = std::abs(dot);
 		if (absdot < 0.95f) {
-			const T angle = std::acos(absdot);
-			return Quat{*this * std::sin(angle * (1-t)) + q * std::sin(angle*t) / std::sin(angle)};
+			const auto angle = std::acos(absdot);
+			return *this * std::sin(angle * (1-t)) + q * std::sin(angle*t) / std::sin(angle);
 		} else {
 			return this->lerp(q, t);
 		}
@@ -103,13 +103,13 @@ struct Quat {
 	}
 
 	constexpr Vec3<T> axis() const noexcept {
-		const T scale = std::sqrt(m_x*m_x + m_y*m_y + m_z*m_z);
-		const T invscale = (scale > 0) ? (static_cast<T>(1) / scale) : 0;
-		return Vec3<T>{m_x * invscale, m_y * invscale, m_z * invscale};
+		const auto scale = std::sqrt(m_x*m_x + m_y*m_y + m_z*m_z);
+		const auto invscale = (scale > 0) ? (T{1} / scale) : 0;
+		return {m_x * invscale, m_y * invscale, m_z * invscale};
 	}
 
 	constexpr Vec3<T> euler() const noexcept {
-		return Vec3{
+		return {
 			std::atan2(2 * (m_y*m_z + m_w*m_x), m_w*m_w - m_x*m_x - m_y*m_y + m_z*m_z),
 			std::asin(-2 * (m_x*m_z - m_w*m_y)),
 			std::atan2(2 * (m_x*m_y + m_w*m_z), m_w*m_w + m_x*m_x - m_y*m_y - m_z*m_z)

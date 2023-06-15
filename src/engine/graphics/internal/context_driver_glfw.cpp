@@ -9,16 +9,16 @@ ContextDriver::ContextDriver(const Logger& logger) noexcept
 	if (glfwInit() != GLFW_TRUE) {
 		m_logger.error("Could not initialize GLFW.");
 	} else {
-		int32_t major, minor, rev;
+		auto major = 0, minor = 0, rev = 0;
 		glfwGetVersion(&major, &minor, &rev);
-		std::ostringstream ss;
+		auto ss = std::ostringstream {};
 		ss << "GLFW version " << major << "." << minor << "." << rev << ".";
 		m_logger.info(ss.str());
 	}
 }
 
 ContextWindow* ContextDriver::createWindow(uint16_t width, uint16_t height, bool fullscreen) const noexcept {
-	ContextWindow* win = glfwCreateWindow(
+	auto win = glfwCreateWindow(
 		width,
 		height,
 		"Hax",
@@ -39,13 +39,13 @@ void ContextDriver::enableWindowContext(ContextWindow& window) const noexcept {
 }
 
 uint16_t ContextDriver::getWindowWidth(ContextWindow& window) const noexcept {
-	int32_t w;
+	auto w = 0;
 	glfwGetFramebufferSize(&window, &w, nullptr);
 	return static_cast<uint16_t>(w);
 }
 
 uint16_t ContextDriver::getWindowHeight(ContextWindow& window) const noexcept {
-	int32_t h;
+	auto h = 0;
 	glfwGetFramebufferSize(&window, nullptr, &h);
 	return static_cast<uint16_t>(h);
 }
@@ -60,7 +60,7 @@ void ContextDriver::refreshwindow(ContextWindow& window) const noexcept {
 }
 
 real_t ContextDriver::getTime() const noexcept {
-	return static_cast<real_t>(glfwGetTime());
+	return real_t(glfwGetTime());
 }
 
 void ContextDriver::setMouseVisible(ContextWindow& window, bool visible) const noexcept {
@@ -72,15 +72,15 @@ void ContextDriver::setMousePosition(ContextWindow& window, int32_t x, int32_t y
 }
 
 int32_t ContextDriver::getMouseX(ContextWindow& window) const noexcept {
-	double x;
+	auto x = 0.0;
 	glfwGetCursorPos(&window, &x, nullptr);
-	return static_cast<int32_t>(std::floor(x));
+	return int32_t(std::floor(x));
 }
 
 int32_t ContextDriver::getMouseY(ContextWindow& window) const noexcept {
-	double y;
+	auto y = 0.0;
 	glfwGetCursorPos(&window, nullptr, &y);
-	return static_cast<int32_t>(std::floor(y));
+	return int32_t(std::floor(y));
 }
 
 bool ContextDriver::isMouseButtonDown(ContextWindow& window, MouseButton button) const noexcept {

@@ -78,7 +78,7 @@ Graphics::~Graphics() noexcept {
 }
 
 std::unique_ptr<Font> Graphics::loadFont(const std::string& filename, real_t height) const noexcept {
-	auto font = std::unique_ptr<Font> {new Font(filename, height, m_driver)};
+	auto font = std::unique_ptr<Font> {new Font {filename, height, m_driver}};
 	if (!font->isValid()) {
 		m_logger.error("Could not load font '" + filename + "'.");
 		font.reset();
@@ -87,7 +87,7 @@ std::unique_ptr<Font> Graphics::loadFont(const std::string& filename, real_t hei
 }
 
 std::unique_ptr<Pixmap> Graphics::loadPixmap(const std::string& filename) const noexcept {
-	auto pixmap = std::unique_ptr<Pixmap> {new Pixmap(filename)};
+	auto pixmap = std::unique_ptr<Pixmap> {new Pixmap {filename}};
 	if (pixmap->getWidth() == 0 && pixmap->getHeight() == 0) {
 		m_logger.error("Could not load pixmap '" + filename + "'.");
 		pixmap.reset();
@@ -97,7 +97,7 @@ std::unique_ptr<Pixmap> Graphics::loadPixmap(const std::string& filename) const 
 
 std::unique_ptr<Texture> Graphics::loadTexture(const std::string& filename) const noexcept {
 	auto pixmap = Pixmap {filename};
-	auto texture = std::unique_ptr<Texture> {new Texture(pixmap.getWidth(), pixmap.getHeight(), m_driver)};
+	auto texture = std::unique_ptr<Texture> {new Texture {pixmap.getWidth(), pixmap.getHeight(), m_driver}};
 	if (!texture->isValid()) {
 		m_logger.error("Could not load texture '" + filename + "'.");
 		texture.reset();
@@ -108,7 +108,7 @@ std::unique_ptr<Texture> Graphics::loadTexture(const std::string& filename) cons
 }
 
 std::unique_ptr<Texture> Graphics::createTexture(uint16_t width, uint16_t height) const noexcept {
-	return std::unique_ptr<Texture>(new Texture(width, height, m_driver));
+	return std::unique_ptr<Texture> {new Texture {width, height, m_driver}};
 }
 
 void Graphics::setup2D(uint16_t x, uint16_t y, uint16_t w, uint16_t h) noexcept {
@@ -137,12 +137,12 @@ void Graphics::drawRect(
 	real_t width,
 	real_t height,
 	uint32_t color) const noexcept {
-	const Mat4r transform = Mat4r::transform(
-		Vec3r{x + width / 2, y + height / 2, 0},
-		Quatr{},
-		Vec3r{width, height, 1});
+	const auto transform = Mat4r::transform(
+		{x + width / 2, y + height / 2, 0},
+		{},
+		{width, height, 1});
 	m_rect.bind();
-	prepareShader(transform, Mat4r{}, color, false);
+	prepareShader(transform, {}, color, false);
 	m_rect.draw();
 }
 
@@ -156,12 +156,12 @@ void Graphics::drawTexture(
 	uint32_t color,
 	const Mat4r& textureMatrix) const noexcept {
 	if (tex) {
-		const real_t realWidth = (width != 0) ? width : tex->getWidth();
-		const real_t realHeight = (height != 0) ? height : tex->getHeight();
-		const Mat4r transform = Mat4r::transform(
-			Vec3r{x + realWidth / 2, y + realHeight / 2, 0},
+		const auto realWidth = real_t {(width != 0) ? width : tex->getWidth()};
+		const auto realHeight = real_t {(height != 0) ? height : tex->getHeight()};
+		const auto transform = Mat4r::transform(
+			{x + realWidth / 2, y + realHeight / 2, 0},
 			Quatr::fromAxis(deg2rad(angle), Vec3r{0, 0, 1}),
-			Vec3r{realWidth, realHeight, 1});
+			{realWidth, realHeight, 1});
 		tex->bind();
 		m_rect.bind();
 		prepareShader(transform, textureMatrix, color, true);
@@ -177,12 +177,12 @@ void Graphics::drawText(
 	uint32_t color) const noexcept {
 	if (font) {
 		y += font->m_maxHeight;
-		for (size_t i = 0; i < text.size(); ++i) {
-			const FontQuad quad = font->getFontQuad(text[i], x, y);
-			const Mat4r texMatrix = Mat4r::transform(
-				Vec3r{quad.m_u, quad.m_v, 0},
-				Quatr{},
-				Vec3r{quad.m_us, quad.m_vs, 1}
+		for (auto i = size_t {0}; i < text.size(); ++i) {
+			const auto quad = font->getFontQuad(text[i], x, y);
+			const auto texMatrix = Mat4r::transform(
+				{quad.m_u, quad.m_v, 0},
+				{},
+				{quad.m_us, quad.m_vs, 1}
 			);
 			drawTexture(font->m_tex.get(), quad.m_x, quad.m_y, quad.m_width, quad.m_height, 0, color, texMatrix);
 		}

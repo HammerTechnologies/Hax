@@ -11,15 +11,15 @@ Pixmap::Pixmap(uint16_t width, uint16_t height, uint32_t color) noexcept
 
 Pixmap::Pixmap(const std::string& filename) noexcept
 : m_data{}, m_width{0}, m_height{0} {
-	int32_t w, h;
+	auto w = 0, h = 0;
 	const auto pixels = std::unique_ptr<uint32_t, void(*)(void*)>{
 		reinterpret_cast<uint32_t*>(stbi_load(filename.c_str(), &w, &h, nullptr, 4)),
 		stbi_image_free
 	};
 	if (!pixels) return;
 
-	m_width = static_cast<uint16_t>(w);
-	m_height = static_cast<uint16_t>(h);
+	m_width = uint16_t(w);
+	m_height = uint16_t(h);
 	m_data.resize(w * h);
 	std::copy(pixels.get(), pixels.get() + m_data.size(), m_data.begin());
 }

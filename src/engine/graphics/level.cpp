@@ -7,8 +7,8 @@ void Level::draw2D(
 	real_t y,
 	real_t size,
 	uint32_t color) const noexcept {
-	for (uint8_t tileY = 0; tileY < m_maze->getHeight(); ++tileY) {
-		for (uint8_t tileX = 0; tileX < m_maze->getWidth(); ++tileX) {
+	for (auto tileY = 0; tileY < m_maze->getHeight(); ++tileY) {
+		for (auto tileX = 0; tileX < m_maze->getWidth(); ++tileX) {
 			drawNode2D(
 				graphics,
 				m_maze->getNodeAt(tileX, tileY),
@@ -72,9 +72,15 @@ void Level::drawNode2D(
 }
 
 void Level::draw3D(const Graphics& graphics, real_t size, uint32_t color) const noexcept {
-	for (uint8_t y = 0; y < m_maze->getHeight(); ++y) {
-		for (uint8_t x = 0; x < m_maze->getWidth(); ++x) {
-			drawNode3D(graphics, m_maze->getNodeAt(x, y), x, m_maze->getHeight() - y - 1, size, color);
+	for (auto tileY = 0; tileY < m_maze->getHeight(); ++tileY) {
+		for (auto tileX = 0; tileX < m_maze->getWidth(); ++tileX) {
+			drawNode3D(
+				graphics,
+				m_maze->getNodeAt(tileX, tileY),
+				tileX,
+				m_maze->getHeight() - tileY - 1,
+				size,
+				color);
 		}
 	}
 }
@@ -212,8 +218,8 @@ void Level::drawZWall(
 	real_t height,
 	uint32_t color) noexcept {
 	const auto transform = Mat4r::transform(
-		Vec3r{x, 0, z},
+		{x, 0, z},
 		Quatr::fromEuler(Vec3r{0, M_PI_2, 0}),
-		Vec3r{width, height, 1});
+		{width, height, 1});
 	graphics.drawQuad(transform, color);
 }
