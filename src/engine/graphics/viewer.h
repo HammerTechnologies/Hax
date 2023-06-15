@@ -6,7 +6,7 @@
 #include "../math/quat.h"
 #include "../math/vec2.h"
 #include "../math/vec3.h"
-#include "../real.h"
+#include "../math/real.h"
 
 struct Viewer {
 	Vec3r m_position;

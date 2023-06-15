@@ -3,7 +3,7 @@
 #include <array>
 #include <cstdint>
 #include "../../math/vec3.h"
-#include "../../real.h"
+#include "../../math/real.h"
 
 struct Vertex {
 	Vec3r m_position;

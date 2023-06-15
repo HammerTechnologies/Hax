@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 #include "../math/mat4.h"
-#include "../real.h"
+#include "../math/real.h"
 #include "color.h"
 #include "internal/geom.h"
 #include "internal/shader.h"
