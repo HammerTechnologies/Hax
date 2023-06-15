@@ -199,7 +199,7 @@ struct Mat4 {
 			mat.m_data[5] = 1;
 			mat.m_data[6] = 0;
 		}
-		return mat.rotate(spin, Vec3{0, 0, 1}).scale(Vec3<T> {width, height, 1});
+		return mat.rotate(spin, {0, 0, 1}).scale(Vec3<T> {width, height, 1});
 	}
 private:
 	std::array<T, 16> m_data;
