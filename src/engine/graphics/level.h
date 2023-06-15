@@ -12,7 +12,7 @@ struct Level {
 	Level(const Vec2<uint8_t>& size, uint32_t seed) noexcept
 	: m_maze{generateMaze(size.x(), size.y(), seed)} {}
 
-	Vec2<uint8_t> getSize() const noexcept { return {m_maze->getWidth(), m_maze->getHeight()}; }
+	Vec2<uint8_t> size() const noexcept { return {m_maze->getWidth(), m_maze->getHeight()}; }
 private:
 	std::unique_ptr<Graph> m_maze;
 

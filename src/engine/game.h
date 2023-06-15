@@ -20,7 +20,7 @@ struct Game {
 	virtual bool update() = 0;
 	virtual void finish() = 0;
 
-	static Game* getInstance() noexcept { return m_instance; }
+	static Game* instance() noexcept { return m_instance; }
 private:
 	static Game* m_instance;
 };

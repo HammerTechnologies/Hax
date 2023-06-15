@@ -11,9 +11,9 @@ struct Input {
 	Input(const ContextDriver& context, const std::shared_ptr<ContextWindow> window)
 	: m_context{context}, m_window{window} {}
 
-  void setMouseVisible(bool visible) const noexcept;
-  void setMousePosition(const Vec2i& position) const noexcept;
-  Vec2i getMousePosition() const noexcept;
+  void mouseVisible(bool visible) const noexcept;
+	Vec2i mousePosition() const noexcept;
+  void mousePosition(const Vec2i& position) const noexcept;
   bool isMouseButtonDown(MouseButton button) const noexcept;
   bool isKeyDown(Key key) const noexcept;
 private:

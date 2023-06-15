@@ -2,7 +2,7 @@
 
 Texture::Texture(const Vec2<uint16_t>& size, const GraphicsDriver& driver) noexcept
 : m_driver{driver}, m_internal{driver.createTexture()}, m_size{size} {
-	setPixels(nullptr);
+	pixels(nullptr);
 }
 
 Texture::~Texture() noexcept {
@@ -13,6 +13,6 @@ void Texture::bind() const noexcept {
 	m_driver.bindTexture(m_internal);
 }
 
-void Texture::setPixels(const color_t* pixels) const noexcept {
+void Texture::pixels(const color_t* pixels) const noexcept {
 	m_driver.setTexturePixels(m_internal, m_size, pixels);
 }

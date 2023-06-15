@@ -90,7 +90,7 @@ std::unique_ptr<Font> Graphics::loadFont(const std::string& filename, real_t hei
 
 std::unique_ptr<Pixmap> Graphics::loadPixmap(const std::string& filename) const noexcept {
 	auto pixmap = std::unique_ptr<Pixmap> {new Pixmap {filename}};
-	if (pixmap->getSize() == Vec2<uint16_t> {0, 0}) {
+	if (pixmap->size() == Vec2<uint16_t> {0, 0}) {
 		m_logger.error("Could not load pixmap '" + filename + "'.");
 		pixmap.reset();
 	}
@@ -99,12 +99,12 @@ std::unique_ptr<Pixmap> Graphics::loadPixmap(const std::string& filename) const 
 
 std::unique_ptr<Texture> Graphics::loadTexture(const std::string& filename) const noexcept {
 	auto pixmap = Pixmap {filename};
-	auto texture = std::unique_ptr<Texture> {new Texture {pixmap.getSize(), m_driver}};
+	auto texture = std::unique_ptr<Texture> {new Texture {pixmap.size(), m_driver}};
 	if (!texture->isValid()) {
 		m_logger.error("Could not load texture '" + filename + "'.");
 		texture.reset();
 	} else {
-		texture->setPixels(pixmap.data());
+		texture->pixels(pixmap.data());
 	}
 	return texture;
 }
@@ -155,8 +155,8 @@ void Graphics::drawTexture(
 	const Mat4r& textureMatrix) const noexcept {
 	if (tex) {
 		const auto realSize = Vec2r {
-			(size.x() != 0) ? size.x() : tex->getSize().x(),
-			(size.y() != 0) ? size.y() : tex->getSize().y()};
+			(size.x() != 0) ? size.x() : tex->size().x(),
+			(size.y() != 0) ? size.y() : tex->size().y()};
 		const auto transform = Mat4r::transform(
 			{position + realSize / 2, 0},
 			Quatr::fromAxis(deg2rad(angle), Vec3r{0, 0, 1}),
@@ -176,7 +176,7 @@ void Graphics::drawText(
 	if (font) {
 		auto fixedPos = Vec2r {position.x(), position.y() + font->m_maxHeight};
 		for (auto i = size_t {0}; i < text.size(); ++i) {
-			const auto quad = font->getFontQuad(text[i], fixedPos);
+			const auto quad = font->fontQuad(text[i], fixedPos);
 			const auto texMatrix = Mat4r::transform(
 				{quad.m_tex.x(), quad.m_tex.y(), 0},
 				{},

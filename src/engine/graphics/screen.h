@@ -13,12 +13,12 @@ struct Screen {
 	~Screen() noexcept;
 
 	void enableContext() const noexcept;
-	Vec2<uint16_t> getSize() const noexcept;
+	Vec2<uint16_t> size() const noexcept;
 	bool isOpened() const noexcept;
 	void refresh() noexcept;
 
-	constexpr real_t getDelta() const noexcept { return m_delta; }
-	constexpr uint32_t getFps() const noexcept { return m_fps; }
+	constexpr real_t delta() const noexcept { return m_delta; }
+	constexpr uint32_t fps() const noexcept { return m_fps; }
 private:
 	const ContextDriver& m_context;
 	const Logger& m_logger;

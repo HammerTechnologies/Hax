@@ -12,8 +12,8 @@
 struct Texture;
 
 struct Font {
-	constexpr real_t getHeight() const noexcept { return m_height; }
-	Vec2r getTextSize(const std::string& text) const noexcept;
+	constexpr real_t height() const noexcept { return m_height; }
+	Vec2r textSize(const std::string& text) const noexcept;
 private:
 	std::unique_ptr<Texture> m_tex;
 	std::array<stbtt_bakedchar, 94> m_glyphs;
@@ -21,7 +21,7 @@ private:
 	real_t m_maxHeight;
 
 	Font(const std::string& filename, real_t height, const GraphicsDriver& driver) noexcept;
-	FontQuad getFontQuad(char c, Vec2r& startPos) const noexcept;
+	FontQuad fontQuad(char c, Vec2r& startPos) const noexcept;
 
 	bool isValid() const { return m_tex != nullptr; }
 

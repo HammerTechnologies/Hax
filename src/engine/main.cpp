@@ -7,7 +7,7 @@
 
 #ifdef EMSCRIPTEN
 void update() noexcept {
-	Game::getInstance()->update();
+	Game::instance()->update();
 }
 #endif
 
@@ -15,8 +15,8 @@ int main() noexcept {
 #ifdef EMSCRIPTEN
 	emscripten_set_main_loop(update, 0, true);
 #else
-	while (Game::getInstance()->update()) {}
-	Game::getInstance()->finish();
+	while (Game::instance()->update()) {}
+	Game::instance()->finish();
 	Core::terminate();
 #endif
 	return 0;

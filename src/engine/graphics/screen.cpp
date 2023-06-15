@@ -23,7 +23,7 @@ void Screen::enableContext() const noexcept {
 	m_context.enableWindowContext(*m_window);
 }
 
-Vec2<uint16_t> Screen::getSize() const noexcept {
+Vec2<uint16_t> Screen::size() const noexcept {
 	return m_context.getWindowSize(*m_window);
 }
 

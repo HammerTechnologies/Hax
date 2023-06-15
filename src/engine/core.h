@@ -14,11 +14,11 @@ struct Core {
 	Core(const Vec2<uint16_t>& size, bool fullscreen, const Logger& logger) noexcept;
 	~Core() noexcept;
 
-	constexpr const Graphics& getGraphics() const noexcept { return m_graphics; }
-	constexpr const Input& getInput() const noexcept { return m_input; }
-	constexpr const Screen& getScreen() const noexcept { return m_screen; }
-	constexpr Graphics& getGraphics() noexcept { return m_graphics; }
-	constexpr Screen& getScreen() noexcept { return m_screen; }
+	constexpr const Graphics& graphics() const noexcept { return m_graphics; }
+	constexpr const Input& input() const noexcept { return m_input; }
+	constexpr const Screen& screen() const noexcept { return m_screen; }
+	constexpr Graphics& graphics() noexcept { return m_graphics; }
+	constexpr Screen& screen() noexcept { return m_screen; }
 
 	static void terminate() noexcept;
 private:

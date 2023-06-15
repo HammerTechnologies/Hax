@@ -13,9 +13,9 @@ struct Pixmap {
 
 	Pixmap(const Vec2<uint16_t>& size, color_t color) noexcept;
 
-	constexpr const Vec2<uint16_t>& getSize() const noexcept { return m_size; }
-	color_t getPixel(const Vec2<uint16_t>& position) const noexcept { return m_data[position.y()*m_size.x() + position.x()]; }
-	void setPixel(const Vec2<uint16_t>& position, color_t color) noexcept { m_data[position.y()*m_size.x() + position.x()] = color; }
+	constexpr const Vec2<uint16_t>& size() const noexcept { return m_size; }
+	color_t pixel(const Vec2<uint16_t>& position) const noexcept { return m_data[position.y()*m_size.x() + position.x()]; }
+	void pixel(const Vec2<uint16_t>& position, color_t color) noexcept { m_data[position.y()*m_size.x() + position.x()] = color; }
 
 	const color_t* data() const noexcept { return m_data.data(); }
 	color_t* data() noexcept { return m_data.data(); }
