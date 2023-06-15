@@ -28,35 +28,29 @@ struct Graphics {
 	std::unique_ptr<Texture> loadTexture(const std::string& filename) const noexcept;
 	std::unique_ptr<Texture> createTexture(uint16_t width, uint16_t height) const noexcept;
 
-	void setup2D(uint16_t x, uint16_t y, uint16_t w, uint16_t h) noexcept;
+	void setup2D(const Vec2<uint16_t>& position, const Vec2<uint16_t> size) noexcept;
 	void setup3D(const Viewer& viewer) noexcept;
 	void cls(uint32_t color = Color::BLACK) const noexcept;
 	void drawRect(
-		real_t x,
-		real_t y,
-		real_t width,
-		real_t height,
+		const Vec2r& position,
+		const Vec2r& size,
 		uint32_t color = Color::WHITE) const noexcept;
 	void drawTexture(
 		const Texture* tex,
-		real_t x,
-		real_t y,
-		real_t width = 0,
-		real_t height = 0,
+		const Vec2r& position,
+		const Vec2r& size = {},
 		real_t angle = 0,
 		uint32_t color = Color::WHITE,
 		const Mat4r& textureMatrix = Mat4r{}) const noexcept;
 	void drawText(
 		const Font* font,
 		const std::string& text,
-		real_t x,
-		real_t y,
+		const Vec2r& position,
 		uint32_t color = Color::WHITE) const noexcept;
 	void drawQuad(const Mat4r& transform, uint32_t color = Color::WHITE) const noexcept;
 	void drawLevel2D(
 		const Level& level,
-		real_t x,
-		real_t y,
+		const Vec2r& position,
 		real_t size,
 		uint32_t color = Color::WHITE) const noexcept;
 	void drawLevel3D(const Level& level, real_t size, uint32_t color = Color::WHITE) const noexcept;

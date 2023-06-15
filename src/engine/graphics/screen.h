@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <memory>
+#include "../math/vec2.h"
 #include "../real.h"
 #include "internal/context_driver.h"
 
@@ -12,8 +13,7 @@ struct Screen {
 	~Screen() noexcept;
 
 	void enableContext() const noexcept;
-	uint16_t getWidth() const noexcept;
-	uint16_t getHeight() const noexcept;
+	Vec2<uint16_t> getSize() const noexcept;
 	bool isOpened() const noexcept;
 	void refresh() noexcept;
 

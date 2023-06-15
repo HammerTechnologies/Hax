@@ -23,12 +23,8 @@ void Screen::enableContext() const noexcept {
 	m_context.enableWindowContext(*m_window);
 }
 
-uint16_t Screen::getWidth() const noexcept {
-	return m_context.getWindowWidth(*m_window);
-}
-
-uint16_t Screen::getHeight() const noexcept {
-	return m_context.getWindowHeight(*m_window);
+Vec2<uint16_t> Screen::getSize() const noexcept {
+	return m_context.getWindowSize(*m_window);
 }
 
 bool Screen::isOpened() const noexcept {
@@ -37,7 +33,7 @@ bool Screen::isOpened() const noexcept {
 
 void Screen::refresh() noexcept {
 	// Refresh screen
-	m_context.refreshwindow(*m_window);
+	m_context.refreshWindow(*m_window);
 
 	// Update delta
 	const auto currentTime = m_context.getTime();

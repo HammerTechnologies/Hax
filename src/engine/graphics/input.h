@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <memory>
+#include "../math/vec2.h"
 #include "internal/context_driver.h"
 #include "key.h"
 #include "mouse_button.h"
@@ -11,9 +12,8 @@ struct Input {
 	: m_context{context}, m_window{window} {}
 
   void setMouseVisible(bool visible) const noexcept;
-  void setMousePosition(int32_t x, int32_t y) const noexcept;
-  int32_t getMouseX() const noexcept;
-  int32_t getMouseY() const noexcept;
+  void setMousePosition(const Vec2i& position) const noexcept;
+  Vec2i getMousePosition() const noexcept;
   bool isMouseButtonDown(MouseButton button) const noexcept;
   bool isKeyDown(Key key) const noexcept;
 private:

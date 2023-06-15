@@ -2,11 +2,11 @@
 #include "logger.h"
 #include "graphics/internal/graphics_driver.h"
 
-Core::Core(uint16_t width, uint16_t height, bool fullscreen, const Logger& logger) noexcept
+Core::Core(const Vec2<uint16_t>& size, bool fullscreen, const Logger& logger) noexcept
 : m_logger{logger},
 	m_context{logger},
 	m_window{
-		m_context.createWindow(width, height, fullscreen),
+		m_context.createWindow(size, fullscreen),
 		[this](ContextWindow* win){ m_context.destroyWindow(*win); }
 	},
 	m_screen{m_context, m_window, logger},

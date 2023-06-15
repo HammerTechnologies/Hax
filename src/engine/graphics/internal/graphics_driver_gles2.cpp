@@ -13,15 +13,15 @@ GraphicsDriver::GraphicsDriver(ContextDriver::GlGetProcAddress loader, const Log
 	}
 }
 
-void GraphicsDriver::setup2D(uint16_t x, uint16_t y, uint16_t w, uint16_t h) const noexcept {
+void GraphicsDriver::setup2D(const Vec2<uint16_t>& position, const Vec2<uint16_t> size) const noexcept {
 	glEnable(GL_BLEND);
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_SCISSOR_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glViewport(x, y, w, h);
-	glScissor(x, y, w, h);
+	glScissor(position.x(), position.y(), size.x(), size.y());
+	glViewport(position.x(), position.y(), size.x(), size.y());
 }
 
 void GraphicsDriver::setup3D(const Viewer& viewer) const noexcept {
@@ -32,16 +32,16 @@ void GraphicsDriver::setup3D(const Viewer& viewer) const noexcept {
 	glEnable(GL_SCISSOR_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glFrontFace(GL_CW);
-	glViewport(
-		viewer.m_viewportX,
-		viewer.m_viewportY,
-		viewer.m_viewportWidth,
-		viewer.m_viewportHeight);
 	glScissor(
-		viewer.m_viewportX,
-		viewer.m_viewportY,
-		viewer.m_viewportWidth,
-		viewer.m_viewportHeight);
+		viewer.m_viewportPosition.x(),
+		viewer.m_viewportPosition.y(),
+		viewer.m_viewportSize.x(),
+		viewer.m_viewportSize.y());
+	glViewport(
+		viewer.m_viewportPosition.x(),
+		viewer.m_viewportPosition.y(),
+		viewer.m_viewportSize.x(),
+		viewer.m_viewportSize.y());
 }
 
 void GraphicsDriver::cls(uint32_t color = Color::BLACK) const noexcept {
@@ -159,8 +159,8 @@ void GraphicsDriver::setProgramUniform(int32_t location, real_t value) const noe
 	glUniform1f(location, value);
 }
 
-void GraphicsDriver::setProgramUniform(int32_t location, real_t x, real_t y) const noexcept {
-	glUniform2f(location, x, y);
+void GraphicsDriver::setProgramUniform(int32_t location, const Vec2r& v) const noexcept {
+	glUniform2fv(location, 1, v.data());
 }
 
 void GraphicsDriver::setProgramUniform(int32_t location, const Vec3r& v) const noexcept {
@@ -214,16 +214,15 @@ void GraphicsDriver::bindTexture(const DriverTexture& texture) const noexcept {
 
 void GraphicsDriver::setTexturePixels(
 	const DriverTexture& texture,
-	uint16_t width,
-	uint16_t height,
+	const Vec2<uint16_t>& size,
 	const uint32_t* pixels) const noexcept {
 	bindTexture(texture);
 	glTexImage2D(
 		GL_TEXTURE_2D,
 		0,
 		GL_RGBA,
-		width,
-		height,
+		size.x(),
+		size.y(),
 		0,
 		GL_RGBA,
 		GL_UNSIGNED_BYTE,

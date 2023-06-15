@@ -4,16 +4,12 @@ void Input::setMouseVisible(bool visible) const noexcept {
 	m_context.setMouseVisible(*m_window, visible);
 }
 
-void Input::setMousePosition(int32_t x, int32_t y) const noexcept {
-	m_context.setMousePosition(*m_window, x, y);
+void Input::setMousePosition(const Vec2i& position) const noexcept {
+	m_context.setMousePosition(*m_window, position);
 }
 
-int32_t Input::getMouseX() const noexcept {
-	return m_context.getMouseX(*m_window);
-}
-
-int32_t Input::getMouseY() const noexcept {
-	return m_context.getMouseY(*m_window);
+Vec2i Input::getMousePosition() const noexcept {
+	return m_context.getMousePosition(*m_window);
 }
 
 bool Input::isMouseButtonDown(MouseButton button) const noexcept {

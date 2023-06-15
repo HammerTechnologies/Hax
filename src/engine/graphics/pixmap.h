@@ -4,17 +4,17 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include "../math/vec2.h"
 
 struct Pixmap {
 	using iterator = uint32_t*;
 	using const_iterator = const uint32_t*;
 
-	Pixmap(uint16_t width, uint16_t height, uint32_t color) noexcept;
+	Pixmap(const Vec2<uint16_t>& size, uint32_t color) noexcept;
 
-	constexpr uint16_t getWidth() const noexcept { return m_width; }
-	constexpr uint16_t getHeight() const noexcept { return m_height; }
-	uint32_t getPixel(uint16_t x, uint16_t y) const noexcept { return m_data[y*m_width + x]; }
-	void setPixel(uint16_t x, uint16_t y, uint32_t color) noexcept { m_data[y*m_width + x] = color; }
+	constexpr const Vec2<uint16_t>& getSize() const noexcept { return m_size; }
+	uint32_t getPixel(const Vec2<uint16_t>& position) const noexcept { return m_data[position.y()*m_size.x() + position.x()]; }
+	void setPixel(const Vec2<uint16_t>& position, uint32_t color) noexcept { m_data[position.y()*m_size.x() + position.x()] = color; }
 
 	const uint32_t* data() const noexcept { return m_data.data(); }
 	uint32_t* data() noexcept { return m_data.data(); }
@@ -25,8 +25,7 @@ struct Pixmap {
 	iterator end() noexcept { return data() + m_data.size(); }
 private:
 	std::vector<uint32_t> m_data;
-	uint16_t m_width;
-	uint16_t m_height;
+	Vec2<uint16_t> m_size;
 
 	Pixmap(const std::string& filename) noexcept;
 

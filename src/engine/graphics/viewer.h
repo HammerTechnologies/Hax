@@ -4,16 +4,15 @@
 #include <cstdint>
 #include "../math/mat4.h"
 #include "../math/quat.h"
+#include "../math/vec2.h"
 #include "../math/vec3.h"
 #include "../real.h"
 
 struct Viewer {
 	Vec3r m_position;
 	Vec3r m_euler;
-	uint16_t m_viewportX;
-	uint16_t m_viewportY;
-	uint16_t m_viewportWidth;
-	uint16_t m_viewportHeight;
+	Vec2<uint16_t> m_viewportPosition;
+	Vec2<uint16_t> m_viewportSize;
 	real_t m_fov;
 	real_t m_rangeMin;
 	real_t m_rangeMax;
@@ -21,19 +20,15 @@ struct Viewer {
 	constexpr Viewer(
 		const Vec3r& position,
 		const Vec3r& euler,
-		uint16_t viewportX,
-		uint16_t viewportY,
-		uint16_t viewportWidth,
-		uint16_t viewportHeight,
+		const Vec2<uint16_t>& viewportPosition,
+		const Vec2<uint16_t>& viewportSize,
 		real_t fov = 60,
 		real_t rangeMin = 1,
 		real_t rangeMax = 1000) noexcept
 	:	m_position{position},
 		m_euler{euler},
-		m_viewportX{viewportX},
-		m_viewportY{viewportY},
-		m_viewportWidth{viewportWidth},
-		m_viewportHeight{viewportHeight},
+		m_viewportPosition{viewportPosition},
+		m_viewportSize{viewportSize},
 		m_fov{fov},
 		m_rangeMin{rangeMin},
 		m_rangeMax{rangeMax} {}

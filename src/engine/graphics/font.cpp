@@ -37,7 +37,7 @@ Font::Font(const std::string& filename, real_t height, const GraphicsDriver& dri
 	alphaBuffer.clear();
 
 	// Create texture
-	m_tex = std::unique_ptr<Texture> {new Texture(w, h, driver)};
+	m_tex = std::unique_ptr<Texture> {new Texture {Vec2<uint16_t>(w, h), driver}};
 	m_tex->setPixels(reinterpret_cast<uint32_t*>(pixels.data()));
 	pixels.clear();
 
@@ -48,43 +48,34 @@ Font::Font(const std::string& filename, real_t height, const GraphicsDriver& dri
 	m_maxHeight = -999999;
 	const auto len = m_glyphs.size();
 	for (auto i = size_t {0}; i < len; ++i) {
-		stbtt_GetBakedQuad(m_glyphs.data(), m_tex->getWidth(), m_tex->getHeight(), i, &x, &y, &q, true);
+		stbtt_GetBakedQuad(m_glyphs.data(), m_tex->getSize().x(), m_tex->getSize().y(), i, &x, &y, &q, true);
 		miny = std::min(miny, q.y0);
 		maxy = std::max(maxy, q.y1);
 	}
 	m_maxHeight = maxy - miny;
 }
 
-real_t Font::getTextWidth(const std::string& text) const noexcept {
-	auto x = 0.f, y = 0.f;
-	auto q = stbtt_aligned_quad {};
-	for (auto i = size_t {0}; i < text.size(); ++i) {
-		stbtt_GetBakedQuad(m_glyphs.data(), m_tex->getWidth(), m_tex->getHeight(), std::min(text[i] - 32, 94), &x, &y, &q, true);
-	}
-	return q.x1;
-}
-
-real_t Font::getTextHeight(const std::string& text) const noexcept {
+Vec2r Font::getTextSize(const std::string& text) const noexcept {
 	auto x = 0.f, y = 0.f, miny = 999999.f, maxy = -999999.f;
 	auto q = stbtt_aligned_quad {};
 	for (auto i = size_t {0}; i < text.size(); ++i) {
-		stbtt_GetBakedQuad(m_glyphs.data(), m_tex->getWidth(), m_tex->getHeight(), std::min(text[i] - 32, 94), &x, &y, &q, true);
+		stbtt_GetBakedQuad(m_glyphs.data(), m_tex->getSize().x(), m_tex->getSize().y(), std::min(text[i] - 32, 94), &x, &y, &q, true);
 		miny = std::min(miny, q.y0);
 		maxy = std::max(maxy, q.y1);
 	}
-	return maxy - miny;
+	return {q.x1, maxy - miny};
 }
 
-FontQuad Font::getFontQuad(char c, real_t& startX, real_t& startY) const noexcept {
+FontQuad Font::getFontQuad(char c, Vec2r& startPos) const noexcept {
 	auto q = stbtt_aligned_quad {};
 	stbtt_GetBakedQuad(
 		m_glyphs.data(),
-		m_tex->getWidth(),
-		m_tex->getHeight(),
+		m_tex->getSize().x(),
+		m_tex->getSize().y(),
 		std::min(c - 32, 94),
-		&startX,
-		&startY,
+		&startPos.x(),
+		&startPos.y(),
 		&q,
 		true);
-	return {q.x0, q.y0, q.x1 - q.x0, q.y1 - q.y0, q.s0, q.t0, q.s1 - q.s0, q.t1 - q.t0};
+	return {{q.x0, q.y0}, {q.x1 - q.x0, q.y1 - q.y0}, {q.s0, q.t0}, {q.s1 - q.s0, q.t1 - q.t0}};
 }

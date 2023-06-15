@@ -6,11 +6,12 @@
 #include "graphics/internal/context_driver.h"
 #include "graphics/internal/graphics_driver.h"
 #include "graphics/screen.h"
+#include "math/vec2.h"
 
 struct Logger;
 
 struct Core {
-	Core(uint16_t width, uint16_t height, bool fullscreen, const Logger& logger) noexcept;
+	Core(const Vec2<uint16_t>& size, bool fullscreen, const Logger& logger) noexcept;
 	~Core() noexcept;
 
 	constexpr const Graphics& getGraphics() const noexcept { return m_graphics; }

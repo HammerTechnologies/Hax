@@ -17,10 +17,10 @@ ContextDriver::ContextDriver(const Logger& logger) noexcept
 	}
 }
 
-ContextWindow* ContextDriver::createWindow(uint16_t width, uint16_t height, bool fullscreen) const noexcept {
+ContextWindow* ContextDriver::createWindow(const Vec2<uint16_t>& size, bool fullscreen) const noexcept {
 	auto win = glfwCreateWindow(
-		width,
-		height,
+		size.x(),
+		size.y(),
 		"Hax",
 		fullscreen ? glfwGetPrimaryMonitor() : nullptr,
 		nullptr);
@@ -38,23 +38,17 @@ void ContextDriver::enableWindowContext(ContextWindow& window) const noexcept {
 	glfwMakeContextCurrent(&window);
 }
 
-uint16_t ContextDriver::getWindowWidth(ContextWindow& window) const noexcept {
-	auto w = 0;
-	glfwGetFramebufferSize(&window, &w, nullptr);
-	return static_cast<uint16_t>(w);
-}
-
-uint16_t ContextDriver::getWindowHeight(ContextWindow& window) const noexcept {
-	auto h = 0;
-	glfwGetFramebufferSize(&window, nullptr, &h);
-	return static_cast<uint16_t>(h);
+Vec2<uint16_t> ContextDriver::getWindowSize(ContextWindow& window) const noexcept {
+	auto w = 0, h = 0;
+	glfwGetFramebufferSize(&window, &w, &h);
+	return {uint16_t(w), uint16_t(h)};
 }
 
 bool ContextDriver::isWindowOpened(ContextWindow& window) const noexcept {
 	return !glfwWindowShouldClose(&window);
 }
 
-void ContextDriver::refreshwindow(ContextWindow& window) const noexcept {
+void ContextDriver::refreshWindow(ContextWindow& window) const noexcept {
 	glfwSwapBuffers(&window);
 	glfwPollEvents();
 }
@@ -67,20 +61,14 @@ void ContextDriver::setMouseVisible(ContextWindow& window, bool visible) const n
 	glfwSetInputMode(&window, GLFW_CURSOR, visible ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN);
 }
 
-void ContextDriver::setMousePosition(ContextWindow& window, int32_t x, int32_t y) const noexcept {
-	glfwSetCursorPos(&window, x, y);
+void ContextDriver::setMousePosition(ContextWindow& window, const Vec2i& position) const noexcept {
+	glfwSetCursorPos(&window, position.x(), position.y());
 }
 
-int32_t ContextDriver::getMouseX(ContextWindow& window) const noexcept {
-	auto x = 0.0;
-	glfwGetCursorPos(&window, &x, nullptr);
-	return int32_t(std::floor(x));
-}
-
-int32_t ContextDriver::getMouseY(ContextWindow& window) const noexcept {
-	auto y = 0.0;
-	glfwGetCursorPos(&window, nullptr, &y);
-	return int32_t(std::floor(y));
+Vec2i ContextDriver::getMousePosition(ContextWindow& window) const noexcept {
+	auto x = 0.0, y = 0.0;
+	glfwGetCursorPos(&window, &x, &y);
+	return {int32_t(std::floor(x)), int32_t(std::floor(y))};
 }
 
 bool ContextDriver::isMouseButtonDown(ContextWindow& window, MouseButton button) const noexcept {

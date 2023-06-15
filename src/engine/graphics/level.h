@@ -2,31 +2,29 @@
 
 #include <memory>
 #include "../math/mat4.h"
+#include "../math/vec2.h"
 #include "../maze/generator.h"
 
 struct Graph;
 struct Graphics;
 
 struct Level {
-	Level(uint8_t width, uint8_t height, uint32_t seed) noexcept
-	: m_maze{generateMaze(width, height, seed)} {}
+	Level(const Vec2<uint8_t>& size, uint32_t seed) noexcept
+	: m_maze{generateMaze(size.x(), size.y(), seed)} {}
 
-	uint8_t getWidth() const noexcept { return m_maze->getWidth(); }
-	uint8_t getHeight() const noexcept { return m_maze->getHeight(); }
+	Vec2<uint8_t> getSize() const noexcept { return {m_maze->getWidth(), m_maze->getHeight()}; }
 private:
 	std::unique_ptr<Graph> m_maze;
 
 	void draw2D(
 		const Graphics& graphics,
-		real_t x,
-		real_t y,
+		const Vec2r& position,
 		real_t size,
 		uint32_t color) const noexcept;
 	static void drawNode2D(
 		const Graphics& graphics,
 		const std::shared_ptr<GraphNode>& gn,
-		real_t x,
-		real_t y,
+		const Vec2r& position,
 		real_t size,
 		uint32_t color) noexcept;
 
@@ -34,59 +32,48 @@ private:
 	static void drawNode3D(
 		const Graphics& graphics,
 		const std::shared_ptr<GraphNode>& gn,
-		uint16_t tileX,
-		uint16_t tileY,
+		const Vec2<uint8_t>& tile,
 		real_t size,
 		uint32_t color) noexcept;
 	static void drawWWall(
 		const Graphics& graphics,
-		uint16_t tileX,
-		uint16_t tileY,
+		const Vec2<uint8_t>& tile,
 		real_t size,
 		uint32_t color) noexcept;
 	static void drawEWall(
 		const Graphics& graphics,
-		uint16_t tileX,
-		uint16_t tileY,
+		const Vec2<uint8_t>& tile,
 		real_t size,
 		uint32_t color) noexcept;
 	static void drawNWall(
 		const Graphics& graphics,
-		uint16_t tileX,
-		uint16_t tileY,
+		const Vec2<uint8_t>& tile,
 		real_t size,
 		uint32_t color) noexcept;
 	static void drawSWall(
 		const Graphics& graphics,
-		uint16_t tileX,
-		uint16_t tileY,
+		const Vec2<uint8_t>& tile,
 		real_t size,
 		uint32_t color) noexcept;
 	static void drawWEWall(
 		const Graphics& graphics,
-		uint16_t tileX,
-		uint16_t tileY,
+		const Vec2<uint8_t>& tile,
 		real_t size,
 		uint32_t color) noexcept;
 	static void drawNSWall(
 		const Graphics& graphics,
-		uint16_t tileX,
-		uint16_t tileY,
+		const Vec2<uint8_t>& tile,
 		real_t size,
 		uint32_t color) noexcept;
 	static void drawXWall(
 		const Graphics& graphics,
-		real_t x,
-		real_t z,
-		real_t width,
-		real_t height,
+		const Vec2r& position,
+		const Vec2r& size,
 		uint32_t color) noexcept;
 	static void drawZWall(
 		const Graphics& graphics,
-		real_t x,
-		real_t z,
-		real_t width,
-		real_t height,
+		const Vec2r& position,
+		const Vec2r& size,
 		uint32_t color) noexcept;
 
 	friend struct Graphics;

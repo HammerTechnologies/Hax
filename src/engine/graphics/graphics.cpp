@@ -88,7 +88,7 @@ std::unique_ptr<Font> Graphics::loadFont(const std::string& filename, real_t hei
 
 std::unique_ptr<Pixmap> Graphics::loadPixmap(const std::string& filename) const noexcept {
 	auto pixmap = std::unique_ptr<Pixmap> {new Pixmap {filename}};
-	if (pixmap->getWidth() == 0 && pixmap->getHeight() == 0) {
+	if (pixmap->getSize() == Vec2<uint16_t> {0, 0}) {
 		m_logger.error("Could not load pixmap '" + filename + "'.");
 		pixmap.reset();
 	}
@@ -97,7 +97,7 @@ std::unique_ptr<Pixmap> Graphics::loadPixmap(const std::string& filename) const 
 
 std::unique_ptr<Texture> Graphics::loadTexture(const std::string& filename) const noexcept {
 	auto pixmap = Pixmap {filename};
-	auto texture = std::unique_ptr<Texture> {new Texture {pixmap.getWidth(), pixmap.getHeight(), m_driver}};
+	auto texture = std::unique_ptr<Texture> {new Texture {pixmap.getSize(), m_driver}};
 	if (!texture->isValid()) {
 		m_logger.error("Could not load texture '" + filename + "'.");
 		texture.reset();
@@ -108,12 +108,12 @@ std::unique_ptr<Texture> Graphics::loadTexture(const std::string& filename) cons
 }
 
 std::unique_ptr<Texture> Graphics::createTexture(uint16_t width, uint16_t height) const noexcept {
-	return std::unique_ptr<Texture> {new Texture {width, height, m_driver}};
+	return std::unique_ptr<Texture> {new Texture {{width, height}, m_driver}};
 }
 
-void Graphics::setup2D(uint16_t x, uint16_t y, uint16_t w, uint16_t h) noexcept {
-	m_driver.setup2D(x, y, w, h);
-	m_projection = Mat4r::ortho(0, w - x, h - y, 0, 0, 1);
+void Graphics::setup2D(const Vec2<uint16_t>& position, const Vec2<uint16_t> size) noexcept {
+	m_driver.setup2D(position, size);
+	m_projection = Mat4r::ortho(0, size.x() - position.x(), size.y() - position.y(), 0, 0, 1);
 }
 
 void Graphics::setup3D(const Viewer& viewer) noexcept {
@@ -121,7 +121,7 @@ void Graphics::setup3D(const Viewer& viewer) noexcept {
 	m_projection =
 		Mat4r::perspective(
 			deg2rad(viewer.m_fov),
-			static_cast<real_t>(viewer.m_viewportWidth) / viewer.m_viewportHeight,
+			static_cast<real_t>(viewer.m_viewportSize.x()) / viewer.m_viewportSize.y(),
 			viewer.m_rangeMin,
 			viewer.m_rangeMax)
 		* viewer.getViewMatrix();
@@ -132,15 +132,13 @@ void Graphics::cls(uint32_t color) const noexcept {
 }
 
 void Graphics::drawRect(
-	real_t x,
-	real_t y,
-	real_t width,
-	real_t height,
+	const Vec2r& position,
+	const Vec2r& size,
 	uint32_t color) const noexcept {
 	const auto transform = Mat4r::transform(
-		{x + width / 2, y + height / 2, 0},
+		{position.x() + size.x() / 2, position.y() + size.y() / 2, 0},
 		{},
-		{width, height, 1});
+		{size.x(), size.y(), 1});
 	m_rect.bind();
 	prepareShader(transform, {}, color, false);
 	m_rect.draw();
@@ -148,20 +146,19 @@ void Graphics::drawRect(
 
 void Graphics::drawTexture(
 	const Texture* tex,
-	real_t x,
-	real_t y,
-	real_t width,
-	real_t height,
+	const Vec2r& position,
+	const Vec2r& size,
 	real_t angle,
 	uint32_t color,
 	const Mat4r& textureMatrix) const noexcept {
 	if (tex) {
-		const auto realWidth = real_t {(width != 0) ? width : tex->getWidth()};
-		const auto realHeight = real_t {(height != 0) ? height : tex->getHeight()};
+		const auto realSize = Vec2r {
+			(size.x() != 0) ? size.x() : tex->getSize().x(),
+			(size.y() != 0) ? size.y() : tex->getSize().y()};
 		const auto transform = Mat4r::transform(
-			{x + realWidth / 2, y + realHeight / 2, 0},
+			{position + realSize / 2, 0},
 			Quatr::fromAxis(deg2rad(angle), Vec3r{0, 0, 1}),
-			{realWidth, realHeight, 1});
+			{realSize, 1});
 		tex->bind();
 		m_rect.bind();
 		prepareShader(transform, textureMatrix, color, true);
@@ -172,19 +169,24 @@ void Graphics::drawTexture(
 void Graphics::drawText(
 	const Font* font,
 	const std::string& text,
-	real_t x,
-	real_t y,
+	const Vec2r& position,
 	uint32_t color) const noexcept {
 	if (font) {
-		y += font->m_maxHeight;
+		auto fixedPos = Vec2r {position.x(), position.y() + font->m_maxHeight};
 		for (auto i = size_t {0}; i < text.size(); ++i) {
-			const auto quad = font->getFontQuad(text[i], x, y);
+			const auto quad = font->getFontQuad(text[i], fixedPos);
 			const auto texMatrix = Mat4r::transform(
-				{quad.m_u, quad.m_v, 0},
+				{quad.m_tex.x(), quad.m_tex.y(), 0},
 				{},
-				{quad.m_us, quad.m_vs, 1}
+				{quad.m_texSize.x(), quad.m_texSize.y(), 1}
 			);
-			drawTexture(font->m_tex.get(), quad.m_x, quad.m_y, quad.m_width, quad.m_height, 0, color, texMatrix);
+			drawTexture(
+				font->m_tex.get(),
+				quad.m_position,
+				quad.m_size,
+				0,
+				color,
+				texMatrix);
 		}
 	}
 }
@@ -197,11 +199,10 @@ void Graphics::drawQuad(const Mat4r& transform, uint32_t color) const noexcept {
 
 void Graphics::drawLevel2D(
 	const Level& level,
-	real_t x,
-	real_t y,
+	const Vec2r& position,
 	real_t size,
 	uint32_t color) const noexcept {
-	level.draw2D(*this, x, y, size, color);
+	level.draw2D(*this, position, size, color);
 }
 
 void Graphics::drawLevel3D(const Level& level, real_t size, uint32_t color) const noexcept {

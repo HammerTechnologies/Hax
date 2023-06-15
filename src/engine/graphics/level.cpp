@@ -3,8 +3,7 @@
 
 void Level::draw2D(
 	const Graphics& graphics,
-	real_t x,
-	real_t y,
+	const Vec2r& position,
 	real_t size,
 	uint32_t color) const noexcept {
 	for (auto tileY = 0; tileY < m_maze->getHeight(); ++tileY) {
@@ -12,8 +11,7 @@ void Level::draw2D(
 			drawNode2D(
 				graphics,
 				m_maze->getNodeAt(tileX, tileY),
-				x + tileX * size,
-				y + tileY * size,
+				position + Vec2r(tileX, tileY) * size,
 				size,
 				color);
 		}
@@ -23,62 +21,60 @@ void Level::draw2D(
 void Level::drawNode2D(
 	const Graphics& graphics,
 	const std::shared_ptr<GraphNode>& gn,
-	real_t x,
-	real_t y,
+	const Vec2r& position,
 	real_t size,
 	uint32_t color) noexcept {
 	const auto half = size / 2;
 	if (gn->hasWest() && !gn->hasEast() && !gn->hasNorth() && !gn->hasSouth()) {
-		graphics.drawRect(x, y + half, half, 1, color);
+		graphics.drawRect({position.x(), position.y() + half}, {half, 1}, color);
 	} else if (!gn->hasWest() && gn->hasEast() && !gn->hasNorth() && !gn->hasSouth())	{
-		graphics.drawRect(x + half, y + half, half, 1, color);
+		graphics.drawRect(position + half, {half, 1}, color);
 	} else if (!gn->hasWest() && !gn->hasEast() && gn->hasNorth() && !gn->hasSouth())	{
-		graphics.drawRect(x + half, y, 1, half, color);
+		graphics.drawRect({position.x() + half, position.y()}, {1, half}, color);
 	} else if (!gn->hasWest() && !gn->hasEast() && !gn->hasNorth() && gn->hasSouth())	{
-		graphics.drawRect(x + half, y + half, 1, half, color);
+		graphics.drawRect(position + half, {1, half}, color);
 	} else if (!gn->hasWest() && !gn->hasEast() && !gn->hasNorth() && !gn->hasSouth()) {
 	} else if (gn->hasWest() && gn->hasEast() && !gn->hasNorth() && !gn->hasSouth()) {
-		graphics.drawRect(x, y + half, size, 1, color);
+		graphics.drawRect({position.x(), position.y() + half}, {size, 1}, color);
 	} else if (!gn->hasWest() && !gn->hasEast() && gn->hasNorth() && gn->hasSouth()) {
-		graphics.drawRect(x + half, y, 1, size, color);
+		graphics.drawRect({position.x() + half, position.y()}, {1, size}, color);
 	} else if (!gn->hasWest() && gn->hasEast() && !gn->hasNorth() && gn->hasSouth()) {
-		graphics.drawRect(x + half, y + half, half, 1, color);
-		graphics.drawRect(x + half, y + half, 1, half, color);
+		graphics.drawRect(position + half, {half, 1}, color);
+		graphics.drawRect(position + half, {1, half}, color);
 	} else if (gn->hasWest() && !gn->hasEast() && !gn->hasNorth() && gn->hasSouth()) {
-		graphics.drawRect(x, y + half, half, 1, color);
-		graphics.drawRect(x + half, y + half, 1, half, color);
+		graphics.drawRect({position.x(), position.y() + half}, {half, 1}, color);
+		graphics.drawRect(position + half, {1, half}, color);
 	} else if (!gn->hasWest() && gn->hasEast() && gn->hasNorth() && !gn->hasSouth()) {
-		graphics.drawRect(x + half, y + half, half, 1, color);
-		graphics.drawRect(x + half, y, 1, half, color);
+		graphics.drawRect(position + half, {half, 1}, color);
+		graphics.drawRect({position.x() + half, position.y()}, {1, half}, color);
 	} else if (gn->hasWest() && !gn->hasEast() && gn->hasNorth() && !gn->hasSouth()) {
-		graphics.drawRect(x, y + half, half, 1, color);
-		graphics.drawRect(x + half, y, 1, half, color);
+		graphics.drawRect({position.x(), position.y() + half}, {half, 1}, color);
+		graphics.drawRect({position.x() + half, position.y()}, {1, half}, color);
 	} else if (!gn->hasWest() && gn->hasEast() && gn->hasNorth() && gn->hasSouth())	{
-		graphics.drawRect(x + half, y + half, half, 1, color);
-		graphics.drawRect(x + half, y, 1, size, color);
+		graphics.drawRect(position + half, {half, 1}, color);
+		graphics.drawRect({position.x() + half, position.y()}, {1, size}, color);
 	} else if (gn->hasWest() && !gn->hasEast() && gn->hasNorth() && gn->hasSouth())	{
-		graphics.drawRect(x, y + half, half, 1, color);
-		graphics.drawRect(x + half, y, 1, size, color);
+		graphics.drawRect({position.x(), position.y() + half}, {half, 1}, color);
+		graphics.drawRect({position.x() + half, position.y()}, {1, size}, color);
 	} else if (gn->hasWest() && gn->hasEast() && !gn->hasNorth() && gn->hasSouth())	{
-		graphics.drawRect(x, y + half, size, 1, color);
-		graphics.drawRect(x + half, y + half, 1, half, color);
+		graphics.drawRect({position.x(), position.y() + half}, {size, 1}, color);
+		graphics.drawRect(position + half, {1, half}, color);
 	} else if (gn->hasWest() && gn->hasEast() && gn->hasNorth() && !gn->hasSouth())	{
-		graphics.drawRect(x, y + half, size, 1, color);
-		graphics.drawRect(x + half, y, 1, half, color);
+		graphics.drawRect({position.x(), position.y() + half}, {size, 1}, color);
+		graphics.drawRect({position.x() + half, position.y()}, {1, half}, color);
 	} else if (gn->hasWest() && gn->hasEast() && gn->hasNorth() && gn->hasSouth()) {
-		graphics.drawRect(x, y, size, 1, color);
-		graphics.drawRect(x + half, y, 1, size, color);
+		graphics.drawRect(position, {size, 1}, color);
+		graphics.drawRect({position.x() + half, position.y()}, {1, size}, color);
 	}
 }
 
 void Level::draw3D(const Graphics& graphics, real_t size, uint32_t color) const noexcept {
-	for (auto tileY = 0; tileY < m_maze->getHeight(); ++tileY) {
-		for (auto tileX = 0; tileX < m_maze->getWidth(); ++tileX) {
+	for (auto tileY = uint8_t {0}; tileY < m_maze->getHeight(); ++tileY) {
+		for (auto tileX = uint8_t {0}; tileX < m_maze->getWidth(); ++tileX) {
 			drawNode3D(
 				graphics,
 				m_maze->getNodeAt(tileX, tileY),
-				tileX,
-				m_maze->getHeight() - tileY - 1,
+				{tileX, uint8_t(m_maze->getHeight() - tileY - 1)},
 				size,
 				color);
 		}
@@ -88,138 +84,127 @@ void Level::draw3D(const Graphics& graphics, real_t size, uint32_t color) const 
 void Level::drawNode3D(
 	const Graphics& graphics,
 	const std::shared_ptr<GraphNode>& gn,
-	uint16_t tileX,
-	uint16_t tileY,
+	const Vec2<uint8_t>& tile,
 	real_t size,
 	uint32_t color) noexcept {
 	const auto dark = Color::multiply(color, 0.75f);
 	if (gn->hasWest() && !gn->hasEast() && !gn->hasNorth() && !gn->hasSouth()) {
-		drawWWall(graphics, tileX, tileY, size, color);
+		drawWWall(graphics, tile, size, color);
 	} else if (!gn->hasWest() && gn->hasEast() && !gn->hasNorth() && !gn->hasSouth())	{
-		drawEWall(graphics, tileX, tileY, size, color);
+		drawEWall(graphics, tile, size, color);
 	} else if (!gn->hasWest() && !gn->hasEast() && gn->hasNorth() && !gn->hasSouth())	{
-		drawNWall(graphics, tileX, tileY, size, dark);
+		drawNWall(graphics, tile, size, dark);
 	} else if (!gn->hasWest() && !gn->hasEast() && !gn->hasNorth() && gn->hasSouth())	{
-		drawSWall(graphics, tileX, tileY, size, dark);
+		drawSWall(graphics, tile, size, dark);
 	} else if (!gn->hasWest() && !gn->hasEast() && !gn->hasNorth() && !gn->hasSouth()) {
 	} else if (gn->hasWest() && gn->hasEast() && !gn->hasNorth() && !gn->hasSouth()) {
-		drawWEWall(graphics, tileX, tileY, size, color);
+		drawWEWall(graphics, tile, size, color);
 	} else if (!gn->hasWest() && !gn->hasEast() && gn->hasNorth() && gn->hasSouth()) {
-		drawNSWall(graphics, tileX, tileY, size, dark);
+		drawNSWall(graphics, tile, size, dark);
 	} else if (!gn->hasWest() && gn->hasEast() && !gn->hasNorth() && gn->hasSouth()) {
-		drawEWall(graphics, tileX, tileY, size, color);
-		drawSWall(graphics, tileX, tileY, size, dark);
+		drawEWall(graphics, tile, size, color);
+		drawSWall(graphics, tile, size, dark);
 	} else if (gn->hasWest() && !gn->hasEast() && !gn->hasNorth() && gn->hasSouth()) {
-		drawWWall(graphics, tileX, tileY, size, color);
-		drawSWall(graphics, tileX, tileY, size, dark);
+		drawWWall(graphics, tile, size, color);
+		drawSWall(graphics, tile, size, dark);
 	} else if (!gn->hasWest() && gn->hasEast() && gn->hasNorth() && !gn->hasSouth()) {
-		drawEWall(graphics, tileX, tileY, size, color);
-		drawNWall(graphics, tileX, tileY, size, dark);
+		drawEWall(graphics, tile, size, color);
+		drawNWall(graphics, tile, size, dark);
 	} else if (gn->hasWest() && !gn->hasEast() && gn->hasNorth() && !gn->hasSouth()) {
-		drawWWall(graphics, tileX, tileY, size, color);
-		drawNWall(graphics, tileX, tileY, size, dark);
+		drawWWall(graphics, tile, size, color);
+		drawNWall(graphics, tile, size, dark);
 	} else if (!gn->hasWest() && gn->hasEast() && gn->hasNorth() && gn->hasSouth())	{
-		drawEWall(graphics, tileX, tileY, size, color);
-		drawNSWall(graphics, tileX, tileY, size, dark);
+		drawEWall(graphics, tile, size, color);
+		drawNSWall(graphics, tile, size, dark);
 	} else if (gn->hasWest() && !gn->hasEast() && gn->hasNorth() && gn->hasSouth())	{
-		drawWWall(graphics, tileX, tileY, size, color);
-		drawNSWall(graphics, tileX, tileY, size, dark);
+		drawWWall(graphics, tile, size, color);
+		drawNSWall(graphics, tile, size, dark);
 	} else if (gn->hasWest() && gn->hasEast() && !gn->hasNorth() && gn->hasSouth())	{
-		drawWEWall(graphics, tileX, tileY, size, color);
-		drawSWall(graphics, tileX, tileY, size, dark);
+		drawWEWall(graphics, tile, size, color);
+		drawSWall(graphics, tile, size, dark);
 	} else if (gn->hasWest() && gn->hasEast() && gn->hasNorth() && !gn->hasSouth())	{
-		drawWEWall(graphics, tileX, tileY, size, color);
-		drawNWall(graphics, tileX, tileY, size, dark);
+		drawWEWall(graphics, tile, size, color);
+		drawNWall(graphics, tile, size, dark);
 	} else if (gn->hasWest() && gn->hasEast() && gn->hasNorth() && gn->hasSouth()) {
-		drawWEWall(graphics, tileX, tileY, size, color);
-		drawNSWall(graphics, tileX, tileY, size, dark);
+		drawWEWall(graphics, tile, size, color);
+		drawNSWall(graphics, tile, size, dark);
 	}
 }
 
 void Level::drawWWall(
 	const Graphics& graphics,
-	uint16_t tileX,
-	uint16_t tileY,
+	const Vec2<uint8_t>& tile,
 	real_t size,
 	uint32_t color) noexcept {
 	const auto half = size / 2;
-	drawXWall(graphics, tileX * size, tileY * size + half, half, size, color);
+	drawXWall(graphics, {tile.x() * size, tile.y() * size + half}, {half, size}, color);
 }
 
 void Level::drawEWall(
 	const Graphics& graphics,
-	uint16_t tileX,
-	uint16_t tileY,
+	const Vec2<uint8_t>& tile,
 	real_t size,
 	uint32_t color) noexcept {
 	const auto half = size / 2;
-	drawXWall(graphics, tileX * size + half, tileY * size + half, half, size, color);
+	drawXWall(graphics, {tile.x() * size + half, tile.y() * size + half}, {half, size}, color);
 }
 
 void Level::drawNWall(
 	const Graphics& graphics,
-	uint16_t tileX,
-	uint16_t tileY,
+	const Vec2<uint8_t>& tile,
 	real_t size,
 	uint32_t color) noexcept {
 	const auto half = size / 2;
-	drawZWall(graphics, tileX * size + half, (tileY + 1) * size, half, size, color);
+	drawZWall(graphics, {tile.x() * size + half, (tile.y() + 1) * size}, {half, size}, color);
 }
 
 void Level::drawSWall(
 	const Graphics& graphics,
-	uint16_t tileX,
-	uint16_t tileY,
+	const Vec2<uint8_t>& tile,
 	real_t size,
 	uint32_t color) noexcept {
 	const auto half = size / 2;
-	drawZWall(graphics, tileX * size + half, tileY * size + half, half, size, color);
+	drawZWall(graphics, {tile.x() * size + half, tile.y() * size + half}, {half, size}, color);
 }
 
 void Level::drawWEWall(
 	const Graphics& graphics,
-	uint16_t tileX,
-	uint16_t tileY,
+	const Vec2<uint8_t>& tile,
 	real_t size,
 	uint32_t color) noexcept {
 	const auto half = size / 2;
-	drawXWall(graphics, tileX * size, tileY * size + half, size, size, color);
+	drawXWall(graphics, {tile.x() * size, tile.y() * size + half}, {size, size}, color);
 }
 
 void Level::drawNSWall(
 	const Graphics& graphics,
-	uint16_t tileX,
-	uint16_t tileY,
+	const Vec2<uint8_t>& tile,
 	real_t size,
 	uint32_t color) noexcept {
 	const auto half = size / 2;
-	drawZWall(graphics, tileX * size + half, (tileY + 1) * size, size, size, color);
+	drawZWall(graphics, {tile.x() * size + half, (tile.y() + 1) * size}, {size, size}, color);
 }
 
 void Level::drawXWall(
 	const Graphics& graphics,
-	real_t x,
-	real_t z,
-	real_t width,
-	real_t height,
+	const Vec2r& position,
+	const Vec2r& size,
 	uint32_t color) noexcept {
 	const auto transform = Mat4r::transform(
-		Vec3r{x, 0, z},
+		Vec3r{position.x(), 0, position.y()},
 		Quatr{},
-		Vec3r{width, height, 1});
+		Vec3r{size, 1});
 	graphics.drawQuad(transform, color);
 }
 
 void Level::drawZWall(
 	const Graphics& graphics,
-	real_t x,
-	real_t z,
-	real_t width,
-	real_t height,
+	const Vec2r& position,
+	const Vec2r& size,
 	uint32_t color) noexcept {
 	const auto transform = Mat4r::transform(
-		{x, 0, z},
+		{position.x(), 0, position.y()},
 		Quatr::fromEuler(Vec3r{0, M_PI_2, 0}),
-		{width, height, 1});
+		{size, 1});
 	graphics.drawQuad(transform, color);
 }

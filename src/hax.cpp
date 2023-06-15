@@ -11,16 +11,14 @@
 
 struct Hax : Game {
 	Hax() noexcept
-	: m_core{640, 360, false, m_logger},
+	: m_core{{640, 360}, false, m_logger},
 		m_viewer{
-			Vec3r{0, 8, -5},
-			Vec3r{},
-			0,
-			0,
-			m_core.getScreen().getWidth(),
-			m_core.getScreen().getHeight()
+			{0, 8, -5},
+			{},
+			{0, 0},
+			m_core.getScreen().getSize(),
 		},
-		m_level{16, 16, 0},
+		m_level{{16, 16}, 0},
 		m_font{nullptr},
 		m_tex{nullptr} {
 			changeDir(exeDir() + "/assets");
@@ -43,25 +41,22 @@ struct Hax : Game {
 		if (input.isKeyDown(Key::DOWN)) { m_viewer.move(Vec3r{0, 0, -16 * screen.getDelta()}); }
 
 		auto ss = std::ostringstream {};
-		ss << screen.getWidth() << "x" << screen.getHeight() << " @ " << screen.getFps() << " FPS";
+		ss << screen.getSize().x() << "x" << screen.getSize().y() << " @ " << screen.getFps() << " FPS";
 
-		m_viewer.m_viewportWidth = screen.getWidth();
-		m_viewer.m_viewportHeight = screen.getHeight();
+		m_viewer.m_viewportSize = screen.getSize();
 
 		graphics.setup3D(m_viewer);
 		graphics.cls();
 		graphics.drawLevel3D(m_level, 16, Color::WHITE);
 
-		graphics.setup2D(0, 0, screen.getWidth(), screen.getHeight());
+		graphics.setup2D({0, 0}, screen.getSize());
 		//graphics.drawTexture(m_tex.get(), 0, 0, screen.getWidth(), screen.getHeight());
-		graphics.drawLevel2D(m_level, 16, 32, 16, Color::ORANGE);
+		graphics.drawLevel2D(m_level, {16, 32}, 16, Color::ORANGE);
 		graphics.drawRect(
-			12 + m_viewer.m_position.x(),
-			28 + m_level.getHeight() * 16 - m_viewer.m_position.z(),
-			8,
-			8,
+			{12 + m_viewer.m_position.x(), 28 + m_level.getSize().y() * 16 - m_viewer.m_position.z()},
+			{8, 8},
 			Color::RED);
-		graphics.drawText(m_font.get(), ss.str(), 14, 12, Color::RED);
+		graphics.drawText(m_font.get(), ss.str(), {14, 12}, Color::RED);
 
 		screen.refresh();
 

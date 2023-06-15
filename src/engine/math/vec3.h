@@ -2,17 +2,23 @@
 
 #include <cmath>
 #include "../real.h"
-
-template<typename T>
-constexpr T deg2rad(const T& a) noexcept { return T(a * 0.0174532925); }
-
-template<typename T>
-constexpr T rad2deg(const T& a) noexcept { return T(a * 57.2957795); }
+#include "vec2.h"
 
 template<typename T>
 struct Vec3 {
 	constexpr Vec3(T x = 0, T y = 0, T z = 0) noexcept
 	: m_x{x}, m_y{y}, m_z{z} {}
+
+	constexpr Vec3(const Vec2<T>& v, T z = 0) noexcept
+	: m_x{v.x()}, m_y{v.y()}, m_z{z} {}
+
+	constexpr bool operator==(const Vec3& other) const noexcept {
+		return m_x == other.m_x && m_y == other.m_y && m_z == other.m_z;
+	}
+
+	constexpr bool operator!=(const Vec3& other) const noexcept {
+		return !(*this == other);
+	}
 
 	constexpr Vec3 operator+(const Vec3& other) const noexcept {
 		return {m_x + other.m_x, m_y + other.m_y, m_z + other.m_z};

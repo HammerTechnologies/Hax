@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "../../math/mat4.h"
+#include "../../math/vec2.h"
 #include "../../math/vec3.h"
 #include "../color.h"
 #include "context_driver.h"
@@ -29,7 +30,7 @@ struct GraphicsDriver {
 
 	constexpr operator bool() const noexcept { return m_init; };
 
-	void setup2D(uint16_t x, uint16_t y, uint16_t w, uint16_t h) const noexcept;
+	void setup2D(const Vec2<uint16_t>& position, const Vec2<uint16_t> size) const noexcept;
 	void setup3D(const Viewer& viewer) const noexcept;
 	void cls(uint32_t color) const noexcept;
 
@@ -46,7 +47,7 @@ struct GraphicsDriver {
 	int32_t getProgramUniformLocation(const GpuProgram& program, const std::string& name) const noexcept;
 	void setProgramUniform(int32_t location, int32_t value) const noexcept;
 	void setProgramUniform(int32_t location, real_t value) const noexcept;
-	void setProgramUniform(int32_t location, real_t x, real_t y) const noexcept;
+	void setProgramUniform(int32_t location, const Vec2r& v) const noexcept;
 	void setProgramUniform(int32_t location, const Vec3r& v) const noexcept;
 	void setProgramUniform(int32_t location, real_t x, real_t y, real_t z, real_t w) const noexcept;
 	void setProgramUniform(int32_t location, const Mat4r& m) const noexcept;
@@ -58,8 +59,7 @@ struct GraphicsDriver {
 	void bindTexture(const DriverTexture& texture) const noexcept;
 	void setTexturePixels(
 		const DriverTexture& texture,
-		uint16_t width,
-		uint16_t height,
+		const Vec2<uint16_t>& size,
 		const uint32_t* pixels) const noexcept;
 private:
 	const Logger& m_logger;
