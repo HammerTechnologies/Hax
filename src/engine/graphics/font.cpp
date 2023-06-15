@@ -73,8 +73,8 @@ FontQuad Font::getFontQuad(char c, Vec2r& startPos) const noexcept {
 		m_tex->getSize().x(),
 		m_tex->getSize().y(),
 		std::min(c - 32, 94),
-		&startPos.x(),
-		&startPos.y(),
+		&startPos.data()[0],
+		&startPos.data()[1],
 		&q,
 		true);
 	return {{q.x0, q.y0}, {q.x1 - q.x0, q.y1 - q.y0}, {q.s0, q.t0}, {q.s1 - q.s0, q.t1 - q.t0}};

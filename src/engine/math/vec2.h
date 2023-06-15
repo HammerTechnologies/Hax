@@ -5,7 +5,7 @@
 
 template<typename T>
 struct Vec2 {
-	constexpr Vec2(T x = 0, T y = 0) noexcept
+	constexpr Vec2(const T& x = 0, const T& y = 0) noexcept
 	: m_x{x}, m_y{y} {}
 
 	constexpr bool operator==(const Vec2& other) const noexcept {
@@ -102,8 +102,8 @@ struct Vec2 {
 
 	constexpr const T& x() const noexcept { return m_x; }
 	constexpr const T& y() const noexcept { return m_y; }
-	constexpr T& x() noexcept { return m_x; }
-	constexpr T& y() noexcept { return m_y; }
+	constexpr void x(const T& x) noexcept { m_x = x; }
+	constexpr void y(const T& y) noexcept { m_y = y; }
 
 	constexpr const T* data() const noexcept { return &m_x; }
 	constexpr T* data() noexcept { return &m_x; }

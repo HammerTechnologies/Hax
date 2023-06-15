@@ -63,10 +63,11 @@ struct Quat {
 	constexpr const T& x() const noexcept { return m_x; }
 	constexpr const T& y() const noexcept { return m_y; }
 	constexpr const T& z() const noexcept { return m_z; }
-	constexpr T& w() noexcept { return m_w; }
-	constexpr T& x() noexcept { return m_x; }
-	constexpr T& y() noexcept { return m_y; }
-	constexpr T& z() noexcept { return m_z; }
+	constexpr void w(const T& w) noexcept { m_w = w; }
+	constexpr void x(const T& x) noexcept { m_x = x; }
+	constexpr void y(const T& y) noexcept { m_y = y; }
+	constexpr void z(const T& z) noexcept { m_z = z; }
+
 
 	constexpr const T* data() const noexcept { return &m_w; }
 	constexpr T* data() noexcept { return &m_w; }

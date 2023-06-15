@@ -6,7 +6,7 @@
 
 template<typename T>
 struct Vec4 {
-	constexpr Vec4(T x = 0, T y = 0, T z = 0, T w = 0) noexcept
+	constexpr Vec4(const T& x = 0, const T& y = 0, const T& z = 0, const T& w = 0) noexcept
 	: m_x{x}, m_y{y}, m_z{z}, m_w{w} {}
 
 	constexpr Vec4(const Vec3<T>& v, T w = 0) noexcept
@@ -124,10 +124,10 @@ struct Vec4 {
 	constexpr const T& y() const noexcept { return m_y; }
 	constexpr const T& z() const noexcept { return m_z; }
 	constexpr const T& w() const noexcept { return m_w; }
-	constexpr T& x() noexcept { return m_x; }
-	constexpr T& y() noexcept { return m_y; }
-	constexpr T& z() noexcept { return m_z; }
-	constexpr T& w() noexcept { return m_w; }
+	constexpr void x(const T& x) noexcept { m_x = x; }
+	constexpr void y(const T& y) noexcept { m_y = y; }
+	constexpr void z(const T& z) noexcept { m_z = z; }
+	constexpr void w(const T& w) noexcept { m_w = w; }
 
 	constexpr const T* data() const noexcept { return &m_x; }
 	constexpr T* data() noexcept { return &m_x; }
