@@ -33,15 +33,15 @@ void GraphicsDriver::setup3D(const Viewer& viewer) const noexcept {
 	glDepthFunc(GL_LEQUAL);
 	glFrontFace(GL_CW);
 	glScissor(
-		viewer.m_viewportPosition.x(),
-		viewer.m_viewportPosition.y(),
-		viewer.m_viewportSize.x(),
-		viewer.m_viewportSize.y());
+		viewer.viewportPosition().x(),
+		viewer.viewportPosition().y(),
+		viewer.viewportSize().x(),
+		viewer.viewportSize().y());
 	glViewport(
-		viewer.m_viewportPosition.x(),
-		viewer.m_viewportPosition.y(),
-		viewer.m_viewportSize.x(),
-		viewer.m_viewportSize.y());
+		viewer.viewportPosition().x(),
+		viewer.viewportPosition().y(),
+		viewer.viewportSize().x(),
+		viewer.viewportSize().y());
 }
 
 void GraphicsDriver::cls(color_t color = Color::BLACK) const noexcept {

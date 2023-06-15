@@ -122,10 +122,10 @@ void Graphics::setup3D(const Viewer& viewer) noexcept {
 	m_driver.setup3D(viewer);
 	m_projection =
 		Mat4r::perspective(
-			deg2rad(viewer.m_fov),
-			static_cast<real_t>(viewer.m_viewportSize.x()) / viewer.m_viewportSize.y(),
-			viewer.m_rangeMin,
-			viewer.m_rangeMax)
+			deg2rad(viewer.fov()),
+			real_t(viewer.viewportSize().x()) / viewer.viewportSize().y(),
+			viewer.rangeMin(),
+			viewer.rangeMax())
 		* viewer.getViewMatrix();
 }
 

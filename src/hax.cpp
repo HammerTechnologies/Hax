@@ -35,15 +35,15 @@ struct Hax : Game {
 			return false;
 		}
 
-		if (input.isKeyDown(Key::LEFT)) { m_viewer.m_euler.y() -= 180 * screen.getDelta(); }
-		if (input.isKeyDown(Key::RIGHT)) { m_viewer.m_euler.y() += 180 * screen.getDelta(); }
+		if (input.isKeyDown(Key::LEFT)) { m_viewer.euler(m_viewer.euler() - Vec3r {0, 180 * screen.getDelta(), 0}); }
+		if (input.isKeyDown(Key::RIGHT)) { m_viewer.euler(m_viewer.euler() + Vec3r {0, 180 * screen.getDelta(), 0}); }
 		if (input.isKeyDown(Key::UP)) { m_viewer.move(Vec3r{0, 0, 16 * screen.getDelta()}); }
 		if (input.isKeyDown(Key::DOWN)) { m_viewer.move(Vec3r{0, 0, -16 * screen.getDelta()}); }
 
 		auto ss = std::ostringstream {};
 		ss << screen.getSize().x() << "x" << screen.getSize().y() << " @ " << screen.getFps() << " FPS";
 
-		m_viewer.m_viewportSize = screen.getSize();
+		m_viewer.viewportSize(screen.getSize());
 
 		graphics.setup3D(m_viewer);
 		graphics.cls();
@@ -53,7 +53,7 @@ struct Hax : Game {
 		//graphics.drawTexture(m_tex.get(), 0, 0, screen.getWidth(), screen.getHeight());
 		graphics.drawLevel2D(m_level, {16, 32}, 16, Color::ORANGE);
 		graphics.drawRect(
-			{12 + m_viewer.m_position.x(), 28 + m_level.getSize().y() * 16 - m_viewer.m_position.z()},
+			{12 + m_viewer.position().x(), 28 + m_level.getSize().y() * 16 - m_viewer.position().z()},
 			{8, 8},
 			Color::RED);
 		graphics.drawText(m_font.get(), ss.str(), {14, 12}, Color::RED);
