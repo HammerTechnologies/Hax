@@ -5,6 +5,7 @@
 #include "../../math/mat4.h"
 #include "../../math/vec2.h"
 #include "../../math/vec3.h"
+#include "../../math/vec4.h"
 #include "../color.h"
 #include "context_driver.h"
 #include "vertex.h"
@@ -49,7 +50,7 @@ struct GraphicsDriver {
 	void setProgramUniform(int32_t location, real_t value) const noexcept;
 	void setProgramUniform(int32_t location, const Vec2r& v) const noexcept;
 	void setProgramUniform(int32_t location, const Vec3r& v) const noexcept;
-	void setProgramUniform(int32_t location, real_t x, real_t y, real_t z, real_t w) const noexcept;
+	void setProgramUniform(int32_t location, const Vec4r& v) const noexcept;
 	void setProgramUniform(int32_t location, const Mat4r& m) const noexcept;
 	int32_t getProgramAttribLocation(const GpuProgram& program, const std::string& name) const noexcept;
 	void setProgramAttrib(int32_t location, size_t size, bool normalize, size_t offset) const noexcept;

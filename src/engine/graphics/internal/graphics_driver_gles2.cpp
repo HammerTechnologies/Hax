@@ -167,8 +167,8 @@ void GraphicsDriver::setProgramUniform(int32_t location, const Vec3r& v) const n
 	glUniform3fv(location, 1, v.data());
 }
 
-void GraphicsDriver::setProgramUniform(int32_t location, real_t x, real_t y, real_t z, real_t w) const noexcept {
-	glUniform4f(location, x, y, z, w);
+void GraphicsDriver::setProgramUniform(int32_t location, const Vec4r& v) const noexcept {
+	glUniform4fv(location, 1, v.data());
 }
 
 void GraphicsDriver::setProgramUniform(int32_t location, const Mat4r& m) const noexcept {

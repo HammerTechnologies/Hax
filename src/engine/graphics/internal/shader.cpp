@@ -42,8 +42,8 @@ void Shader::setVec3(int32_t location, const Vec3r& v) const noexcept {
 	m_driver.setProgramUniform(location, v);
 }
 
-void Shader::setVec4(int32_t location, real_t x, real_t y, real_t z, real_t w) const noexcept {
-	m_driver.setProgramUniform(location, x, y, z, w);
+void Shader::setVec4(int32_t location, const Vec4r& v) const noexcept {
+	m_driver.setProgramUniform(location, v);
 }
 
 void Shader::setMat4(int32_t location, const Mat4r& m) const noexcept {

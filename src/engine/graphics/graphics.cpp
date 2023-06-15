@@ -221,8 +221,10 @@ void Graphics::prepareShader(
 	m_shader.setMat4(m_textureMatrixLoc, textureMatrix);
 	m_shader.setVec4(
 		m_baseColorLoc,
-		Color::redf(color),
-		Color::greenf(color),
-		Color::bluef(color),
-		Color::alphaf(color));
+		{
+			Color::redf(color),
+			Color::greenf(color),
+			Color::bluef(color),
+			Color::alphaf(color)
+		});
 }
