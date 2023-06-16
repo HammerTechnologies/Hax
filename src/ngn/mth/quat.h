@@ -8,10 +8,10 @@ namespace ngn {
 
 template <typename T>
 struct Quat {
-	constexpr Quat(const T& w = 1, const T& x = 0, const T& y = 0, const T& z = 0) noexcept
+	constexpr Quat(T w = 1, T x = 0, T y = 0, T z = 0) noexcept
 	: m_w(w), m_x(x), m_y(y), m_z(z) {}
 
-	constexpr static Quat fromAxis(const T& angle, const Vec3<T>& axis) noexcept {
+	constexpr static Quat fromAxis(T angle, const Vec3<T>& axis) noexcept {
 		const auto halfAngle = angle / 2;
 		const auto v = axis.norm() * std::sin(halfAngle);
 		return {std::cos(halfAngle), v.x(), v.y(), v.z()};
@@ -53,22 +53,22 @@ struct Quat {
 		return {q.m_x, q.m_y, q.m_z};
 	}
 
-	constexpr Quat operator*(const T& scalar) const noexcept {
+	constexpr Quat operator*(T scalar) const noexcept {
 		return {m_w * scalar, m_x * scalar, m_y * scalar, m_z * scalar};
 	}
 
-	constexpr Quat operator/(const T& scalar) const noexcept {
+	constexpr Quat operator/(T scalar) const noexcept {
 		return {m_w / scalar, m_x / scalar, m_y / scalar, m_z / scalar};
 	}
 
-	constexpr const T& w() const noexcept { return m_w; }
-	constexpr const T& x() const noexcept { return m_x; }
-	constexpr const T& y() const noexcept { return m_y; }
-	constexpr const T& z() const noexcept { return m_z; }
-	constexpr void w(const T& w) noexcept { m_w = w; }
-	constexpr void x(const T& x) noexcept { m_x = x; }
-	constexpr void y(const T& y) noexcept { m_y = y; }
-	constexpr void z(const T& z) noexcept { m_z = z; }
+	constexpr T w() const noexcept { return m_w; }
+	constexpr T x() const noexcept { return m_x; }
+	constexpr T y() const noexcept { return m_y; }
+	constexpr T z() const noexcept { return m_z; }
+	constexpr void w(T w) noexcept { m_w = w; }
+	constexpr void x(T x) noexcept { m_x = x; }
+	constexpr void y(T y) noexcept { m_y = y; }
+	constexpr void z(T z) noexcept { m_z = z; }
 
 
 	constexpr const T* data() const noexcept { return &m_w; }
@@ -91,11 +91,11 @@ struct Quat {
 		return {m_w, -m_x, -m_y, -m_z};
 	}
 
-	constexpr Quat lerp(const Quat& other, const T& t) const noexcept {
+	constexpr Quat lerp(const Quat& other, T t) const noexcept {
 		return (*this * (1-t) + other * t).norm();
 	}
 
-	constexpr Quat slerp(const Quat& other, const T& t) const noexcept {
+	constexpr Quat slerp(const Quat& other, T t) const noexcept {
 		const auto dot = this->dot(other);
 		const auto q = (dot < 0) ? (other * -1) : other;
 		const T absdot = std::abs(dot);

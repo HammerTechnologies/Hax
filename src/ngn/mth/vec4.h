@@ -8,7 +8,7 @@ namespace ngn {
 
 template<typename T>
 struct Vec4 {
-	constexpr Vec4(const T& x = 0, const T& y = 0, const T& z = 0, const T& w = 0) noexcept
+	constexpr Vec4(T x = 0, T y = 0, T z = 0, T w = 0) noexcept
 	: m_x{x}, m_y{y}, m_z{z}, m_w{w} {}
 
 	constexpr Vec4(const Vec3<T>& v, T w = 0) noexcept
@@ -26,7 +26,7 @@ struct Vec4 {
 		return {m_x + other.m_x, m_y + other.m_y, m_z + other.m_z, m_w + other.m_w};
 	}
 
-	constexpr Vec4 operator+(const T& scalar) const noexcept {
+	constexpr Vec4 operator+(T scalar) const noexcept {
 		return {m_x + scalar, m_y + scalar, m_z + scalar, m_w + scalar};
 	}
 
@@ -38,7 +38,7 @@ struct Vec4 {
 		return *this;
 	}
 
-	constexpr Vec4& operator+=(const T& scalar) noexcept {
+	constexpr Vec4& operator+=(T scalar) noexcept {
 		m_x += scalar;
 		m_y += scalar;
 		m_z += scalar;
@@ -50,7 +50,7 @@ struct Vec4 {
 		return {m_x - other.m_x, m_y - other.m_y, m_z - other.m_z, m_w - other.m_w};
 	}
 
-	constexpr Vec4 operator-(const T& scalar) const noexcept {
+	constexpr Vec4 operator-(T scalar) const noexcept {
 		return {m_x - scalar, m_y - scalar, m_z - scalar, m_w - scalar};
 	}
 
@@ -66,7 +66,7 @@ struct Vec4 {
 		return *this;
 	}
 
-	constexpr Vec4& operator-=(const T& scalar) noexcept {
+	constexpr Vec4& operator-=(T scalar) noexcept {
 		m_x -= scalar;
 		m_y -= scalar;
 		m_z -= scalar;
@@ -78,7 +78,7 @@ struct Vec4 {
 		return {m_x * other.m_x, m_y * other.m_y, m_z * other.m_z, m_w * other.m_w};
 	}
 
-	constexpr Vec4 operator*(const T& scalar) const noexcept {
+	constexpr Vec4 operator*(T scalar) const noexcept {
 		return {m_x * scalar, m_y * scalar, m_z * scalar, m_w * scalar};
 	}
 
@@ -90,7 +90,7 @@ struct Vec4 {
 		return *this;
 	}
 
-	constexpr Vec4& operator*=(const T& scalar) noexcept {
+	constexpr Vec4& operator*=(T scalar) noexcept {
 		m_x *= scalar;
 		m_y *= scalar;
 		m_z *= scalar;
@@ -102,7 +102,7 @@ struct Vec4 {
 		return {m_x / other.m_x, m_y / other.m_y, m_z / other.m_z, m_w / other.m_w};
 	}
 
-	constexpr Vec4 operator/(const T& scalar) const noexcept {
+	constexpr Vec4 operator/(T scalar) const noexcept {
 		return {m_x / scalar, m_y / scalar, m_z / scalar, m_w / scalar};
 	}
 
@@ -114,7 +114,7 @@ struct Vec4 {
 		return *this;
 	}
 
-	constexpr Vec4& operator/=(const T& scalar) noexcept {
+	constexpr Vec4& operator/=(T scalar) noexcept {
 		m_x /= scalar;
 		m_y /= scalar;
 		m_z /= scalar;
@@ -122,14 +122,14 @@ struct Vec4 {
 		return *this;
 	}
 
-	constexpr const T& x() const noexcept { return m_x; }
-	constexpr const T& y() const noexcept { return m_y; }
-	constexpr const T& z() const noexcept { return m_z; }
-	constexpr const T& w() const noexcept { return m_w; }
-	constexpr void x(const T& x) noexcept { m_x = x; }
-	constexpr void y(const T& y) noexcept { m_y = y; }
-	constexpr void z(const T& z) noexcept { m_z = z; }
-	constexpr void w(const T& w) noexcept { m_w = w; }
+	constexpr T x() const noexcept { return m_x; }
+	constexpr T y() const noexcept { return m_y; }
+	constexpr T z() const noexcept { return m_z; }
+	constexpr T w() const noexcept { return m_w; }
+	constexpr void x(T x) noexcept { m_x = x; }
+	constexpr void y(T y) noexcept { m_y = y; }
+	constexpr void z(T z) noexcept { m_z = z; }
+	constexpr void w(T w) noexcept { m_w = w; }
 
 	constexpr const T* data() const noexcept { return &m_x; }
 	constexpr T* data() noexcept { return &m_x; }
@@ -152,7 +152,7 @@ struct Vec4 {
 		return *this * invLen;
 	}
 
-	constexpr Vec4 mix(const Vec4& other, const T& t) const noexcept {
+	constexpr Vec4 mix(const Vec4& other, T t) const noexcept {
 		return *this + (other - *this) * t;
 	}
 private:

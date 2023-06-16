@@ -7,7 +7,7 @@ namespace ngn {
 
 template<typename T>
 struct Vec2 {
-	constexpr Vec2(const T& x = 0, const T& y = 0) noexcept
+	constexpr Vec2(T x = 0, T y = 0) noexcept
 	: m_x{x}, m_y{y} {}
 
 	constexpr bool operator==(const Vec2& other) const noexcept {
@@ -22,7 +22,7 @@ struct Vec2 {
 		return {m_x + other.m_x, m_y + other.m_y};
 	}
 
-	constexpr Vec2 operator+(const T& scalar) const noexcept {
+	constexpr Vec2 operator+(T scalar) const noexcept {
 		return {m_x + scalar, m_y + scalar};
 	}
 
@@ -32,7 +32,7 @@ struct Vec2 {
 		return *this;
 	}
 
-	constexpr Vec2& operator+=(const T& scalar) noexcept {
+	constexpr Vec2& operator+=(T scalar) noexcept {
 		m_x += scalar;
 		m_y += scalar;
 		return *this;
@@ -42,7 +42,7 @@ struct Vec2 {
 		return {m_x - other.m_x, m_y - other.m_y};
 	}
 
-	constexpr Vec2 operator-(const T& scalar) const noexcept {
+	constexpr Vec2 operator-(T scalar) const noexcept {
 		return {m_x - scalar, m_y - scalar};
 	}
 
@@ -56,7 +56,7 @@ struct Vec2 {
 		return *this;
 	}
 
-	constexpr Vec2& operator-=(const T& scalar) noexcept {
+	constexpr Vec2& operator-=(T scalar) noexcept {
 		m_x -= scalar;
 		m_y -= scalar;
 		return *this;
@@ -66,7 +66,7 @@ struct Vec2 {
 		return {m_x * other.m_x, m_y * other.m_y};
 	}
 
-	constexpr Vec2 operator*(const T& scalar) const noexcept {
+	constexpr Vec2 operator*(T scalar) const noexcept {
 		return {m_x * scalar, m_y * scalar};
 	}
 
@@ -76,7 +76,7 @@ struct Vec2 {
 		return *this;
 	}
 
-	constexpr Vec2& operator*=(const T& scalar) noexcept {
+	constexpr Vec2& operator*=(T scalar) noexcept {
 		m_x *= scalar;
 		m_y *= scalar;
 		return *this;
@@ -86,7 +86,7 @@ struct Vec2 {
 		return {m_x / other.m_x, m_y / other.m_y};
 	}
 
-	constexpr Vec2 operator/(const T& scalar) const noexcept {
+	constexpr Vec2 operator/(T scalar) const noexcept {
 		return {m_x / scalar, m_y / scalar};
 	}
 
@@ -96,16 +96,16 @@ struct Vec2 {
 		return *this;
 	}
 
-	constexpr Vec2& operator/=(const T& scalar) noexcept {
+	constexpr Vec2& operator/=(T scalar) noexcept {
 		m_x /= scalar;
 		m_y /= scalar;
 		return *this;
 	}
 
-	constexpr const T& x() const noexcept { return m_x; }
-	constexpr const T& y() const noexcept { return m_y; }
-	constexpr void x(const T& x) noexcept { m_x = x; }
-	constexpr void y(const T& y) noexcept { m_y = y; }
+	constexpr T x() const noexcept { return m_x; }
+	constexpr T y() const noexcept { return m_y; }
+	constexpr void x(T x) noexcept { m_x = x; }
+	constexpr void y(T y) noexcept { m_y = y; }
 
 	constexpr const T* data() const noexcept { return &m_x; }
 	constexpr T* data() noexcept { return &m_x; }
@@ -128,7 +128,7 @@ struct Vec2 {
 		return *this * invLen;
 	}
 
-	constexpr Vec2 mix(const Vec2& other, const T& t) const noexcept {
+	constexpr Vec2 mix(const Vec2& other, T t) const noexcept {
 		return *this + (other - *this) * t;
 	}
 private:
