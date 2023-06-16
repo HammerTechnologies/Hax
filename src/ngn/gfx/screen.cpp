@@ -1,7 +1,12 @@
 #include "../logger.h"
 #include "screen.h"
 
-Screen::Screen(const ContextDriver& context, const std::shared_ptr<ContextWindow>& window, const Logger& logger) noexcept
+namespace ngn {
+
+Screen::Screen(
+	const prv::ContextDriver& context,
+	const std::shared_ptr<prv::ContextWindow>& window,
+	const Logger& logger) noexcept
 : m_context{context},
 	m_logger{logger},
 	m_window{window},
@@ -49,3 +54,5 @@ void Screen::refresh() noexcept {
 		m_fpsTime -= 1;
 	}
 }
+
+} // namespace ngn

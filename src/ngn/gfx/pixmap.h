@@ -7,6 +7,8 @@
 #include "../mth/vec2.h"
 #include "color.h"
 
+namespace ngn {
+
 struct Pixmap {
 	using iterator = color_t*;
 	using const_iterator = const color_t*;
@@ -33,3 +35,5 @@ private:
 	friend struct Graphics;
 	friend class std::default_delete<Pixmap>;
 };
+
+} // namespace ngn

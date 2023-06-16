@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 
+namespace ngn {
+
 struct Logger {
 	Logger() noexcept {
 		info("Logger initialized.");
@@ -28,3 +30,5 @@ private:
 		std::cout << level << " :: " << msg << std::endl << std::flush;
 	}
 };
+
+} // namespace ngn

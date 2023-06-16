@@ -2,16 +2,20 @@
 
 #include <string>
 #include <vector>
-#include "../../mth/mat4.h"
-#include "../../mth/vec2.h"
-#include "../../mth/vec3.h"
-#include "../../mth/vec4.h"
-#include "../color.h"
+#include "../gfx/color.h"
+#include "../mth/mat4.h"
+#include "../mth/vec2.h"
+#include "../mth/vec3.h"
+#include "../mth/vec4.h"
 #include "context_driver.h"
 #include "vertex.h"
 
+namespace ngn {
+
 struct Logger;
 struct Viewer;
+
+namespace prv {
 
 struct GraphicsResource {
 	GraphicsResource(uint32_t id) : m_id{id} {}
@@ -66,3 +70,7 @@ private:
 	const Logger& m_logger;
 	bool m_init;
 };
+
+} // namespace prv
+
+} // namespace ngn

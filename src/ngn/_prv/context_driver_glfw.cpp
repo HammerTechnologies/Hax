@@ -1,8 +1,9 @@
 #include <cmath>
 #include <sstream>
-#include <GLFW/glfw3.h>
-#include "../../logger.h"
+#include "../logger.h"
 #include "context_driver.h"
+
+namespace ngn::prv {
 
 ContextDriver::ContextDriver(const Logger& logger) noexcept
 : m_logger(logger) {
@@ -86,3 +87,5 @@ ContextDriver::GlGetProcAddress ContextDriver::getGlGetProcAddressFunc() const n
 void ContextDriver::terminate() noexcept {
 	glfwTerminate();
 }
+
+} // namespace ngn::prv

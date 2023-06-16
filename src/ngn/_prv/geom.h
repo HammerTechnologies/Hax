@@ -5,6 +5,8 @@
 #include "graphics_driver.h"
 #include "vertex.h"
 
+namespace ngn::prv {
+
 struct Geom {
 	Geom(const GraphicsDriver& driver, const std::vector<Vertex>& vertices, const std::vector<uint16_t>& indices) noexcept;
 	~Geom() noexcept;
@@ -16,3 +18,5 @@ private:
 	IndexBuffer m_indexBuffer;
 	size_t m_numIndices;
 };
+
+} // namespace ngn::prv

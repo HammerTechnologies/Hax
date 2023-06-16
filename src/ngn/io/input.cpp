@@ -1,5 +1,7 @@
 #include "input.h"
 
+namespace ngn {
+
 void Input::mouseVisible(bool visible) const noexcept {
 	m_context.setMouseVisible(*m_window, visible);
 }
@@ -19,3 +21,5 @@ bool Input::isMouseButtonDown(MouseButton button) const noexcept {
 bool Input::isKeyDown(Key key) const noexcept {
 	return m_context.isKeyDown(*m_window, key);
 }
+
+} // namespace ngn

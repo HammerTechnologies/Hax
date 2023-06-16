@@ -1,12 +1,14 @@
 #pragma once
 
 #include <memory>
-#include "gfx/_internal/context_driver.h"
-#include "gfx/_internal/graphics_driver.h"
+#include "_prv/context_driver.h"
+#include "_prv/graphics_driver.h"
 #include "gfx/graphics.h"
 #include "gfx/screen.h"
 #include "io/input.h"
 #include "mth/vec2.h"
+
+namespace ngn {
 
 struct Logger;
 
@@ -23,10 +25,12 @@ struct Core {
 	static void terminate() noexcept;
 private:
 	const Logger& m_logger;
-	ContextDriver m_context;
-	std::shared_ptr<ContextWindow> m_window;
+	prv::ContextDriver m_context;
+	std::shared_ptr<prv::ContextWindow> m_window;
 	Screen m_screen;
 	Input m_input;
-	GraphicsDriver m_gfxDriver;
+	prv::GraphicsDriver m_gfxDriver;
 	Graphics m_graphics;
 };
+
+} // namespace ngn

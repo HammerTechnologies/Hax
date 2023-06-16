@@ -4,7 +4,6 @@ file(GLOB HAX_FILES
 	"src/*.cpp"
 	"src/*/*.cpp"
 	"src/*/*/*.cpp"
-	"src/*/*/*/*.cpp"
 	"lib/glad_gles20/src/glad.c")
 add_definitions(-DSTBI_ONLY_PNG)
 include_directories(

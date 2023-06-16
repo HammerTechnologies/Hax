@@ -4,6 +4,8 @@
 #include <cstdint>
 #include "../mth/real.h"
 
+namespace ngn {
+
 using color_t = uint32_t;
 using colorcomp_t = uint8_t;
 
@@ -82,3 +84,5 @@ struct Color {
 			alphaf(color));
 	}
 };
+
+} // namespace ngn

@@ -2,11 +2,13 @@
 
 #include <cstdint>
 #include <string>
-#include "../../mth/mat4.h"
-#include "../../mth/vec2.h"
-#include "../../mth/vec3.h"
-#include "../../mth/vec4.h"
+#include "../mth/mat4.h"
+#include "../mth/vec2.h"
+#include "../mth/vec3.h"
+#include "../mth/vec4.h"
 #include "graphics_driver.h"
+
+namespace ngn::prv {
 
 struct Shader {
 	Shader(const GraphicsDriver& driver, const std::string& vertex, const std::string& fragment) noexcept;
@@ -30,3 +32,5 @@ private:
 	int32_t m_vertexColor;
 	int32_t m_vertexTexCoords;
 };
+
+} // namespace ngn::prv

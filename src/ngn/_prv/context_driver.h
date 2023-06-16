@@ -1,15 +1,20 @@
 #pragma once
 
 #include <cstdint>
-#include "../../mth/vec2.h"
-#include "../../mth/real.h"
-#include "../../io/key.h"
-#include "../../io/mouse_button.h"
+#include <GLFW/glfw3.h>
+#include "../io/key.h"
+#include "../io/mouse_button.h"
+#include "../mth/vec2.h"
+#include "../mth/real.h"
+
+namespace ngn {
 
 struct GLFWwindow;
 struct Logger;
 
-using ContextWindow = GLFWwindow;
+namespace prv {
+
+using ContextWindow = ::GLFWwindow;
 
 struct ContextDriver {
 	using GlGetProcAddress = void*(*)(const char*);
@@ -36,3 +41,7 @@ struct ContextDriver {
 private:
 	const Logger& m_logger;
 };
+
+} // namespace prv
+
+} // namespace ngn

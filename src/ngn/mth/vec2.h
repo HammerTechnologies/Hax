@@ -3,6 +3,8 @@
 #include <cmath>
 #include "../mth/real.h"
 
+namespace ngn {
+
 template<typename T>
 struct Vec2 {
 	constexpr Vec2(const T& x = 0, const T& y = 0) noexcept
@@ -135,3 +137,5 @@ private:
 
 using Vec2i = Vec2<int32_t>;
 using Vec2r = Vec2<real_t>;
+
+} // namespace ngn

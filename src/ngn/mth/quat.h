@@ -4,6 +4,8 @@
 #include "../mth/real.h"
 #include "vec3.h"
 
+namespace ngn {
+
 template <typename T>
 struct Quat {
 	constexpr Quat(const T& w = 1, const T& x = 0, const T& y = 0, const T& z = 0) noexcept
@@ -131,3 +133,5 @@ private:
 };
 
 using Quatr = Quat<real_t>;
+
+} // namespace ngn

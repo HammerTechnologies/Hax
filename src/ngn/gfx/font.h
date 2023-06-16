@@ -6,8 +6,10 @@
 #include <stb_truetype.h>
 #include "../mth/vec2.h"
 #include "../mth/real.h"
-#include "_internal/graphics_driver.h"
+#include "../_prv/graphics_driver.h"
 #include "font_quad.h"
+
+namespace ngn {
 
 struct Texture;
 
@@ -20,7 +22,7 @@ private:
 	real_t m_height;
 	real_t m_maxHeight;
 
-	Font(const std::string& filename, real_t height, const GraphicsDriver& driver) noexcept;
+	Font(const std::string& filename, real_t height, const prv::GraphicsDriver& driver) noexcept;
 	FontQuad fontQuad(char c, Vec2r& startPos) const noexcept;
 
 	bool isValid() const { return m_tex != nullptr; }
@@ -28,3 +30,5 @@ private:
 	friend struct Graphics;
 	friend class std::default_delete<Font>;
 };
+
+} // namespace ngn

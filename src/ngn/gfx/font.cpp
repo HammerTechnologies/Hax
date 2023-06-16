@@ -7,7 +7,9 @@
 #include "font.h"
 #include "texture.h"
 
-Font::Font(const std::string& filename, real_t height, const GraphicsDriver& driver) noexcept {
+namespace ngn {
+
+Font::Font(const std::string& filename, real_t height, const prv::GraphicsDriver& driver) noexcept {
 	// Read file into buffer
 	auto file = std::ifstream {filename, std::ios::ate | std::ios::binary};
 	if (!file.is_open()) return;
@@ -79,3 +81,5 @@ FontQuad Font::fontQuad(char c, Vec2r& startPos) const noexcept {
 		true);
 	return {{q.x0, q.y0}, {q.x1 - q.x0, q.y1 - q.y0}, {q.s0, q.t0}, {q.s1 - q.s0, q.t1 - q.t0}};
 }
+
+} // namespace ngn

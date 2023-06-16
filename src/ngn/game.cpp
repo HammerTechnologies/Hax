@@ -1,3 +1,3 @@
 #include "game.h"
 
-Game* Game::m_instance {nullptr};
+ngn::Game* ngn::Game::m_instance {nullptr};

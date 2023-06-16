@@ -9,7 +9,7 @@
 #include "ngn/gfx/viewer.h"
 #include "ngn/logger.h"
 
-struct Hax : Game {
+struct Hax : ngn::Game {
 	Hax() noexcept
 	: m_core{{640, 360}, false, m_logger},
 		m_viewer{
@@ -31,14 +31,14 @@ struct Hax : Game {
 		auto& input = m_core.input();
 		auto& screen = m_core.screen();
 
-		if (!screen.isOpened() || input.isKeyDown(Key::ESC)) {
+		if (!screen.isOpened() || input.isKeyDown(ngn::Key::ESC)) {
 			return false;
 		}
 
-		if (input.isKeyDown(Key::LEFT)) { m_viewer.euler(m_viewer.euler() - Vec3r {0, 180 * screen.delta(), 0}); }
-		if (input.isKeyDown(Key::RIGHT)) { m_viewer.euler(m_viewer.euler() + Vec3r {0, 180 * screen.delta(), 0}); }
-		if (input.isKeyDown(Key::UP)) { m_viewer.move(Vec3r{0, 0, 16 * screen.delta()}); }
-		if (input.isKeyDown(Key::DOWN)) { m_viewer.move(Vec3r{0, 0, -16 * screen.delta()}); }
+		if (input.isKeyDown(ngn::Key::LEFT)) { m_viewer.euler(m_viewer.euler() - ngn::Vec3r {0, 180 * screen.delta(), 0}); }
+		if (input.isKeyDown(ngn::Key::RIGHT)) { m_viewer.euler(m_viewer.euler() + ngn::Vec3r {0, 180 * screen.delta(), 0}); }
+		if (input.isKeyDown(ngn::Key::UP)) { m_viewer.move(ngn::Vec3r{0, 0, 16 * screen.delta()}); }
+		if (input.isKeyDown(ngn::Key::DOWN)) { m_viewer.move(ngn::Vec3r{0, 0, -16 * screen.delta()}); }
 
 		auto ss = std::ostringstream {};
 		ss << screen.size().x() << "x" << screen.size().y() << " @ " << screen.fps() << " FPS";
@@ -47,16 +47,16 @@ struct Hax : Game {
 
 		graphics.setup3D(m_viewer);
 		graphics.cls();
-		m_level.draw3D(16, Color::WHITE);
+		m_level.draw3D(16, ngn::Color::WHITE);
 
 		graphics.setup2D({0, 0}, screen.size());
 		//graphics.drawTexture(m_tex.get(), 0, 0, screen.getWidth(), screen.getHeight());
-		m_level.draw2D({16, 32}, 16, Color::ORANGE);
+		m_level.draw2D({16, 32}, 16, ngn::Color::ORANGE);
 		graphics.drawRect(
 			{12 + m_viewer.position().x(), 28 + m_level.size().y() * 16 - m_viewer.position().z()},
 			{8, 8},
-			Color::RED);
-		graphics.drawText(m_font.get(), ss.str(), {14, 12}, Color::RED);
+			ngn::Color::RED);
+		graphics.drawText(m_font.get(), ss.str(), {14, 12}, ngn::Color::RED);
 
 		screen.refresh();
 
@@ -65,12 +65,12 @@ struct Hax : Game {
 
 	virtual void finish() noexcept override;
 private:
-	Logger m_logger;
-	Core m_core;
-	Viewer m_viewer;
+	ngn::Logger m_logger;
+	ngn::Core m_core;
+	ngn::Viewer m_viewer;
 	Level m_level;
-	std::unique_ptr<Font> m_font;
-	std::unique_ptr<Texture> m_tex;
+	std::unique_ptr<ngn::Font> m_font;
+	std::unique_ptr<ngn::Texture> m_tex;
 };
 
 auto g_hax = std::make_unique<Hax>();

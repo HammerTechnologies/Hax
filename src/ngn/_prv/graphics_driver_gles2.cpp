@@ -1,9 +1,11 @@
 #include <array>
 #include <glad/glad.h>
-#include "../../logger.h"
-#include "../viewer.h"
+#include "../gfx/viewer.h"
+#include "../logger.h"
 #include "graphics_driver.h"
 #include "vertex.h"
+
+namespace ngn::prv {
 
 GraphicsDriver::GraphicsDriver(ContextDriver::GlGetProcAddress loader, const Logger& logger) noexcept
 : m_logger(logger),
@@ -228,3 +230,5 @@ void GraphicsDriver::setTexturePixels(
 		GL_UNSIGNED_BYTE,
 		pixels);
 }
+
+} // namespace ngn::prv

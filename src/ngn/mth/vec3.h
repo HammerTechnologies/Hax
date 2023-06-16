@@ -4,6 +4,8 @@
 #include "../mth/real.h"
 #include "vec2.h"
 
+namespace ngn {
+
 template<typename T>
 constexpr T deg2rad(const T& a) noexcept { return T(a * 0.0174532925); }
 
@@ -169,3 +171,5 @@ private:
 };
 
 using Vec3r = Vec3<real_t>;
+
+} // namespace ngn

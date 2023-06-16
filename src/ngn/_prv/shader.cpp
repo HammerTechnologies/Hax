@@ -3,6 +3,8 @@
 #include "shader.h"
 #include "vertex.h"
 
+namespace ngn::prv {
+
 Shader::Shader(const GraphicsDriver& driver, const std::string& vertex, const std::string& fragment) noexcept
 : m_driver {driver},
 	m_program {m_driver.createProgram(vertex, fragment)},
@@ -49,3 +51,5 @@ void Shader::setVec4(int32_t location, const Vec4r& v) const noexcept {
 void Shader::setMat4(int32_t location, const Mat4r& m) const noexcept {
 	m_driver.setProgramUniform(location, m);
 }
+
+} // namespace ngn::prv

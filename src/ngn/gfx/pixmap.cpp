@@ -4,6 +4,8 @@
 #include <stb_image.h>
 #include "pixmap.h"
 
+namespace ngn {
+
 Pixmap::Pixmap(const Vec2<uint16_t>& size, color_t color) noexcept
 : m_data(size.x() * size.y()), m_size{size} {
 	std::fill(m_data.begin(), m_data.end(), color);
@@ -22,3 +24,5 @@ Pixmap::Pixmap(const std::string& filename) noexcept
 	m_data.resize(w * h);
 	std::copy(pixels.get(), pixels.get() + m_data.size(), m_data.begin());
 }
+
+} // namespace ngn

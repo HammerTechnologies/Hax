@@ -3,6 +3,8 @@
 #include <cstdlib>
 #include <iostream>
 
+namespace ngn {
+
 struct Game {
 	Game() noexcept {
 		if (m_instance == nullptr) {
@@ -24,3 +26,5 @@ struct Game {
 private:
 	static Game* m_instance;
 };
+
+} // namespace ngn

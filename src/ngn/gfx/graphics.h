@@ -5,19 +5,24 @@
 #include <string>
 #include "../mth/mat4.h"
 #include "../mth/real.h"
-#include "_internal/geom.h"
-#include "_internal/shader.h"
+#include "../_prv/geom.h"
+#include "../_prv/shader.h"
 #include "color.h"
 
+namespace ngn {
+
 struct Font;
-struct GraphicsDriver;
 struct Logger;
 struct Pixmap;
 struct Texture;
 struct Viewer;
 
+namespace prv {
+	struct GraphicsDriver;
+}
+
 struct Graphics {
-	Graphics(const GraphicsDriver& driver, const Logger& logger) noexcept;
+	Graphics(const prv::GraphicsDriver& driver, const Logger& logger) noexcept;
 	~Graphics() noexcept;
 
 	operator bool() const noexcept { return m_driver && m_shader; }
@@ -48,11 +53,11 @@ struct Graphics {
 		color_t color = Color::WHITE) const noexcept;
 	void drawQuad(const Mat4r& transform, color_t color = Color::WHITE) const noexcept;
 private:
-	const GraphicsDriver& m_driver;
+	const prv::GraphicsDriver& m_driver;
 	const Logger& m_logger;
-	Shader m_shader;
-	Geom m_rect;
-	Geom m_quad;
+	prv::Shader m_shader;
+	prv::Geom m_rect;
+	prv::Geom m_quad;
 	int32_t m_mvpLoc;
 	int32_t m_textureMatrixLoc;
 	int32_t m_baseColorLoc;
@@ -66,3 +71,5 @@ private:
 		color_t color,
 		bool useTexture) const noexcept;
 };
+
+} // namespace ngn

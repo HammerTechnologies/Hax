@@ -1,19 +1,19 @@
 #include "ngn/gfx/graphics.h"
 #include "level.h"
 
-void Level::draw2D(const Vec2r& position, real_t size, color_t color) const noexcept {
+void Level::draw2D(const ngn::Vec2r& position, ngn::real_t size, ngn::color_t color) const noexcept {
 	for (auto tileY = 0; tileY < m_maze->getHeight(); ++tileY) {
 		for (auto tileX = 0; tileX < m_maze->getWidth(); ++tileX) {
 			drawNode2D(
 				m_maze->getNodeAt(tileX, tileY),
-				position + Vec2r(tileX, tileY) * size,
+				position + ngn::Vec2r(tileX, tileY) * size,
 				size,
 				color);
 		}
 	}
 }
 
-void Level::draw3D(real_t size, color_t color) const noexcept {
+void Level::draw3D(ngn::real_t size, ngn::color_t color) const noexcept {
 	for (auto tileY = uint8_t {0}; tileY < m_maze->getHeight(); ++tileY) {
 		for (auto tileX = uint8_t {0}; tileX < m_maze->getWidth(); ++tileX) {
 			drawNode3D(
@@ -27,9 +27,9 @@ void Level::draw3D(real_t size, color_t color) const noexcept {
 
 void Level::drawNode2D(
 	const std::shared_ptr<GraphNode>& gn,
-	const Vec2r& position,
-	real_t size,
-	color_t color) const noexcept {
+	const ngn::Vec2r& position,
+	ngn::real_t size,
+	ngn::color_t color) const noexcept {
 	const auto half = size / 2;
 	if (gn->hasWest() && !gn->hasEast() && !gn->hasNorth() && !gn->hasSouth()) {
 		m_graphics.drawRect({position.x(), position.y() + half}, {half, 1}, color);
@@ -76,10 +76,10 @@ void Level::drawNode2D(
 
 void Level::drawNode3D(
 	const std::shared_ptr<GraphNode>& gn,
-	const Vec2<uint8_t>& tile,
-	real_t size,
-	color_t color) const noexcept {
-	const auto dark = Color::multiply(color, 0.75f);
+	const ngn::Vec2<uint8_t>& tile,
+	ngn::real_t size,
+	ngn::color_t color) const noexcept {
+	const auto dark = ngn::Color::multiply(color, 0.75f);
 	if (gn->hasWest() && !gn->hasEast() && !gn->hasNorth() && !gn->hasSouth()) {
 		drawWWall(tile, size, color);
 	} else if (!gn->hasWest() && gn->hasEast() && !gn->hasNorth() && !gn->hasSouth())	{
@@ -123,48 +123,48 @@ void Level::drawNode3D(
 	}
 }
 
-void Level::drawWWall(const Vec2<uint8_t>& tile, real_t size, color_t color) const noexcept {
+void Level::drawWWall(const ngn::Vec2<uint8_t>& tile, ngn::real_t size, ngn::color_t color) const noexcept {
 	const auto half = size / 2;
 	drawXWall({tile.x() * size, tile.y() * size + half}, {half, size}, color);
 }
 
-void Level::drawEWall(const Vec2<uint8_t>& tile, real_t size, color_t color) const noexcept {
+void Level::drawEWall(const ngn::Vec2<uint8_t>& tile, ngn::real_t size, ngn::color_t color) const noexcept {
 	const auto half = size / 2;
 	drawXWall({tile.x() * size + half, tile.y() * size + half}, {half, size}, color);
 }
 
-void Level::drawNWall(const Vec2<uint8_t>& tile, real_t size, color_t color) const noexcept {
+void Level::drawNWall(const ngn::Vec2<uint8_t>& tile, ngn::real_t size, ngn::color_t color) const noexcept {
 	const auto half = size / 2;
 	drawZWall({tile.x() * size + half, (tile.y() + 1) * size}, {half, size}, color);
 }
 
-void Level::drawSWall(const Vec2<uint8_t>& tile, real_t size, color_t color) const noexcept {
+void Level::drawSWall(const ngn::Vec2<uint8_t>& tile, ngn::real_t size, ngn::color_t color) const noexcept {
 	const auto half = size / 2;
 	drawZWall({tile.x() * size + half, tile.y() * size + half}, {half, size}, color);
 }
 
-void Level::drawWEWall(const Vec2<uint8_t>& tile, real_t size, color_t color) const noexcept {
+void Level::drawWEWall(const ngn::Vec2<uint8_t>& tile, ngn::real_t size, ngn::color_t color) const noexcept {
 	const auto half = size / 2;
 	drawXWall({tile.x() * size, tile.y() * size + half}, {size, size}, color);
 }
 
-void Level::drawNSWall(const Vec2<uint8_t>& tile, real_t size, color_t color) const noexcept {
+void Level::drawNSWall(const ngn::Vec2<uint8_t>& tile, ngn::real_t size, ngn::color_t color) const noexcept {
 	const auto half = size / 2;
 	drawZWall({tile.x() * size + half, (tile.y() + 1) * size}, {size, size}, color);
 }
 
-void Level::drawXWall(const Vec2r& position, const Vec2r& size, color_t color) const noexcept {
-	const auto transform = Mat4r::transform(
-		Vec3r{position.x(), 0, position.y()},
-		Quatr{},
-		Vec3r{size, 1});
+void Level::drawXWall(const ngn::Vec2r& position, const ngn::Vec2r& size, ngn::color_t color) const noexcept {
+	const auto transform = ngn::Mat4r::transform(
+		ngn::Vec3r{position.x(), 0, position.y()},
+		ngn::Quatr{},
+		ngn::Vec3r{size, 1});
 	m_graphics.drawQuad(transform, color);
 }
 
-void Level::drawZWall(const Vec2r& position, const Vec2r& size, color_t color) const noexcept {
-	const auto transform = Mat4r::transform(
+void Level::drawZWall(const ngn::Vec2r& position, const ngn::Vec2r& size, ngn::color_t color) const noexcept {
+	const auto transform = ngn::Mat4r::transform(
 		{position.x(), 0, position.y()},
-		Quatr::fromEuler(Vec3r{0, M_PI_2, 0}),
+		ngn::Quatr::fromEuler(ngn::Vec3r{0, M_PI_2, 0}),
 		{size, 1});
 	m_graphics.drawQuad(transform, color);
 }

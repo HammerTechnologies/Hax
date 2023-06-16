@@ -1,7 +1,7 @@
 #include <string>
 #include <utility>
 #include "../logger.h"
-#include "_internal/graphics_driver.h"
+#include "../_prv/graphics_driver.h"
 #include "font.h"
 #include "graphics.h"
 #include "pixmap.h"
@@ -43,7 +43,9 @@ void main() {
 }
 )FS";
 
-Graphics::Graphics(const GraphicsDriver& driver, const Logger& logger) noexcept
+namespace ngn {
+
+Graphics::Graphics(const prv::GraphicsDriver& driver, const Logger& logger) noexcept
 : m_driver{driver},
 	m_logger{logger},
 	m_shader{m_driver, VERTEX_SHADER, FRAGMENT_SHADER},
@@ -217,3 +219,5 @@ void Graphics::prepareShader(
 			Color::alphaf(color)
 		});
 }
+
+} // namespace ngn

@@ -8,6 +8,8 @@
 #include "../mth/vec3.h"
 #include "../mth/real.h"
 
+namespace ngn {
+
 struct Viewer {
 	constexpr Viewer(
 		const Vec3r& position,
@@ -65,3 +67,5 @@ private:
 	real_t m_rangeMin;
 	real_t m_rangeMax;
 };
+
+} // namespace ngn

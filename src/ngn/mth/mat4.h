@@ -7,6 +7,8 @@
 #include "vec3.h"
 #include "vec4.h"
 
+namespace ngn {
+
 template <typename T>
 struct Mat4 {
 	constexpr Mat4() noexcept
@@ -206,3 +208,5 @@ private:
 };
 
 using Mat4r = Mat4<real_t>;
+
+} // namespace ngn

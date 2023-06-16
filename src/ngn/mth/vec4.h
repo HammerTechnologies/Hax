@@ -4,6 +4,8 @@
 #include "../mth/real.h"
 #include "vec3.h"
 
+namespace ngn {
+
 template<typename T>
 struct Vec4 {
 	constexpr Vec4(const T& x = 0, const T& y = 0, const T& z = 0, const T& w = 0) noexcept
@@ -158,3 +160,5 @@ private:
 };
 
 using Vec4r = Vec4<real_t>;
+
+} // namespace ngn

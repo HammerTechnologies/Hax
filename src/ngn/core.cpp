@@ -1,13 +1,15 @@
 #include "core.h"
 #include "logger.h"
-#include "gfx/_internal/graphics_driver.h"
+#include "_prv/graphics_driver.h"
+
+namespace ngn {
 
 Core::Core(const Vec2<uint16_t>& size, bool fullscreen, const Logger& logger) noexcept
 : m_logger{logger},
 	m_context{logger},
 	m_window{
 		m_context.createWindow(size, fullscreen),
-		[this](ContextWindow* win){ m_context.destroyWindow(*win); }
+		[this](prv::ContextWindow* win){ m_context.destroyWindow(*win); }
 	},
 	m_screen{m_context, m_window, logger},
 	m_input{m_context, m_window},
@@ -21,5 +23,7 @@ Core::~Core() noexcept {
 }
 
 void Core::terminate() noexcept {
-	ContextDriver::terminate();
+	prv::ContextDriver::terminate();
 }
+
+} // namespace ngn

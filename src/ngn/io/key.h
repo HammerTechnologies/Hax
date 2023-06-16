@@ -1,5 +1,7 @@
 #pragma once
 
+namespace ngn {
+
 enum class Key {
 	SPACE = 32,
 	APOSTROPHE = 39,
@@ -121,3 +123,5 @@ enum class Key {
 	RIGHT_ALT = 346,
 	RIGHT_SUPER = 347,
 };
+
+} // namespace ngn

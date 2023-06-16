@@ -2,6 +2,8 @@
 
 #include "../mth/vec2.h"
 
+namespace ngn {
+
 struct FontQuad {
 	Vec2r m_position;
 	Vec2r m_size;
@@ -18,3 +20,5 @@ struct FontQuad {
 		m_tex {tex},
 		m_texSize {texSize} {}
 };
+
+} // namespace ngn

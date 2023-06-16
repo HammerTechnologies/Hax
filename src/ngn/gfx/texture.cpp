@@ -1,6 +1,8 @@
 #include "texture.h"
 
-Texture::Texture(const Vec2<uint16_t>& size, const GraphicsDriver& driver) noexcept
+namespace ngn {
+
+Texture::Texture(const Vec2<uint16_t>& size, const prv::GraphicsDriver& driver) noexcept
 : m_driver{driver}, m_internal{driver.createTexture()}, m_size{size} {
 	pixels(nullptr);
 }
@@ -16,3 +18,5 @@ void Texture::bind() const noexcept {
 void Texture::pixels(const color_t* pixels) const noexcept {
 	m_driver.setTexturePixels(m_internal, m_size, pixels);
 }
+
+} // namespace ngn
