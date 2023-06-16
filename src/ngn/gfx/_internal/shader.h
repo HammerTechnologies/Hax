@@ -2,10 +2,10 @@
 
 #include <cstdint>
 #include <string>
-#include "../../math/mat4.h"
-#include "../../math/vec2.h"
-#include "../../math/vec3.h"
-#include "../../math/vec4.h"
+#include "../../mth/mat4.h"
+#include "../../mth/vec2.h"
+#include "../../mth/vec3.h"
+#include "../../mth/vec4.h"
 #include "graphics_driver.h"
 
 struct Shader {

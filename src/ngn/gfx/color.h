@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include <cstdint>
-#include "../math/real.h"
+#include "../mth/real.h"
 
 using color_t = uint32_t;
 using colorcomp_t = uint8_t;

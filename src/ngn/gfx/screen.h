@@ -2,9 +2,9 @@
 
 #include <cstdint>
 #include <memory>
-#include "../math/vec2.h"
-#include "../math/real.h"
-#include "internal/context_driver.h"
+#include "../mth/vec2.h"
+#include "../mth/real.h"
+#include "_internal/context_driver.h"
 
 struct Logger;
 

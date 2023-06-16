@@ -2,8 +2,8 @@
 
 #include <cstdint>
 #include <memory>
-#include "../math/vec2.h"
-#include "internal/context_driver.h"
+#include "../gfx/_internal/context_driver.h"
+#include "../mth/vec2.h"
 #include "key.h"
 #include "mouse_button.h"
 

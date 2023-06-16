@@ -3,9 +3,9 @@
 #include <cstdint>
 #include <memory>
 #include <string>
-#include "../math/vec2.h"
+#include "../mth/vec2.h"
+#include "_internal/graphics_driver.h"
 #include "color.h"
-#include "internal/graphics_driver.h"
 
 struct Texture {
 	constexpr const Vec2<uint16_t>& size() const noexcept { return m_size; }

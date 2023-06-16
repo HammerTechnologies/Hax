@@ -3,11 +3,11 @@
 #include <cstdint>
 #include <memory>
 #include <string>
-#include "../math/mat4.h"
-#include "../math/real.h"
+#include "../mth/mat4.h"
+#include "../mth/real.h"
+#include "_internal/geom.h"
+#include "_internal/shader.h"
 #include "color.h"
-#include "internal/geom.h"
-#include "internal/shader.h"
 
 struct Font;
 struct GraphicsDriver;

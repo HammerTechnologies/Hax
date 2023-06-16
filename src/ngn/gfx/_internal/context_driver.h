@@ -1,10 +1,10 @@
 #pragma once
 
 #include <cstdint>
-#include "../../math/vec2.h"
-#include "../../math/real.h"
-#include "../key.h"
-#include "../mouse_button.h"
+#include "../../mth/vec2.h"
+#include "../../mth/real.h"
+#include "../../io/key.h"
+#include "../../io/mouse_button.h"
 
 struct GLFWwindow;
 struct Logger;

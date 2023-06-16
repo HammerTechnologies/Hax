@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cmath>
-#include "../math/real.h"
+#include "../mth/real.h"
 #include "vec3.h"
 
 template<typename T>

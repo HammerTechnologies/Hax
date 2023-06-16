@@ -4,10 +4,10 @@
 #include <memory>
 #include <string>
 #include <stb_truetype.h>
-#include "../math/vec2.h"
-#include "../math/real.h"
+#include "../mth/vec2.h"
+#include "../mth/real.h"
+#include "_internal/graphics_driver.h"
 #include "font_quad.h"
-#include "internal/graphics_driver.h"
 
 struct Texture;
 

@@ -2,7 +2,7 @@
 
 #include <array>
 #include <cmath>
-#include "../math/real.h"
+#include "../mth/real.h"
 #include "quat.h"
 #include "vec3.h"
 #include "vec4.h"

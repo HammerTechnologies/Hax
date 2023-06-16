@@ -1,9 +1,9 @@
 #include <string>
 #include <utility>
 #include "../logger.h"
+#include "_internal/graphics_driver.h"
 #include "font.h"
 #include "graphics.h"
-#include "internal/graphics_driver.h"
 #include "level.h"
 #include "pixmap.h"
 #include "texture.h"

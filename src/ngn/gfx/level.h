@@ -1,8 +1,8 @@
 #pragma once
 
 #include <memory>
-#include "../math/mat4.h"
-#include "../math/vec2.h"
+#include "../mth/mat4.h"
+#include "../mth/vec2.h"
 #include "../maze/generator.h"
 
 struct Graph;

@@ -2,11 +2,11 @@
 
 #include <cmath>
 #include <cstdint>
-#include "../math/mat4.h"
-#include "../math/quat.h"
-#include "../math/vec2.h"
-#include "../math/vec3.h"
-#include "../math/real.h"
+#include "../mth/mat4.h"
+#include "../mth/quat.h"
+#include "../mth/vec2.h"
+#include "../mth/vec3.h"
+#include "../mth/real.h"
 
 struct Viewer {
 	constexpr Viewer(

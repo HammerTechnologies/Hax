@@ -1,13 +1,13 @@
 #include <memory>
 #include <sstream>
 #include "dir.h"
-#include "engine/core.h"
-#include "engine/game.h"
-#include "engine/graphics/font.h"
-#include "engine/graphics/level.h"
-#include "engine/graphics/texture.h"
-#include "engine/graphics/viewer.h"
-#include "engine/logger.h"
+#include "ngn/core.h"
+#include "ngn/game.h"
+#include "ngn/gfx/font.h"
+#include "ngn/gfx/level.h"
+#include "ngn/gfx/texture.h"
+#include "ngn/gfx/viewer.h"
+#include "ngn/logger.h"
 
 struct Hax : Game {
 	Hax() noexcept

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../math/vec2.h"
+#include "../mth/vec2.h"
 
 struct FontQuad {
 	Vec2r m_position;

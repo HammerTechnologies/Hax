@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include "../math/vec2.h"
+#include "../mth/vec2.h"
 #include "color.h"
 
 struct Pixmap {

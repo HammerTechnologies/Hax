@@ -2,9 +2,9 @@
 
 #include <array>
 #include <cstdint>
-#include "../../math/vec2.h"
-#include "../../math/vec3.h"
-#include "../../math/real.h"
+#include "../../mth/vec2.h"
+#include "../../mth/vec3.h"
+#include "../../mth/real.h"
 
 struct Vertex {
 	Vec3r m_position;
