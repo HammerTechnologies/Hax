@@ -4,7 +4,6 @@
 #include "_internal/graphics_driver.h"
 #include "font.h"
 #include "graphics.h"
-#include "level.h"
 #include "pixmap.h"
 #include "texture.h"
 #include "viewer.h"
@@ -197,18 +196,6 @@ void Graphics::drawQuad(const Mat4r& transform, color_t color) const noexcept {
 	m_quad.bind();
 	prepareShader(transform, Mat4r{}, color, false);
 	m_quad.draw();
-}
-
-void Graphics::drawLevel2D(
-	const Level& level,
-	const Vec2r& position,
-	real_t size,
-	color_t color) const noexcept {
-	level.draw2D(*this, position, size, color);
-}
-
-void Graphics::drawLevel3D(const Level& level, real_t size, color_t color) const noexcept {
-	level.draw3D(*this, size, color);
 }
 
 void Graphics::prepareShader(

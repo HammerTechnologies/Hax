@@ -1,10 +1,10 @@
 #include <memory>
 #include <sstream>
 #include "dir.h"
+#include "level.h"
 #include "ngn/core.h"
 #include "ngn/game.h"
 #include "ngn/gfx/font.h"
-#include "ngn/gfx/level.h"
 #include "ngn/gfx/texture.h"
 #include "ngn/gfx/viewer.h"
 #include "ngn/logger.h"
@@ -18,7 +18,7 @@ struct Hax : Game {
 			{0, 0},
 			m_core.screen().size(),
 		},
-		m_level{{16, 16}, 0},
+		m_level{{16, 16}, 0, m_core.graphics()},
 		m_font{nullptr},
 		m_tex{nullptr} {
 			changeDir(exeDir() + "/assets");
@@ -47,11 +47,11 @@ struct Hax : Game {
 
 		graphics.setup3D(m_viewer);
 		graphics.cls();
-		graphics.drawLevel3D(m_level, 16, Color::WHITE);
+		m_level.draw3D(16, Color::WHITE);
 
 		graphics.setup2D({0, 0}, screen.size());
 		//graphics.drawTexture(m_tex.get(), 0, 0, screen.getWidth(), screen.getHeight());
-		graphics.drawLevel2D(m_level, {16, 32}, 16, Color::ORANGE);
+		m_level.draw2D({16, 32}, 16, Color::ORANGE);
 		graphics.drawRect(
 			{12 + m_viewer.position().x(), 28 + m_level.size().y() * 16 - m_viewer.position().z()},
 			{8, 8},
