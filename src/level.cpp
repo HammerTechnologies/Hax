@@ -158,7 +158,7 @@ void Level::drawXWall(const ngn::Vec2r& position, const ngn::Vec2r& size, ngn::c
 		ngn::Vec3r{position.x(), 0, position.y()},
 		ngn::Quatr{},
 		ngn::Vec3r{size, 1});
-	m_graphics.drawQuad(transform, color);
+	m_graphics.drawQuad(transform, m_tex.get(), color);
 }
 
 void Level::drawZWall(const ngn::Vec2r& position, const ngn::Vec2r& size, ngn::color_t color) const noexcept {
@@ -166,5 +166,5 @@ void Level::drawZWall(const ngn::Vec2r& position, const ngn::Vec2r& size, ngn::c
 		{position.x(), 0, position.y()},
 		ngn::Quatr::fromEuler(ngn::Vec3r{0, M_PI_2, 0}),
 		{size, 1});
-	m_graphics.drawQuad(transform, color);
+	m_graphics.drawQuad(transform, m_tex.get(), color);
 }

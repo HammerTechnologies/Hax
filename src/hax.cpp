@@ -18,13 +18,14 @@ struct Hax : ngn::Game {
 			{0, 0},
 			m_core.screen().size(),
 		},
-		m_level{{16, 16}, 0, m_core.graphics()},
 		m_font{nullptr},
-		m_tex{nullptr} {
-			changeDir(exeDir() + "/assets");
-			m_font = m_core.graphics().loadFont("Minecraft.ttf", 16);
-			m_tex = m_core.graphics().loadTexture("mockup.png");
-		}
+		m_tex{nullptr},
+		m_level{nullptr} {
+		changeDir(exeDir() + "/assets");
+		m_font = m_core.graphics().loadFont("Minecraft.ttf", 16);
+		m_tex = m_core.graphics().loadTexture("textures/wall001.png");
+		m_level = std::make_unique<Level>(ngn::Vec2<uint8_t>{16, 16}, 0, m_tex, m_core.graphics());
+	}
 
 	virtual bool update() noexcept override {
 		auto& graphics = m_core.graphics();
@@ -47,13 +48,13 @@ struct Hax : ngn::Game {
 
 		graphics.setup3D(m_viewer);
 		graphics.cls();
-		m_level.draw3D(16, ngn::Color::WHITE);
+		m_level->draw3D(16, ngn::Color::WHITE);
 
 		graphics.setup2D({0, 0}, screen.size());
 		//graphics.drawTexture(m_tex.get(), 0, 0, screen.getWidth(), screen.getHeight());
-		m_level.draw2D({16, 32}, 16, ngn::Color::ORANGE);
+		m_level->draw2D({16, 32}, 16, ngn::Color::ORANGE);
 		graphics.drawRect(
-			{12 + m_viewer.position().x(), 28 + m_level.size().y() * 16 - m_viewer.position().z()},
+			{12 + m_viewer.position().x(), 28 + m_level->size().y() * 16 - m_viewer.position().z()},
 			{8, 8},
 			ngn::Color::RED);
 		graphics.drawText(m_font.get(), ss.str(), {14, 12}, ngn::Color::RED);
@@ -68,9 +69,9 @@ private:
 	ngn::Logger m_logger;
 	ngn::Core m_core;
 	ngn::Viewer m_viewer;
-	Level m_level;
 	std::unique_ptr<ngn::Font> m_font;
-	std::unique_ptr<ngn::Texture> m_tex;
+	std::shared_ptr<ngn::Texture> m_tex;
+	std::unique_ptr<Level> m_level;
 };
 
 auto g_hax = std::make_unique<Hax>();

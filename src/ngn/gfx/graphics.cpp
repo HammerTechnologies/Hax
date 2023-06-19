@@ -194,9 +194,10 @@ void Graphics::drawText(
 	}
 }
 
-void Graphics::drawQuad(const Mat4r& transform, color_t color) const noexcept {
+void Graphics::drawQuad(const Mat4r& transform, const Texture* tex, color_t color) const noexcept {
+	if (tex) tex->bind();
 	m_quad.bind();
-	prepareShader(transform, Mat4r{}, color, false);
+	prepareShader(transform, Mat4r{}, color, tex != nullptr);
 	m_quad.draw();
 }
 

@@ -51,7 +51,7 @@ struct Graphics {
 		const std::string& text,
 		const Vec2r& position,
 		color_t color = Color::WHITE) const noexcept;
-	void drawQuad(const Mat4r& transform, color_t color = Color::WHITE) const noexcept;
+	void drawQuad(const Mat4r& transform, const Texture* tex = nullptr, color_t color = Color::WHITE) const noexcept;
 private:
 	const prv::GraphicsDriver& m_driver;
 	const Logger& m_logger;
