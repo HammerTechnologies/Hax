@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include <vector>
 #include "../gfx/color.h"
@@ -17,18 +18,25 @@ struct Viewer;
 
 namespace prv {
 
+template <void(*F)(uint32_t)>
 struct GraphicsResource {
 	GraphicsResource(uint32_t id) : m_id{id} {}
-	constexpr operator bool() const noexcept { return m_id != 0; }
+	GraphicsResource(GraphicsResource&& other) : m_id{other.m_id} { other.m_id = 0; }
+	~GraphicsResource() { if (m_id != 0) F(m_id); }
 private:
 	uint32_t m_id;
 	friend struct GraphicsDriver;
 };
 
-struct VertexBuffer : GraphicsResource {};
-struct IndexBuffer : GraphicsResource {};
-struct GpuProgram : GraphicsResource {};
-struct DriverTexture : GraphicsResource {};
+void VertexBufferDeleter(uint32_t vb);
+void IndexBufferDeleter(uint32_t ib);
+void GpuProgramDeleter(uint32_t p);
+void DriverTextureDeleter(uint32_t t);
+
+struct VertexBuffer : GraphicsResource<VertexBufferDeleter> { using GraphicsResource::GraphicsResource; };
+struct IndexBuffer : GraphicsResource<IndexBufferDeleter> { using GraphicsResource::GraphicsResource; };
+struct GpuProgram : GraphicsResource<GpuProgramDeleter> { using GraphicsResource::GraphicsResource; };
+struct DriverTexture : GraphicsResource<DriverTextureDeleter> { using GraphicsResource::GraphicsResource; };
 
 struct GraphicsDriver {
 	GraphicsDriver(ContextDriver::GlGetProcAddress loader, const Logger& logger) noexcept;
@@ -39,15 +47,12 @@ struct GraphicsDriver {
 	void setup3D(const Viewer& viewer) const noexcept;
 	void cls(color_t color) const noexcept;
 
-	VertexBuffer createVertexBuffer(const std::vector<Vertex>& vertices) const noexcept;
-	IndexBuffer createIndexBuffer(const std::vector<uint16_t>& indices) const noexcept;
+	std::unique_ptr<VertexBuffer> createVertexBuffer(const std::vector<Vertex>& vertices) const noexcept;
+	std::unique_ptr<IndexBuffer> createIndexBuffer(const std::vector<uint16_t>& indices) const noexcept;
 	void bindBuffers(const VertexBuffer& vertexBuffer, const IndexBuffer& indexBuffer) const noexcept;
 	void drawBuffers(size_t numIndices) const noexcept;
-	void deleteBuffer(const VertexBuffer& buffer) const noexcept;
-	void deleteBuffer(const IndexBuffer& buffer) const noexcept;
 
-	GpuProgram createProgram(const std::string& vertex, const std::string& fragment) const noexcept;
-	void deleteProgram(const GpuProgram& program) const noexcept;
+	std::unique_ptr<GpuProgram> createProgram(const std::string& vertex, const std::string& fragment) const noexcept;
 	void useProgram(const GpuProgram& program) const noexcept;
 	int32_t getProgramUniformLocation(const GpuProgram& program, const std::string& name) const noexcept;
 	void setProgramUniform(int32_t location, int32_t value) const noexcept;
@@ -59,8 +64,7 @@ struct GraphicsDriver {
 	int32_t getProgramAttribLocation(const GpuProgram& program, const std::string& name) const noexcept;
 	void setProgramAttrib(int32_t location, size_t size, bool normalize, size_t offset) const noexcept;
 
-	DriverTexture createTexture() const noexcept;
-	void deleteTexture(const DriverTexture& texture) const noexcept;
+	std::unique_ptr<DriverTexture> createTexture() const noexcept;
 	void bindTexture(const DriverTexture& texture) const noexcept;
 	void setTexturePixels(
 		const DriverTexture& texture,

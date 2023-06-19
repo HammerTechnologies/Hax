@@ -1,27 +1,34 @@
 #pragma once
 
 #include <cstdint>
-#include <GLFW/glfw3.h>
+#include <memory>
 #include "../io/key.h"
 #include "../io/mouse_button.h"
 #include "../mth/vec2.h"
 #include "../mth/real.h"
 
+struct GLFWwindow;
+
 namespace ngn {
 
-struct GLFWwindow;
 struct Logger;
 
 namespace prv {
 
-using ContextWindow = ::GLFWwindow;
+struct ContextWindow {
+	ContextWindow(GLFWwindow* win) : m_win {win} {}
+	ContextWindow(ContextWindow&& other) : m_win {other.m_win} { other.m_win = nullptr; }
+	~ContextWindow();
+private:
+	GLFWwindow* m_win;
+	friend struct ContextDriver;
+};
 
 struct ContextDriver {
 	using GlGetProcAddress = void*(*)(const char*);
 
 	ContextDriver(const Logger& logger) noexcept;
-	ContextWindow* createWindow(const Vec2<uint16_t>& size, bool fullscreen) const noexcept;
-	void destroyWindow(ContextWindow& window) const noexcept;
+	std::unique_ptr<ContextWindow> createWindow(const Vec2<uint16_t>& size, bool fullscreen) const noexcept;
 	void enableWindowContext(ContextWindow& window) const noexcept;
 	Vec2<uint16_t> getWindowSize(ContextWindow& window) const noexcept;
 	bool isWindowOpened(ContextWindow& window) const noexcept;

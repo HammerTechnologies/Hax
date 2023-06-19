@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <memory>
 #include <string>
 #include "../mth/mat4.h"
 #include "../mth/vec2.h"
@@ -12,9 +13,8 @@ namespace ngn::prv {
 
 struct Shader {
 	Shader(const GraphicsDriver& driver, const std::string& vertex, const std::string& fragment) noexcept;
-	~Shader() noexcept;
 
-	constexpr operator bool() const noexcept { return m_program; }
+	operator bool() const noexcept { return static_cast<bool>(m_program); }
 
 	int32_t getUniform(const std::string& name) const noexcept;
 
@@ -27,7 +27,7 @@ struct Shader {
 	void setMat4(int32_t location, const Mat4r& m) const noexcept;
 private:
 	const GraphicsDriver& m_driver;
-	GpuProgram m_program;
+	std::unique_ptr<GpuProgram> m_program;
 	int32_t m_vertexPos;
 	int32_t m_vertexColor;
 	int32_t m_vertexTexCoords;

@@ -7,16 +7,12 @@ Texture::Texture(const Vec2<uint16_t>& size, const prv::GraphicsDriver& driver) 
 	pixels(nullptr);
 }
 
-Texture::~Texture() noexcept {
-	m_driver.deleteTexture(m_internal);
-}
-
 void Texture::bind() const noexcept {
-	m_driver.bindTexture(m_internal);
+	m_driver.bindTexture(*m_internal);
 }
 
 void Texture::pixels(const color_t* pixels) const noexcept {
-	m_driver.setTexturePixels(m_internal, m_size, pixels);
+	m_driver.setTexturePixels(*m_internal, m_size, pixels);
 }
 
 } // namespace ngn

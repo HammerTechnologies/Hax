@@ -9,13 +9,8 @@ Geom::Geom(const GraphicsDriver& driver, const std::vector<Vertex>& vertices, co
 	m_numIndices {indices.size()} {
 }
 
-Geom::~Geom() {
-	m_driver.deleteBuffer(m_vertexBuffer);
-	m_driver.deleteBuffer(m_indexBuffer);
-}
-
 void Geom::bind() const noexcept {
-	m_driver.bindBuffers(m_vertexBuffer, m_indexBuffer);
+	m_driver.bindBuffers(*m_vertexBuffer, *m_indexBuffer);
 }
 
 void Geom::draw() const noexcept {

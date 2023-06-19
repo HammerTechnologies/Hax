@@ -51,20 +51,20 @@ void GraphicsDriver::cls(color_t color = Color::BLACK) const noexcept {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-VertexBuffer GraphicsDriver::createVertexBuffer(const std::vector<Vertex>& vertices) const noexcept {
-	auto buffer = 0U;
+std::unique_ptr<VertexBuffer> GraphicsDriver::createVertexBuffer(const std::vector<Vertex>& vertices) const noexcept {
+	auto buffer = GLuint {0};
 	glGenBuffers(1, &buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, buffer);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
-	return {buffer};
+	return std::make_unique<VertexBuffer>(buffer);
 }
 
-IndexBuffer GraphicsDriver::createIndexBuffer(const std::vector<uint16_t>& indices) const noexcept {
-	auto buffer = 0U;
+std::unique_ptr<IndexBuffer> GraphicsDriver::createIndexBuffer(const std::vector<uint16_t>& indices) const noexcept {
+	auto buffer = GLuint {0};
 	glGenBuffers(1, &buffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint16_t), indices.data(), GL_STATIC_DRAW);
-	return {buffer};
+	return std::make_unique<IndexBuffer>(buffer);
 }
 
 void GraphicsDriver::bindBuffers(const VertexBuffer& vertexBuffer, const IndexBuffer& indexBuffer) const noexcept {
@@ -76,15 +76,7 @@ void GraphicsDriver::drawBuffers(size_t numIndices) const noexcept {
 	glDrawElements(GL_TRIANGLE_FAN, numIndices, GL_UNSIGNED_SHORT, 0);
 }
 
-void GraphicsDriver::deleteBuffer(const VertexBuffer& buffer) const noexcept {
-	glDeleteBuffers(1, &buffer.m_id);
-}
-
-void GraphicsDriver::deleteBuffer(const IndexBuffer& buffer) const noexcept {
-	glDeleteBuffers(1, &buffer.m_id);
-}
-
-GpuProgram GraphicsDriver::createProgram(const std::string& vertex, const std::string& fragment) const noexcept {
+std::unique_ptr<GpuProgram> GraphicsDriver::createProgram(const std::string& vertex, const std::string& fragment) const noexcept {
 #ifdef EMSCRIPTEN
 	const auto vertexCode = vertex;
 	const auto fragmentCode = "precision mediump float;\n" + fragment;
@@ -106,7 +98,7 @@ GpuProgram GraphicsDriver::createProgram(const std::string& vertex, const std::s
 		glGetShaderInfoLog(vshader, errorOutput.size(), nullptr, errorOutput.data());
 		m_logger.error(errorOutput.data());
 		glDeleteShader(vshader);
-		return {0};
+		return nullptr;
 	}
 
 	// Create fragment shader
@@ -120,7 +112,7 @@ GpuProgram GraphicsDriver::createProgram(const std::string& vertex, const std::s
 		m_logger.error(errorOutput.data());
 		glDeleteShader(vshader);
 		glDeleteShader(fshader);
-		return {0};
+		return nullptr;
 	}
 
 	// Create program
@@ -135,14 +127,10 @@ GpuProgram GraphicsDriver::createProgram(const std::string& vertex, const std::s
 		glGetProgramInfoLog(id, errorOutput.size(), nullptr, errorOutput.data());
 		m_logger.error(errorOutput.data());
 		glDeleteProgram(id);
-		return {0};
+		return nullptr;
 	}
 
-	return {id};
-}
-
-void GraphicsDriver::deleteProgram(const GpuProgram& program) const noexcept {
-	glDeleteProgram(program.m_id);
+	return std::make_unique<GpuProgram>(id);
 }
 
 void GraphicsDriver::useProgram(const GpuProgram& program) const noexcept {
@@ -195,19 +183,15 @@ void GraphicsDriver::setProgramAttrib(int32_t location, size_t size, bool normal
 	}
 }
 
-DriverTexture GraphicsDriver::createTexture() const noexcept {
-	auto id = 0U;
+std::unique_ptr<DriverTexture> GraphicsDriver::createTexture() const noexcept {
+	auto id = GLuint {0};
 	glGenTextures(1, &id);
 	glBindTexture(GL_TEXTURE_2D, id);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	return {id};
-}
-
-void GraphicsDriver::deleteTexture(const DriverTexture& texture) const noexcept {
-	glDeleteTextures(1, &texture.m_id);
+	return std::make_unique<DriverTexture>(id);
 }
 
 void GraphicsDriver::bindTexture(const DriverTexture& texture) const noexcept {
@@ -229,6 +213,22 @@ void GraphicsDriver::setTexturePixels(
 		GL_RGBA,
 		GL_UNSIGNED_BYTE,
 		pixels);
+}
+
+void VertexBufferDeleter(uint32_t vb) {
+	glDeleteBuffers(1, &vb);
+}
+
+void IndexBufferDeleter(uint32_t ib) {
+	glDeleteBuffers(1, &ib);
+}
+
+void GpuProgramDeleter(uint32_t p) {
+	glDeleteProgram(p);
+}
+
+void DriverTextureDeleter(uint32_t t) {
+	glDeleteTextures(1, &t);
 }
 
 } // namespace ngn::prv
