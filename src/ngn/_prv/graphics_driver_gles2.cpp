@@ -201,7 +201,7 @@ void GraphicsDriver::bindTexture(const DriverTexture& texture) const noexcept {
 void GraphicsDriver::setTexturePixels(
 	const DriverTexture& texture,
 	const Vec2<uint16_t>& size,
-	const color_t* pixels) const noexcept {
+	non_owning_ptr<const color_t> pixels) const noexcept {
 	bindTexture(texture);
 	glTexImage2D(
 		GL_TEXTURE_2D,

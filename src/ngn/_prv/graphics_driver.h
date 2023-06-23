@@ -8,6 +8,7 @@
 #include "../mth/vec2.h"
 #include "../mth/vec3.h"
 #include "../mth/vec4.h"
+#include "../non_owning_ptr.h"
 #include "context_driver.h"
 #include "vertex.h"
 
@@ -69,7 +70,7 @@ struct GraphicsDriver {
 	void setTexturePixels(
 		const DriverTexture& texture,
 		const Vec2<uint16_t>& size,
-		const color_t* pixels) const noexcept;
+		non_owning_ptr<const color_t> pixels) const noexcept;
 private:
 	const Logger& m_logger;
 	bool m_init;

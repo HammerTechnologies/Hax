@@ -148,7 +148,7 @@ void Graphics::drawRect(
 }
 
 void Graphics::drawTexture(
-	const Texture* tex,
+	non_owning_ptr<const Texture> tex,
 	const Vec2r& position,
 	const Vec2r& size,
 	real_t angle,
@@ -170,7 +170,7 @@ void Graphics::drawTexture(
 }
 
 void Graphics::drawText(
-	const Font* font,
+	non_owning_ptr<const Font> font,
 	const std::string& text,
 	const Vec2r& position,
 	color_t color) const noexcept {
@@ -194,7 +194,10 @@ void Graphics::drawText(
 	}
 }
 
-void Graphics::drawQuad(const Mat4r& transform, const Texture* tex, color_t color) const noexcept {
+void Graphics::drawQuad(
+	const Mat4r& transform,
+	non_owning_ptr<const Texture> tex,
+	color_t color) const noexcept {
 	if (tex) tex->bind();
 	m_quad.bind();
 	prepareShader(transform, Mat4r{}, color, tex != nullptr);

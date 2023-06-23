@@ -3,10 +3,11 @@
 #include <cstdint>
 #include <memory>
 #include <string>
-#include "../mth/mat4.h"
-#include "../mth/real.h"
 #include "../_prv/geom.h"
 #include "../_prv/shader.h"
+#include "../mth/mat4.h"
+#include "../mth/real.h"
+#include "../non_owning_ptr.h"
 #include "color.h"
 
 namespace ngn {
@@ -40,18 +41,21 @@ struct Graphics {
 		const Vec2r& size,
 		color_t color = Color::WHITE) const noexcept;
 	void drawTexture(
-		const Texture* tex,
+		non_owning_ptr<const Texture> tex,
 		const Vec2r& position,
 		const Vec2r& size = {},
 		real_t angle = 0,
 		color_t color = Color::WHITE,
 		const Mat4r& textureMatrix = Mat4r{}) const noexcept;
 	void drawText(
-		const Font* font,
+		non_owning_ptr<const Font> font,
 		const std::string& text,
 		const Vec2r& position,
 		color_t color = Color::WHITE) const noexcept;
-	void drawQuad(const Mat4r& transform, const Texture* tex = nullptr, color_t color = Color::WHITE) const noexcept;
+	void drawQuad(
+		const Mat4r& transform,
+		non_owning_ptr<const Texture> tex = nullptr,
+		color_t color = Color::WHITE) const noexcept;
 private:
 	const prv::GraphicsDriver& m_driver;
 	const Logger& m_logger;

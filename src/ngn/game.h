@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include "non_owning_ptr.h"
 
 namespace ngn {
 
@@ -22,9 +23,9 @@ struct Game {
 	virtual bool update() = 0;
 	virtual void finish() = 0;
 
-	static Game* instance() noexcept { return m_instance; }
+	static non_owning_ptr<Game> instance() noexcept { return m_instance; }
 private:
-	static Game* m_instance;
+	static non_owning_ptr<Game> m_instance;
 };
 
 } // namespace ngn

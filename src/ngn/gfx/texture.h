@@ -3,8 +3,9 @@
 #include <cstdint>
 #include <memory>
 #include <string>
-#include "../mth/vec2.h"
 #include "../_prv/graphics_driver.h"
+#include "../mth/vec2.h"
+#include "../non_owning_ptr.h"
 #include "color.h"
 
 namespace ngn {
@@ -13,7 +14,7 @@ struct Texture {
 	constexpr const Vec2<uint16_t>& size() const noexcept { return m_size; }
 
 	void bind() const noexcept;
-	void pixels(const color_t* pixels) const noexcept;
+	void pixels(non_owning_ptr<const color_t> pixels) const noexcept;
 private:
 	const prv::GraphicsDriver& m_driver;
 	std::unique_ptr<prv::DriverTexture> m_internal;

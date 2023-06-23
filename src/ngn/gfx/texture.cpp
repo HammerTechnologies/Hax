@@ -11,7 +11,7 @@ void Texture::bind() const noexcept {
 	m_driver.bindTexture(*m_internal);
 }
 
-void Texture::pixels(const color_t* pixels) const noexcept {
+void Texture::pixels(non_owning_ptr<const color_t> pixels) const noexcept {
 	m_driver.setTexturePixels(*m_internal, m_size, pixels);
 }
 
