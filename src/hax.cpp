@@ -3,13 +3,12 @@
 #include "dir.h"
 #include "level.h"
 #include "ngn/core.h"
-#include "ngn/game.h"
 #include "ngn/gfx/font.h"
 #include "ngn/gfx/texture.h"
 #include "ngn/gfx/viewer.h"
 #include "ngn/logger.h"
 
-struct Hax : ngn::Game {
+struct Hax {
 	Hax() noexcept
 	: m_core{{640, 360}, false, m_logger},
 		m_viewer{
@@ -27,7 +26,7 @@ struct Hax : ngn::Game {
 		m_level = std::make_unique<Level>(ngn::Vec2<uint8_t>{16, 16}, 0, m_tex, m_core.graphics());
 	}
 
-	virtual bool update() noexcept override {
+	bool update() noexcept {
 		auto& graphics = m_core.graphics();
 		auto& input = m_core.input();
 		auto& screen = m_core.screen();
@@ -63,8 +62,6 @@ struct Hax : ngn::Game {
 
 		return true;
 	}
-
-	virtual void finish() noexcept override;
 private:
 	ngn::Logger m_logger;
 	ngn::Core m_core;
@@ -76,6 +73,13 @@ private:
 
 auto g_hax = std::make_unique<Hax>();
 
-void Hax::finish() noexcept {
+void init() noexcept {
+}
+
+bool update() noexcept {
+	return g_hax->update();
+}
+
+void finish() noexcept {
 	g_hax = nullptr;
 }

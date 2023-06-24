@@ -1,22 +1,25 @@
 #ifdef EMSCRIPTEN
 #include <emscripten.h>
 #endif
-#include <iostream>
 #include "core.h"
-#include "game.h"
+
+void init();
+bool update();
+void finish();
 
 #ifdef EMSCRIPTEN
-void update() noexcept {
-	ngn::Game::instance()->update();
+void emscripten_update() {
+	update();
 }
 #endif
 
 int main() noexcept {
+	init();
 #ifdef EMSCRIPTEN
-	emscripten_set_main_loop(update, 0, true);
+	emscripten_set_main_loop(emscripten_update, 0, true);
 #else
-	while (ngn::Game::instance()->update()) {}
-	ngn::Game::instance()->finish();
+	while (update()) {}
+	finish();
 	ngn::Core::terminate();
 #endif
 	return 0;
