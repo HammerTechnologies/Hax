@@ -4,14 +4,14 @@
 
 namespace ngn {
 
-Core::Core(const Vec2<uint16_t>& size, bool fullscreen, const Logger& logger) noexcept
-: m_logger{logger},
-	m_context{logger},
-	m_window{m_context.createWindow(size, fullscreen)},
-	m_screen{m_context, m_window, logger},
-	m_input{m_context, m_window},
-	m_gfxDriver{m_context.getGlGetProcAddressFunc(), logger},
-	m_graphics{m_gfxDriver, logger} {
+Core::Core(const Vec2<uint16_t>& size, bool fullscreen) noexcept
+: m_logger {},
+	m_context {m_logger},
+	m_window {m_context.createWindow(size, fullscreen)},
+	m_gfxDriver {m_context.getGlGetProcAddressFunc(), m_logger},
+	m_screen {m_context, m_window, m_logger},
+	m_input {m_context, m_window},
+	m_graphics {m_gfxDriver, m_logger} {
 	m_logger.info("Core services initializated.");
 }
 

@@ -12,8 +12,7 @@
 #include "prefab/game.h"
 #include "prefab/player.h"
 
-static auto g_logger = ngn::Logger {};
-static auto g_core = std::make_unique<ngn::Core>(ngn::Vec2<uint16_t>{640, 360}, false, g_logger);
+static auto g_core = std::make_unique<ngn::Core>(ngn::Vec2<uint16_t>{640, 360}, false);
 static auto g_entityMgr = HaxEntityManager {};
 static auto g_level = std::unique_ptr<Level> {};
 static auto g_viewer = ngn::Viewer {

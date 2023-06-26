@@ -24,16 +24,24 @@ ContextDriver::ContextDriver(const Logger& logger) noexcept
 }
 
 std::unique_ptr<ContextWindow> ContextDriver::createWindow(const Vec2<uint16_t>& size, bool fullscreen) const noexcept {
-	auto win = glfwCreateWindow(
+	auto win = std::make_unique<ContextWindow>(glfwCreateWindow(
 		size.x(),
 		size.y(),
 		"Hax",
 		fullscreen ? glfwGetPrimaryMonitor() : nullptr,
-		nullptr);
-	if (!win) {
+		nullptr));
+	if (win) {
+		enableWindowContext(*win);
+
+		auto ss = std::ostringstream {};
+		ss << "Window opened with size " << size.x() << "x" << size.y() << ", ";
+		if (fullscreen) { ss << "fullscreen."; }
+		else { ss << "windowed."; }
+		m_logger.info(ss.str());
+	} else {
 		m_logger.error("Could not create window.");
 	}
-	return std::make_unique<ContextWindow>(win);
+	return win;
 }
 
 void ContextDriver::enableWindowContext(ContextWindow& window) const noexcept {
