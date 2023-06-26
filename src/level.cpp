@@ -1,5 +1,5 @@
-#include "ngn/gfx/graphics.h"
 #include "level.h"
+#include "ngn/gfx/graphics.h"
 
 void Level::draw2D(const ngn::Vec2r& position, ngn::real_t size, ngn::color_t color) const noexcept {
 	for (auto tileY = 0; tileY < m_maze->getHeight(); ++tileY) {
