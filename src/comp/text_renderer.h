@@ -8,12 +8,11 @@
 #include "../ngn/mth/vec2.h"
 
 struct TextRenderer {
-	std::shared_ptr<ngn::Font> font;
 	std::string text;
 	ngn::Vec2r position;
 	ngn::color_t color;
 
-	void render(const ngn::Graphics& gfx) const noexcept {
-		gfx.drawText(font.get(), text, position, color);
+	void render(const ngn::Font& font, const ngn::Graphics& gfx) const noexcept {
+		gfx.drawText(&font, text, position, color);
 	}
 };

@@ -11,8 +11,16 @@ namespace ngn {
 
 using EntityId = size_t;
 
-template<typename... CompTypes>
+template<typename SharedDataType, typename... CompTypes>
 struct EntityManager {
+	constexpr const SharedDataType& sharedData() const noexcept {
+		return m_sharedData;
+	}
+
+	constexpr SharedDataType& sharedData() noexcept {
+		return m_sharedData;
+	}
+
 	constexpr EntityId createEntity() noexcept {
 		if (m_freeIds.empty()) {
 			m_entities.emplace_back(Entity {});
@@ -55,6 +63,7 @@ struct EntityManager {
 private:
 	using Entity = std::tuple<std::optional<CompTypes> ...>;
 
+	SharedDataType m_sharedData {};
 	std::vector<std::optional<Entity>> m_entities {};
 	std::list<EntityId> m_freeIds {};
 };

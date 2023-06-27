@@ -4,18 +4,16 @@
 
 void updatePlayer(HaxEntityManager&, ngn::EntityId) noexcept;
 
-inline ngn::EntityId createPlayer(HaxEntityManager& mgr, const GameData& gameData) noexcept {
+inline ngn::EntityId createPlayer(HaxEntityManager& mgr) noexcept {
 	auto player = mgr.createEntity();
 	mgr.component<Behavior>(player) = Behavior { updatePlayer };
-	mgr.component<GameData>(player) = GameData { gameData };
 	return player;
 }
 
-inline void updatePlayer(HaxEntityManager& mgr, ngn::EntityId player) noexcept {
-	auto& gameData = mgr.component<GameData>(player).value();
-	auto& input = gameData.input.get();
-	auto& screen = gameData.screen.get();
-	auto& viewer = gameData.viewer.get();
+inline void updatePlayer(HaxEntityManager& mgr, ngn::EntityId) noexcept {
+	auto& input = mgr.sharedData().core().input();
+	auto& screen = mgr.sharedData().core().screen();
+	auto& viewer = mgr.sharedData().viewer();
 	viewer.viewportSize(screen.size());
 	if (input.isKeyDown(ngn::Key::LEFT)) { viewer.euler(viewer.euler() - ngn::Vec3r {0, 180 * screen.delta(), 0}); }
 	if (input.isKeyDown(ngn::Key::RIGHT)) { viewer.euler(viewer.euler() + ngn::Vec3r {0, 180 * screen.delta(), 0}); }
