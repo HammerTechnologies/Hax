@@ -1,9 +1,9 @@
 #include <array>
 #include <glad/glad.h>
+#include "../gfx/vertex.h"
 #include "../gfx/viewer.h"
 #include "../logger.h"
 #include "graphics_driver.h"
-#include "vertex.h"
 
 namespace ngn::prv {
 

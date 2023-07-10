@@ -3,12 +3,12 @@
 #include <cstdint>
 #include <memory>
 #include <string>
-#include "../_prv/geom.h"
 #include "../_prv/shader.h"
 #include "../mth/mat4.h"
 #include "../mth/real.h"
 #include "../non_owning_ptr.h"
 #include "color.h"
+#include "geom.h"
 
 namespace ngn {
 
@@ -60,8 +60,8 @@ private:
 	const prv::GraphicsDriver& m_driver;
 	const Logger& m_logger;
 	prv::Shader m_shader;
-	prv::Geom m_rect;
-	prv::Geom m_quad;
+	Geom m_rect;
+	Geom m_quad;
 	int32_t m_mvpLoc;
 	int32_t m_textureMatrixLoc;
 	int32_t m_baseColorLoc;

@@ -1,7 +1,5 @@
-#include <array>
-#include <cstddef>
+#include "../gfx/vertex.h"
 #include "shader.h"
-#include "vertex.h"
 
 namespace ngn::prv {
 
@@ -19,9 +17,9 @@ int32_t Shader::getUniform(const std::string& name) const noexcept {
 
 void Shader::prepare() const noexcept {
 	m_driver.useProgram(*m_program);
-	m_driver.setProgramAttrib(m_vertexPos, 3, false, offsetof(Vertex, m_position));
-	m_driver.setProgramAttrib(m_vertexColor, 4, true, offsetof(Vertex, m_color));
-	m_driver.setProgramAttrib(m_vertexTexCoords, 2, false, offsetof(Vertex, m_texCoords));
+	m_driver.setProgramAttrib(m_vertexPos, 3, false, offsetof(Vertex, position));
+	m_driver.setProgramAttrib(m_vertexColor, 4, true, offsetof(Vertex, color));
+	m_driver.setProgramAttrib(m_vertexTexCoords, 2, false, offsetof(Vertex, texCoords));
 }
 
 void Shader::setInt(int32_t location, int32_t value) const noexcept {

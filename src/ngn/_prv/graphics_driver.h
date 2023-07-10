@@ -10,7 +10,7 @@
 #include "../mth/vec4.h"
 #include "../non_owning_ptr.h"
 #include "context_driver.h"
-#include "vertex.h"
+#include "../gfx/vertex.h"
 
 namespace ngn {
 

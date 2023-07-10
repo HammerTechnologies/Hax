@@ -50,23 +50,23 @@ Graphics::Graphics(const prv::GraphicsDriver& driver, const Logger& logger) noex
 	m_logger{logger},
 	m_shader{m_driver, VERTEX_SHADER, FRAGMENT_SHADER},
 	m_rect{
-		m_driver,
 		{
 			{{-0.5, -0.5, 0}, Color::WHITE, {0, 0}},
 			{{ 0.5, -0.5, 0}, Color::WHITE, {1, 0}},
 			{{ 0.5,  0.5, 0}, Color::WHITE, {1, 1}},
 			{{-0.5,  0.5, 0}, Color::WHITE, {0, 1}}
 		},
-		{0, 1, 2, 3}},
+		{0, 1, 2, 3},
+		m_driver},
 	m_quad{
-		m_driver,
 		{
 			{{0, 1, 0}, Color::WHITE, {0, 0}},
 			{{1, 1, 0}, Color::WHITE, {1, 0}},
 			{{1, 0, 0}, Color::WHITE, {1, 1}},
 			{{0, 0, 0}, Color::WHITE, {0, 1}}
 		},
-		{0, 1, 2, 3}},
+		{0, 1, 2, 3},
+		m_driver},
 	m_mvpLoc{m_shader.getUniform("mvp")},
 	m_textureMatrixLoc{m_shader.getUniform("textureMatrix")},
 	m_baseColorLoc{m_shader.getUniform("baseColor")},
