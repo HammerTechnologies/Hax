@@ -6,7 +6,7 @@ void updatePlayer(HaxEntityManager&, ngn::EntityId) noexcept;
 
 inline ngn::EntityId createPlayer(HaxEntityManager& mgr) noexcept {
 	auto player = mgr.createEntity();
-	mgr.component<Behavior>(player) = Behavior { updatePlayer };
+	mgr.component(player, Behavior { updatePlayer });
 	return player;
 }
 

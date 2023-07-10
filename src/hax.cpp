@@ -31,8 +31,8 @@ bool update() noexcept {
 	// Behaviors
 	for (size_t entity = 0; entity < entityMgr.numEntities(); ++entity) {
 		if (entityMgr.isValid(entity)) {
-			auto& behavior = entityMgr.component<Behavior>(entity);
-			if (behavior) { behavior.value().func(entityMgr, entity); }
+			auto behavior = entityMgr.component<Behavior>(entity);
+			if (behavior) { behavior->func(entityMgr, entity); }
 		}
 	}
 
@@ -50,8 +50,8 @@ bool update() noexcept {
 		ngn::Color::RED);
 	for (size_t entity = 0; entity < entityMgr.numEntities(); ++entity) {
 		if (entityMgr.isValid(entity)) {
-			auto& textRenderer = entityMgr.component<TextRenderer>(entity);
-			if (textRenderer) { textRenderer.value().render(entityMgr.sharedData().font(), graphics); }
+			auto textRenderer = entityMgr.component<TextRenderer>(entity);
+			if (textRenderer) { textRenderer->render(entityMgr.sharedData().font(), graphics); }
 		}
 	}
 	screen.refresh();
