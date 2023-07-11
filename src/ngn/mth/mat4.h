@@ -50,7 +50,7 @@ struct Mat4 {
 		return *this * translation;
 	}
 
-	constexpr Mat4 rotate(const T& angle, const Vec3<T>& axis) const noexcept {
+	constexpr Mat4 rotate(T angle, const Vec3<T>& axis) const noexcept {
 		const auto c = std::cos(angle);
 		const auto s = std::sin(angle);
 		const auto xx = axis.x() * axis.x();
@@ -86,7 +86,7 @@ struct Mat4 {
 	}
 
 	constexpr Mat4 transposed() const noexcept {
-		const auto arr = std::array<T, 16> {};
+		auto arr = std::array<T, 16> {};
 		for (auto r = 0; r < 4; ++r) {
 			for (auto c = 0; c < 4; ++c) {
 				arr[c*4 + r] = m_data[r*4 + c];
@@ -96,7 +96,7 @@ struct Mat4 {
 	}
 
 	constexpr Mat4 inverse() const noexcept {
-		const auto arr = std::array<T, 16> {};
+		auto arr = std::array<T, 16> {};
 		arr[ 0] =  m_data[5] * m_data[10] * m_data[15] - m_data[5] * m_data[11] * m_data[14] - m_data[9] * m_data[6] * m_data[15] + m_data[9] * m_data[7] * m_data[14] + m_data[13] * m_data[6] * m_data[11] - m_data[13] * m_data[7] * m_data[10];
 		arr[ 4] = -m_data[4] * m_data[10] * m_data[15] + m_data[4] * m_data[11] * m_data[14] + m_data[8] * m_data[6] * m_data[15] - m_data[8] * m_data[7] * m_data[14] - m_data[12] * m_data[6] * m_data[11] + m_data[12] * m_data[7] * m_data[10];
 		arr[ 8] =  m_data[4] * m_data[ 9] * m_data[15] - m_data[4] * m_data[11] * m_data[13] - m_data[8] * m_data[5] * m_data[15] + m_data[8] * m_data[7] * m_data[13] + m_data[12] * m_data[5] * m_data[11] - m_data[12] * m_data[7] * m_data[ 9];
@@ -122,7 +122,7 @@ struct Mat4 {
 		return {arr};
 	}
 
-	constexpr static Mat4 ortho(const T& left, const T& right, const T& bottom, const T& top, const T& near_, const T& far_) noexcept {
+	constexpr static Mat4 ortho(T left, T right, T bottom, T top, T near_, T far_) noexcept {
 		const auto a = T{2.0} / (right - left);
 		const auto b = T{2.0} / (top - bottom);
 		const auto c = T{2.0} / (far_ - near_);
@@ -139,7 +139,7 @@ struct Mat4 {
 		return result;
 	}
 
-	constexpr static Mat4 frustum(const T& left, const T& right, const T& bottom, const T& top, const T& near_, const T& far_) noexcept {
+	constexpr static Mat4 frustum(T left, T right, T bottom, T top, T near_, T far_) noexcept {
 		auto result = Mat4 {};
 		result.m_data[0]  = 2 * near_ / (right - left);
 		result.m_data[5]  = 2 * near_ / (top - bottom);
@@ -152,7 +152,7 @@ struct Mat4 {
 		return result;
 	}
 
-	constexpr static Mat4 perspective(const T& fovy, const T& aspect, const T& near_, const T& far_) noexcept {
+	constexpr static Mat4 perspective(T fovy, T aspect, T near_, T far_) noexcept {
 		const auto tangent = std::tan(fovy / 2);
 		const auto height = near_ * tangent;
 		const auto width = height * aspect;
@@ -187,7 +187,7 @@ struct Mat4 {
 		return Mat4 {}.translate(pos).rotate(rot).scale(scale);
 	}
 
-	constexpr static Mat4 billboard(const Mat4& view, const Vec3<T>& pos, const T& spin, const T& width, const T& height, bool upfront) {
+	constexpr static Mat4 billboard(const Mat4& view, const Vec3<T>& pos, T spin, const Vec2<T>& size, bool upfront) {
 		auto mat = view.transposed();
 		mat.m_data[3] = 0;
 		mat.m_data[7] = 0;
@@ -201,7 +201,7 @@ struct Mat4 {
 			mat.m_data[5] = 1;
 			mat.m_data[6] = 0;
 		}
-		return mat.rotate(spin, {0, 0, 1}).scale(Vec3<T> {width, height, 1});
+		return mat.rotate(spin, {0, 0, 1}).scale({size.x(), size.y(), 1});
 	}
 private:
 	std::array<T, 16> m_data;
