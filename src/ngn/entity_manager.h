@@ -12,14 +12,14 @@ namespace ngn {
 
 using EntityId = size_t;
 
-template<typename SharedDataType, typename... CompTypes>
+template<typename GameDataType, typename... CompTypes>
 struct EntityManager {
-	constexpr const SharedDataType& sharedData() const noexcept {
-		return m_sharedData;
+	constexpr const GameDataType& gameData() const noexcept {
+		return m_gameData;
 	}
 
-	constexpr SharedDataType& sharedData() noexcept {
-		return m_sharedData;
+	constexpr GameDataType& gameData() noexcept {
+		return m_gameData;
 	}
 
 	constexpr EntityId createEntity() noexcept {
@@ -81,7 +81,7 @@ struct EntityManager {
 private:
 	using Entity = std::tuple<std::optional<CompTypes> ...>;
 
-	SharedDataType m_sharedData {};
+	GameDataType m_gameData {};
 	std::vector<std::optional<Entity>> m_entities {};
 	std::list<EntityId> m_freeIds {};
 };

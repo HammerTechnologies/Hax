@@ -13,7 +13,7 @@ inline ngn::EntityId createGame(HaxEntityManager& mgr) noexcept {
 }
 
 inline void updateGame(HaxEntityManager& mgr, ngn::EntityId game) noexcept {
-	auto& screen = mgr.sharedData().core().screen();
+	auto& screen = mgr.gameData().core().screen();
 	auto textRen = mgr.component<TextRenderer>(game);
 	auto ss = std::ostringstream {};
 	ss << screen.size().x() << "x" << screen.size().y() << " @ " << screen.fps() << " FPS";

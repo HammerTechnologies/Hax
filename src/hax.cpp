@@ -1,5 +1,4 @@
 #include <memory>
-#include "comp/behavior.h"
 #include "dir.h"
 #include "hax_entity_manager.h"
 #include "hax_globals.h"
@@ -11,18 +10,18 @@ static auto entityMgr = HaxEntityManager {};
 
 void init() noexcept {
 	if (!changedToAssetsDir) {
-		entityMgr.sharedData().core().logger().error("Could not set 'assets' dir as active.");
+		entityMgr.gameData().core().logger().error("Could not set 'assets' dir as active.");
 	}
 	createGame(entityMgr);
 	createPlayer(entityMgr);
 }
 
 bool update() noexcept {
-	auto& graphics = entityMgr.sharedData().core().graphics();
-	auto& input = entityMgr.sharedData().core().input();
-	auto& screen = entityMgr.sharedData().core().screen();
-	auto& level = entityMgr.sharedData().level();
-	auto& viewer = entityMgr.sharedData().viewer();
+	auto& graphics = entityMgr.gameData().core().graphics();
+	auto& input = entityMgr.gameData().core().input();
+	auto& screen = entityMgr.gameData().core().screen();
+	auto& level = entityMgr.gameData().level();
+	auto& viewer = entityMgr.gameData().viewer();
 
 	if (!screen.isOpened() || input.isKeyDown(ngn::Key::ESC)) {
 		return false;
@@ -37,7 +36,7 @@ bool update() noexcept {
 	}
 
 	// 3D rendering
-	graphics.setup3D(entityMgr.sharedData().viewer());
+	graphics.setup3D(entityMgr.gameData().viewer());
 	graphics.cls();
 	level.draw3D(16, ngn::Color::WHITE);
 
@@ -51,7 +50,7 @@ bool update() noexcept {
 	for (size_t entity = 0; entity < entityMgr.numEntities(); ++entity) {
 		if (entityMgr.isValid(entity)) {
 			auto textRenderer = entityMgr.component<TextRenderer>(entity);
-			if (textRenderer) { textRenderer->render(entityMgr.sharedData().font(), graphics); }
+			if (textRenderer) { textRenderer->render(entityMgr.gameData().font(), graphics); }
 		}
 	}
 	screen.refresh();
@@ -61,5 +60,5 @@ bool update() noexcept {
 
 void finish() noexcept {
 	entityMgr.clear();
-	entityMgr.sharedData().finish();
+	entityMgr.gameData().finish();
 }

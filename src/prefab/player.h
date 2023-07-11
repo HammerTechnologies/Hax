@@ -11,9 +11,9 @@ inline ngn::EntityId createPlayer(HaxEntityManager& mgr) noexcept {
 }
 
 inline void updatePlayer(HaxEntityManager& mgr, ngn::EntityId) noexcept {
-	auto& input = mgr.sharedData().core().input();
-	auto& screen = mgr.sharedData().core().screen();
-	auto& viewer = mgr.sharedData().viewer();
+	auto& input = mgr.gameData().core().input();
+	auto& screen = mgr.gameData().core().screen();
+	auto& viewer = mgr.gameData().viewer();
 	viewer.viewportSize(screen.size());
 	if (input.isKeyDown(ngn::Key::LEFT)) { viewer.euler(viewer.euler() - ngn::Vec3r {0, 180 * screen.delta(), 0}); }
 	if (input.isKeyDown(ngn::Key::RIGHT)) { viewer.euler(viewer.euler() + ngn::Vec3r {0, 180 * screen.delta(), 0}); }
