@@ -1,7 +1,7 @@
 #include <memory>
 #include "dir.h"
 #include "hax_entity_manager.h"
-#include "hax_globals.h"
+#include "hax_data.h"
 #include "prefab/game.h"
 #include "prefab/player.h"
 

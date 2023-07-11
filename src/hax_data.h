@@ -8,7 +8,7 @@
 #include "ngn/gfx/texture.h"
 #include "ngn/gfx/viewer.h"
 
-struct HaxGlobals {
+struct HaxData {
 	const ngn::Core& core() const noexcept { return *m_core; }
 	const Level& level() const noexcept { return *m_level; }
 	const ngn::Viewer& viewer() const noexcept { return m_viewer; }
