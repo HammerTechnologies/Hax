@@ -10,19 +10,20 @@ static auto entityMgr = HaxEntityManager {};
 
 void init() noexcept {
 	if (!changedToAssetsDir) {
-		entityMgr.gameData().core().logger().error("Could not set 'assets' dir as active.");
+		entityMgr.gameData().m_core->logger().error("Could not set 'assets' dir as active.");
 	}
 	createGame(entityMgr);
 	createPlayer(entityMgr);
 }
 
 bool update() noexcept {
-	entityMgr.gameData().update();
-	auto& graphics = entityMgr.gameData().core().graphics();
-	auto& input = entityMgr.gameData().core().input();
-	auto& screen = entityMgr.gameData().core().screen();
-	auto& level = entityMgr.gameData().level();
-	auto& viewer = entityMgr.gameData().viewer();
+	auto& data = entityMgr.gameData();
+	data.update();
+	auto& graphics = data.m_core->graphics();
+	auto& input = data.m_core->input();
+	auto& screen = data.m_core->screen();
+	auto& level = data.level();
+	auto& viewer = data.viewer();
 
 	if (!screen.isOpened() || input.isKeyDown(ngn::Key::ESC)) {
 		return false;

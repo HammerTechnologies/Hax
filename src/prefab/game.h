@@ -13,9 +13,9 @@ inline ngn::EntityId createGame(HaxEntityManager& mgr) noexcept {
 }
 
 inline void updateGame(HaxEntityManager& mgr, ngn::EntityId game) noexcept {
-	auto& screen = mgr.gameData().core().screen();
+	auto& data = mgr.gameData();
 	auto textRen = mgr.component<TextRenderer>(game);
 	auto ss = std::ostringstream {};
-	ss << screen.size().x() << "x" << screen.size().y() << " @ " << screen.fps() << " FPS";
+	ss << data.screenSize().x() << "x" << data.screenSize().y() << " @ " << data.fps() << " FPS";
 	textRen->text = ss.str();
 }
