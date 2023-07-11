@@ -41,12 +41,7 @@ private:
 		0,
 		m_core->graphics().loadTexture("textures/wall001.png"),
 		m_core->graphics());
-	ngn::Viewer m_viewer {
-		{0, 8, -5},
-		{},
-		{0, 0},
-		m_core->screen().size(),
-	};
+	ngn::Viewer m_viewer { {}, {}, {}, m_core->screen().size() };
 	std::unique_ptr<ngn::Font> m_font { m_core->graphics().loadFont("Minecraft.ttf", 16) };
 	std::unique_ptr<ngn::Texture> m_sheet { m_core->graphics().loadTexture("textures/wall001.png") };
 

@@ -14,7 +14,10 @@ void init() noexcept {
 		entityMgr.gameData().m_core->logger().error("Could not set 'assets' dir as active.");
 	}
 	createGame(entityMgr);
-	createEnemy(entityMgr);
+	createEnemy(
+		entityMgr,
+		{-32, 0, 32},
+		ngn::Vec2r(entityMgr.gameData().level().size().x(), entityMgr.gameData().level().size().y()));
 	createPlayer(entityMgr);
 }
 
@@ -48,16 +51,16 @@ bool update() noexcept {
 	const ngn::Mat4r viewMatrix = entityMgr.gameData().viewer().viewMatrix();
 	for (size_t entity = 0; entity < entityMgr.numEntities(); ++entity) {
 		if (entityMgr.isValid(entity)) {
-			auto spritePos = entityMgr.component<SpritePosition>(entity);
 			auto spriteRen = entityMgr.component<SpriteRenderer>(entity);
-			if (spritePos && spriteRen) {
-				const ngn::Mat4r transform = ngn::Mat4r::billboard(
+			auto transform = entityMgr.component<Transform>(entity);
+			if (spriteRen && transform) {
+				const ngn::Mat4r matrix = ngn::Mat4r::billboard(
 					viewMatrix,
-					spritePos->position,
-					0,
-					ngn::Vec2r(level.size().x(), level.size().y()),
+					transform->position,
+					transform->rotation,
+					ngn::Vec2r(transform->scale.x(), transform->scale.y()),
 					true);
-				graphics.drawQuad(transform, &spriteRen->texture.get());
+				graphics.drawQuad(matrix, &spriteRen->texture.get());
 			}
 		}
 	}
