@@ -17,6 +17,7 @@ void init() noexcept {
 }
 
 bool update() noexcept {
+	entityMgr.gameData().update();
 	auto& graphics = entityMgr.gameData().core().graphics();
 	auto& input = entityMgr.gameData().core().input();
 	auto& screen = entityMgr.gameData().core().screen();

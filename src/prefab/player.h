@@ -11,12 +11,10 @@ inline ngn::EntityId createPlayer(HaxEntityManager& mgr) noexcept {
 }
 
 inline void updatePlayer(HaxEntityManager& mgr, ngn::EntityId) noexcept {
-	auto& input = mgr.gameData().core().input();
+	auto& inputs = mgr.gameData().inputs();
 	auto& screen = mgr.gameData().core().screen();
 	auto& viewer = mgr.gameData().viewer();
 	viewer.viewportSize(screen.size());
-	if (input.isKeyDown(ngn::Key::LEFT)) { viewer.euler(viewer.euler() - ngn::Vec3r {0, 180 * screen.delta(), 0}); }
-	if (input.isKeyDown(ngn::Key::RIGHT)) { viewer.euler(viewer.euler() + ngn::Vec3r {0, 180 * screen.delta(), 0}); }
-	if (input.isKeyDown(ngn::Key::UP)) { viewer.move(ngn::Vec3r{0, 0, 16 * screen.delta()}); }
-	if (input.isKeyDown(ngn::Key::DOWN)) { viewer.move(ngn::Vec3r{0, 0, -16 * screen.delta()}); }
+	viewer.euler(viewer.euler() + ngn::Vec3r {0, inputs.right * 180 * screen.delta(), 0});
+	viewer.move(ngn::Vec3r {0, 0, inputs.forward * 16 * screen.delta()});
 }
