@@ -16,6 +16,7 @@ struct HaxData {
 	const HaxInputs& inputs() const noexcept { return m_inputs; }
 	const Level& level() const noexcept { return *m_level; }
 	ngn::Vec2<uint16_t> screenSize() const noexcept { return m_core->screen().size(); }
+	const ngn::Texture& sheet() const noexcept { return *m_sheet; }
 	const ngn::Viewer& viewer() const noexcept { return m_viewer; }
 
 	Level& level() noexcept { return *m_level; }
@@ -47,6 +48,7 @@ private:
 		m_core->screen().size(),
 	};
 	std::unique_ptr<ngn::Font> m_font { m_core->graphics().loadFont("Minecraft.ttf", 16) };
+	std::unique_ptr<ngn::Texture> m_sheet { m_core->graphics().loadTexture("textures/wall001.png") };
 
 	friend void init() noexcept;
 	friend bool update() noexcept;

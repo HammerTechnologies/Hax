@@ -2,6 +2,7 @@
 #include "dir.h"
 #include "hax_entity_manager.h"
 #include "hax_data.h"
+#include "prefab/enemy.h"
 #include "prefab/game.h"
 #include "prefab/player.h"
 
@@ -13,6 +14,7 @@ void init() noexcept {
 		entityMgr.gameData().m_core->logger().error("Could not set 'assets' dir as active.");
 	}
 	createGame(entityMgr);
+	createEnemy(entityMgr);
 	createPlayer(entityMgr);
 }
 
@@ -41,6 +43,24 @@ bool update() noexcept {
 	graphics.setup3D(entityMgr.gameData().viewer());
 	graphics.cls();
 	level.draw3D(16, ngn::Color::WHITE);
+
+	// Sprites
+	const ngn::Mat4r viewMatrix = entityMgr.gameData().viewer().viewMatrix();
+	for (size_t entity = 0; entity < entityMgr.numEntities(); ++entity) {
+		if (entityMgr.isValid(entity)) {
+			auto spritePos = entityMgr.component<SpritePosition>(entity);
+			auto spriteRen = entityMgr.component<SpriteRenderer>(entity);
+			if (spritePos && spriteRen) {
+				const ngn::Mat4r transform = ngn::Mat4r::billboard(
+					viewMatrix,
+					spritePos->position,
+					0,
+					ngn::Vec2r(level.size().x(), level.size().y()),
+					true);
+				graphics.drawQuad(transform, &spriteRen->texture.get());
+			}
+		}
+	}
 
 	// 2D rendering
 	graphics.setup2D({0, 0}, screen.size());
