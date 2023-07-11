@@ -52,7 +52,7 @@ struct Viewer {
 		m_euler.y(rad2deg(std::atan2(dir.x(), dir.z())));
 	}
 
-	constexpr Mat4r getViewMatrix() const noexcept {
+	constexpr Mat4r viewMatrix() const noexcept {
 		const auto q = Quatr::fromEuler(m_euler.rad());
 		return Mat4r{}
 			.rotate(-q.angle(), q.axis())

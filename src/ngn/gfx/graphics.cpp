@@ -127,7 +127,7 @@ void Graphics::setup3D(const Viewer& viewer) noexcept {
 			real_t(viewer.viewportSize().x()) / viewer.viewportSize().y(),
 			viewer.rangeMin(),
 			viewer.rangeMax())
-		* viewer.getViewMatrix();
+		* viewer.viewMatrix();
 }
 
 void Graphics::cls(color_t color) const noexcept {
